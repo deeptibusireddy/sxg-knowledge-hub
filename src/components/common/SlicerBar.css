@@ -1,0 +1,58 @@
+.slicer-bar {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  padding: 10px 20px;
+  flex-wrap: wrap;
+  row-gap: 8px;
+}
+
+.slicer-bar__group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 12px;
+}
+
+.slicer-bar__label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--pbi-muted);
+  white-space: nowrap;
+}
+
+.slicer-bar__select {
+  border: 1px solid var(--pbi-border-strong);
+  border-radius: var(--radius);
+  padding: 5px 28px 5px 10px;
+  font-size: 13px;
+  font-family: inherit;
+  color: var(--pbi-text);
+  background: var(--pbi-surface)
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23605e5c'/%3E%3C/svg%3E")
+    no-repeat right 9px center;
+  -webkit-appearance: none;
+  appearance: none;
+  cursor: pointer;
+  min-width: 140px;
+}
+
+.slicer-bar__select:focus {
+  outline: 2px solid var(--pbi-blue);
+  outline-offset: 1px;
+}
+
+.slicer-bar__divider {
+  width: 1px;
+  height: 28px;
+  background: var(--pbi-border);
+  flex-shrink: 0;
+}
+
+.slicer-bar__spacer { flex: 1; }
+
+.slicer-bar__hint {
+  font-size: 11px;
+  color: var(--pbi-subtle);
+  white-space: nowrap;
+}

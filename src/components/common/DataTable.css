@@ -1,0 +1,29 @@
+.data-table__empty {
+  text-align: center;
+  color: var(--pbi-subtle);
+  padding: 24px !important;
+}
+
+.severity-badge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 10px;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.severity-badge--High   { background: #fde7de; color: var(--pbi-red); }
+.severity-badge--Medium { background: #fef5d9; color: #7a5800; }
+.severity-badge--Low    { background: #dff6dd; color: var(--pbi-green); }
+
+.status-badge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 10px;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.status-badge--Open      { background: #fde7de; color: var(--pbi-red); }
+.status-badge--In\ Review { background: #fef5d9; color: #7a5800; }
+.status-badge--Resolved  { background: #dff6dd; color: var(--pbi-green); }

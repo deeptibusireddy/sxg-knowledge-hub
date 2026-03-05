@@ -1,0 +1,122 @@
+/* ─── App Shell ─────────────────────────────────────────────────────────────── */
+.app {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--pbi-bg);
+}
+
+/* ─── Header ─────────────────────────────────────────────────────────────────── */
+.app__header {
+  background: var(--pbi-teal);
+  color: #fff;
+  flex-shrink: 0;
+  z-index: 10;
+}
+
+.app__header-inner {
+  max-width: 1800px;
+  margin: 0 auto;
+  padding: 0 24px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.app__logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.app__logo-icon {
+  font-size: 22px;
+  opacity: .85;
+}
+
+.app__title {
+  font-size: 16px;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: -.01em;
+}
+
+.app__subtitle {
+  font-size: 11px;
+  color: rgba(255,255,255,.65);
+  margin-top: 1px;
+}
+
+.app__last-updated {
+  font-size: 11px;
+  color: rgba(255,255,255,.6);
+}
+
+/* ─── Body Layout ─────────────────────────────────────────────────────────────── */
+.app__body {
+  flex: 1;
+  display: grid;
+  grid-template-columns: 1fr var(--sidebar-width);
+  gap: 0;
+  max-width: 1800px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 0;
+  align-items: start;
+}
+
+.app__main {
+  padding: 16px 20px 40px;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.app__sidebar {
+  padding: 16px 16px 16px 0;
+}
+
+/* ─── KPI Row ─────────────────────────────────────────────────────────────────── */
+.kpi-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  margin-top: 14px;
+}
+
+@media (max-width: 1100px) {
+  .app__body { grid-template-columns: 1fr; }
+  .app__sidebar { padding: 0 16px 24px; }
+  .kpi-row { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 640px) {
+  .kpi-row { grid-template-columns: 1fr 1fr; }
+}
+
+/* ─── Eval Upload Panel ───────────────────────────────────────────────────── */
+.eval-upload-panel {
+  padding: 16px 20px;
+  margin-top: 28px;
+}
+
+.eval-upload-panel__header {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+}
+
+.eval-upload-panel__title {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--pbi-text);
+}
+
+.eval-upload-panel__hint {
+  font-size: 12px;
+  color: var(--pbi-muted);
+}

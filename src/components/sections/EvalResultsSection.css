@@ -1,0 +1,150 @@
+/* ── Eval empty state ──────────────────────────────────────────────────────── */
+.eval-empty {
+  padding: 40px 24px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+.eval-empty__icon { font-size: 36px; }
+.eval-empty__msg  { font-size: 16px; font-weight: 600; color: var(--pbi-text); }
+.eval-empty__hint { font-size: 13px; color: var(--pbi-muted); max-width: 480px; line-height: 1.6; }
+
+/* ── Accuracy hero card ────────────────────────────────────────────────────── */
+.eval-hero { margin-bottom: 16px; }
+
+.eval-hero__card {
+  padding: 20px 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  border-left: 5px solid var(--pbi-red);
+  background: linear-gradient(135deg, #fff 70%, #fff4f1 100%);
+}
+
+.eval-hero__label {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: .1em;
+  color: var(--pbi-red);
+}
+
+.eval-hero__value-row {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+}
+
+.eval-hero__score {
+  font-size: 52px;
+  font-weight: 800;
+  color: var(--pbi-text);
+  line-height: 1;
+}
+
+.eval-hero__max {
+  font-size: 22px;
+  font-weight: 600;
+  color: var(--pbi-muted);
+}
+
+.eval-hero__threshold-row { display: flex; align-items: center; gap: 8px; }
+
+.eval-hero__badge {
+  display: inline-block;
+  font-size: 13px;
+  font-weight: 700;
+  padding: 4px 12px;
+  border-radius: 14px;
+}
+
+.eval-hero__badge--good { background: #dff6dd; color: var(--pbi-green); }
+.eval-hero__badge--warn { background: #fef5d9; color: #7a5800; }
+
+.eval-hero__sub { font-size: 12px; color: var(--pbi-muted); margin-top: 2px; }
+
+/* ── Other metric cards ────────────────────────────────────────────────────── */
+.eval-kpi-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 12px;
+  margin-bottom: 4px;
+}
+
+.eval-metric-card {
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.eval-metric-card__label {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .06em;
+  color: var(--pbi-muted);
+}
+
+.eval-metric-card__score {
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--pbi-text);
+  line-height: 1.1;
+}
+
+.eval-metric-card__max {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--pbi-muted);
+}
+
+.eval-metric-card__pct {
+  font-size: 12px;
+  font-weight: 600;
+}
+.eval-metric-card__pct--good { color: var(--pbi-green); }
+.eval-metric-card__pct--warn { color: var(--pbi-orange); }
+
+/* ── Content safety panel ──────────────────────────────────────────────────── */
+.eval-safety {
+  padding: 16px 20px;
+  margin-top: 16px;
+}
+
+.eval-safety__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 10px;
+}
+
+.eval-safety__item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  border-radius: var(--radius);
+  font-size: 13px;
+}
+
+.eval-safety__item--pass { background: #dff6dd; }
+.eval-safety__item--fail { background: #fde7de; }
+
+.eval-safety__icon { font-size: 16px; font-weight: 700; }
+.eval-safety__item--pass .eval-safety__icon { color: var(--pbi-green); }
+.eval-safety__item--fail .eval-safety__icon { color: var(--pbi-red); }
+
+.eval-safety__name { font-weight: 600; flex: 1; color: var(--pbi-text); }
+.eval-safety__count { font-size: 11px; color: var(--pbi-muted); }
+
+/* ── Table score cells ─────────────────────────────────────────────────────── */
+.eval-table__long {
+  max-width: 280px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.eval-score { font-weight: 700; }
+.eval-score--pass { color: var(--pbi-green); }
+.eval-score--fail { color: var(--pbi-red); }
