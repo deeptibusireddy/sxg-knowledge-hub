@@ -36,7 +36,7 @@ export default function App() {
             </div>
           </div>
           <div className="app__header-meta">
-            <span className="app__last-updated">Last updated: Mar 4, 2026 · 05:00 UTC</span>
+            <span className="app__last-updated">Last updated: 2026-03-05T08:41:59Z</span>
           </div>
         </div>
       </header>
