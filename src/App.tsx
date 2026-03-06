@@ -39,22 +39,26 @@ export default function App() {
               <p className="app__subtitle">Knowledge Agent · Partner Dashboard</p>
             </div>
           </div>
-          <div className="app__product-switcher">
-            {PRODUCTS.map(p => (
-              <button
-                key={p}
-                className={`app__product-btn${product === p ? ' app__product-btn--active' : ''}`}
-                onClick={() => setProduct(p)}
-              >
-                {p}
-              </button>
-            ))}
-          </div>
           <div className="app__header-meta">
             <span className="app__last-updated">Last updated: 2026-03-05T08:41:59Z</span>
           </div>
         </div>
       </header>
+
+      {/* ── Product Bar ─────────────────────────────────────────────────── */}
+      <div className="app__product-bar">
+        <div className="app__product-bar-inner">
+          {PRODUCTS.map(p => (
+            <button
+              key={p}
+              className={`app__product-btn${product === p ? ' app__product-btn--active' : ''}`}
+              onClick={() => setProduct(p)}
+            >
+              {p}
+            </button>
+          ))}
+        </div>
+      </div>
 
       {/* ── Body: main + sidebar ────────────────────────────────────────── */}
       <div className="app__body">

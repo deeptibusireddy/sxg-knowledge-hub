@@ -53,41 +53,53 @@
   color: rgba(255,255,255,.6);
 }
 
-/* ─── Product Switcher ───────────────────────────────────────────────────────── */
-.app__product-switcher {
+/* ─── Product Bar ────────────────────────────────────────────────────────────── */
+.app__product-bar {
+  background: #fff;
+  border-bottom: 1px solid #e0e0e0;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.07);
+  flex-shrink: 0;
+  z-index: 9;
+}
+
+.app__product-bar-inner {
+  max-width: 1800px;
+  margin: 0 auto;
+  padding: 0 24px;
   display: flex;
   align-items: center;
-  gap: 4px;
-  background: rgba(0,0,0,0.2);
-  border-radius: 8px;
-  padding: 4px;
+  gap: 6px;
+  height: 52px;
 }
 
 .app__product-btn {
-  padding: 6px 18px;
+  padding: 8px 28px;
   border-radius: 6px;
-  border: none;
-  background: transparent;
-  color: rgba(255,255,255,0.75);
-  font-size: 13px;
-  font-weight: 600;
+  border: 2px solid transparent;
+  background: var(--pbi-bg);
+  color: var(--pbi-muted);
+  font-size: 14px;
+  font-weight: 700;
   cursor: pointer;
-  transition: background 0.15s, color 0.15s;
-  white-space: nowrap;
+  transition: all 0.15s;
+  letter-spacing: 0.01em;
 }
 
 .app__product-btn:hover {
-  background: rgba(255,255,255,0.12);
-  color: #fff;
+  background: #e8f0fe;
+  color: var(--pbi-blue);
+  border-color: #c5d8f8;
 }
 
 .app__product-btn--active {
-  background: #fff;
-  color: var(--pbi-teal);
+  background: var(--pbi-blue);
+  color: #fff;
+  border-color: var(--pbi-blue);
+  box-shadow: 0 2px 8px rgba(17,141,255,0.35);
 }
 .app__product-btn--active:hover {
-  background: #fff;
-  color: var(--pbi-teal);
+  background: var(--pbi-blue);
+  color: #fff;
 }
 
 /* ─── Body Layout ─────────────────────────────────────────────────────────────── */
