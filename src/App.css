@@ -53,6 +53,43 @@
   color: rgba(255,255,255,.6);
 }
 
+/* ─── Product Switcher ───────────────────────────────────────────────────────── */
+.app__product-switcher {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: rgba(0,0,0,0.2);
+  border-radius: 8px;
+  padding: 4px;
+}
+
+.app__product-btn {
+  padding: 6px 18px;
+  border-radius: 6px;
+  border: none;
+  background: transparent;
+  color: rgba(255,255,255,0.75);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+  white-space: nowrap;
+}
+
+.app__product-btn:hover {
+  background: rgba(255,255,255,0.12);
+  color: #fff;
+}
+
+.app__product-btn--active {
+  background: #fff;
+  color: var(--pbi-teal);
+}
+.app__product-btn--active:hover {
+  background: #fff;
+  color: var(--pbi-teal);
+}
+
 /* ─── Body Layout ─────────────────────────────────────────────────────────────── */
 .app__body {
   flex: 1;

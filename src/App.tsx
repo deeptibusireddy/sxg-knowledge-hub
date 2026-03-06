@@ -20,8 +20,12 @@ const DEFAULT_SLICER: SlicerState = {
   severity: 'all',
 };
 
+type Product = 'AAQ' | 'CMSP' | 'AI Native';
+const PRODUCTS: Product[] = ['AAQ', 'CMSP', 'AI Native'];
+
 export default function App() {
   const [slicer, setSlicer] = useState<SlicerState>(DEFAULT_SLICER);
+  const [product, setProduct] = useState<Product>('AAQ');
 
   return (
     <div className="app">
@@ -31,9 +35,20 @@ export default function App() {
           <div className="app__logo">
             <span className="app__logo-icon">◈</span>
             <div>
-              <h1 className="app__title">AAQ Environment Health</h1>
+              <h1 className="app__title">SxG Knowledge Health</h1>
               <p className="app__subtitle">Knowledge Agent · Partner Dashboard</p>
             </div>
+          </div>
+          <div className="app__product-switcher">
+            {PRODUCTS.map(p => (
+              <button
+                key={p}
+                className={`app__product-btn${product === p ? ' app__product-btn--active' : ''}`}
+                onClick={() => setProduct(p)}
+              >
+                {p}
+              </button>
+            ))}
           </div>
           <div className="app__header-meta">
             <span className="app__last-updated">Last updated: 2026-03-05T08:41:59Z</span>
