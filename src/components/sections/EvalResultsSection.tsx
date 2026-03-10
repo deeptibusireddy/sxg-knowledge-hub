@@ -4,7 +4,7 @@ import { SectionHeader } from '../common/SectionHeader';
 import {
   BarChart, Bar, LineChart, Line,
   XAxis, YAxis, Tooltip, Legend,
-  CartesianGrid, ResponsiveContainer, Cell
+  CartesianGrid, ResponsiveContainer, Cell, ReferenceLine
 } from 'recharts';
 import './EvalResultsSection.css';
 
@@ -59,7 +59,19 @@ const COLORS = {
   intent_resolution:'#12239e',
 };
 
-/* ── Helpers ────────────────────────────────────────────────────────────── */
+/* ── Known eval dip event (mock scenario) ───────────────────────────────── */
+const EVAL_DIP = {
+  startDate:    '03-03',   // MM-DD format used in trendData
+  endDate:      '03-07',
+  fromScore:    3.41,
+  toScore:      3.06,
+  drop:         0.35,
+  category:     'Azure Networking',
+  categoryPct:  34,
+  actionItemId: 'a11',
+};
+
+
 function avg(rows: EvalRow[], key: keyof EvalRow): number {
   const nums = rows.map(r => Number(r[key])).filter(n => !isNaN(n));
   return nums.length ? nums.reduce((a, b) => a + b, 0) / nums.length : 0;
@@ -163,6 +175,24 @@ export function EvalResultsSection({ dataset }: Props) {
         </div>
       </div>
 
+      {/* ── Eval Dip Alert Banner ────────────────────────────────────── */}
+      <div className="eval-dip-alert">
+        <div className="eval-dip-alert__icon">⚠</div>
+        <div className="eval-dip-alert__body">
+          <div className="eval-dip-alert__title">
+            Accuracy Dip Detected — {EVAL_DIP.startDate.replace('-','/')} to {EVAL_DIP.endDate.replace('-','/')}
+          </div>
+          <div className="eval-dip-alert__detail">
+            Daily accuracy dropped <strong>{EVAL_DIP.drop.toFixed(2)} pts</strong> ({EVAL_DIP.fromScore.toFixed(2)} → {EVAL_DIP.toScore.toFixed(2)}).{' '}
+            Root cause: <strong>{EVAL_DIP.categoryPct}% of low-scoring queries</strong> fall in the{' '}
+            <strong>{EVAL_DIP.category}</strong> category — a known content gap.
+          </div>
+        </div>
+        <div className="eval-dip-alert__cta">
+          ↓ See actionable insight below
+        </div>
+      </div>
+
       {/* ── Other Metric Cards ──────────────────────────────────────── */}
       <div className="eval-kpi-row">
         {metricStats.map(m => (
@@ -230,6 +260,17 @@ export function EvalResultsSection({ dataset }: Props) {
                 <YAxis domain={[0, 5]} ticks={[0,1,2,3,4,5]} tick={{ fontSize: 11 }} />
                 <Tooltip formatter={(v) => [(v as number).toFixed(3), '']} />
                 <Legend wrapperStyle={{ fontSize: 11 }} />
+                <ReferenceLine
+                  x={EVAL_DIP.startDate}
+                  stroke="#d83b01"
+                  strokeDasharray="4 3"
+                  label={{ value: '⚠ Dip', position: 'top', fill: '#d83b01', fontSize: 11, fontWeight: 600 }}
+                />
+                <ReferenceLine
+                  x={EVAL_DIP.endDate}
+                  stroke="#d83b01"
+                  strokeDasharray="4 3"
+                />
                 <Line type="monotone" dataKey="accuracy"          stroke={COLORS.accuracy}          dot={false} strokeWidth={2.5} name="Accuracy" />
                 <Line type="monotone" dataKey="relevance"         stroke={COLORS.relevance}         dot={false} strokeWidth={1.5} name="Relevance" />
                 <Line type="monotone" dataKey="coherence"         stroke={COLORS.coherence}         dot={false} strokeWidth={1.5} name="Coherence" />

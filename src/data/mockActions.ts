@@ -252,5 +252,33 @@ export const actionItems: ActionItem[] = [
       },
     },
   },
+  {
+    id: 'a11',
+    priority: 'High',
+    persona: 'Program Leader',
+    description: 'Accuracy dipped 0.35 pts Mar 3–7 — correlated with Azure Networking content gap (34% of low-scoring queries).',
+    section: 'eval-results',
+    resolutionType: 'ado-assignment',
+    detail: {
+      summary: 'Daily accuracy scores dropped from 3.41 to 3.06 between Mar 3–7, a 0.35 point decline. Analysis of low-scoring queries shows 34% fall into the Azure Networking category — the same gap flagged in the missing content alert. This suggests the content gap is directly impacting eval quality. The recommended action is to create a priority investigation and content authoring task for the Azure LOB content lead.',
+      affectedQueries: [
+        'How do I configure Azure Private Endpoint for a storage account? (accuracy 1.8)',
+        'Azure VNet peering across subscriptions — not working (accuracy 2.1)',
+        'How to set up NSG rules for outbound traffic? (accuracy 2.3)',
+        'Azure Application Gateway WAF policy setup (accuracy 2.4)',
+        'How do I route traffic through Azure Firewall? (accuracy 2.5)',
+        'Azure DNS private zone resolution not resolving (accuracy 2.6)',
+        'ExpressRoute vs VPN Gateway — which to use? (accuracy 2.7)',
+      ],
+      adoDefaults: {
+        title: '[Eval Dip] Accuracy drop Mar 3–7 — Azure Networking content gap',
+        type: 'User Story',
+        assignedTo: 'Azure LOB Content Lead',
+        areaPath: 'AAQ\\Content\\Azure',
+        priority: '1',
+        tags: 'eval-dip, accuracy, azure, networking, content-gap, p1',
+      },
+    },
+  },
 ];
 
