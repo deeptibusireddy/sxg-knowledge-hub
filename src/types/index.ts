@@ -1,11 +1,18 @@
 // ── Slicer / filter state ───────────────────────────────────────────────────
-export type DateRange = '7d' | '30d' | '90d' | 'all';
+export type DateRange = '7d' | '30d' | '90d' | 'all' | 'custom';
 export type Severity = 'all' | 'High' | 'Medium' | 'Low';
+export type Audience = 'all' | 'Commercial' | 'Consumer';
 
 export interface SlicerState {
   lob: string;          // 'all' or a LOB name
   dateRange: DateRange;
-  severity: Severity;
+  dateFrom: string;     // ISO date string, used when dateRange === 'custom'
+  dateTo: string;       // ISO date string, used when dateRange === 'custom'
+  lobTag: string;       // 'all' or a LOB tag
+  audience: Audience;
+  dataSource: string;   // 'all' or a data source
+  business: string;     // 'all' or a business unit
+  user: string;         // free-text owner / reviewer filter
 }
 
 // ── KPI Card ────────────────────────────────────────────────────────────────

@@ -52,9 +52,8 @@ export function TablesSection({ slicer }: Props) {
   const filteredIncidents = useMemo(() => {
     let rows = recentIncidents;
     if (slicer.lob !== 'all') rows = rows.filter(r => r.lob === slicer.lob);
-    if (slicer.severity !== 'all') rows = rows.filter(r => r.severity === slicer.severity);
     return rows;
-  }, [slicer.lob, slicer.severity]);
+  }, [slicer.lob]);
 
   return (
     <div>
@@ -65,11 +64,11 @@ export function TablesSection({ slicer }: Props) {
       <div className="tables-section">
         <div className="surface chart-wrapper tables-section__table">
           <p className="chart-title">Top Blocked Articles</p>
-          <DataTable columns={BLOCKED_COLS} rows={filteredBlocked} emptyMessage="No blocked articles for selected filters" />
+          <DataTable columns={BLOCKED_COLS} rows={filteredBlocked} emptyMessage="No blocked articles for selected filters" exportFilename="blocked-articles.csv" />
         </div>
         <div className="surface chart-wrapper tables-section__table">
           <p className="chart-title">Recent Incidents</p>
-          <DataTable columns={INCIDENT_COLS} rows={filteredIncidents} emptyMessage="No incidents for selected filters" />
+          <DataTable columns={INCIDENT_COLS} rows={filteredIncidents} emptyMessage="No incidents for selected filters" exportFilename="incidents.csv" />
         </div>
       </div>
     </div>

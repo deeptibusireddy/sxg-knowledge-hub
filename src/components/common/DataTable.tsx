@@ -1,3 +1,4 @@
+import { exportToCsv } from '../../utils/exportCsv';
 import './DataTable.css';
 
 export interface Column<T> {
@@ -10,11 +11,34 @@ interface Props<T extends { id: string }> {
   columns: Column<T>[];
   rows: T[];
   emptyMessage?: string;
+  exportFilename?: string;
 }
 
-export function DataTable<T extends { id: string }>({ columns, rows, emptyMessage = 'No data' }: Props<T>) {
+export function DataTable<T extends { id: string }>({
+  columns, rows, emptyMessage = 'No data', exportFilename,
+}: Props<T>) {
+  const handleExport = () => {
+    exportToCsv(
+      exportFilename!,
+      columns.map(c => ({ key: c.key, header: c.header })),
+      rows,
+    );
+  };
+
   return (
     <div className="data-table-wrapper">
+      {exportFilename && (
+        <div className="data-table__toolbar">
+          <button
+            className="data-table__export-btn"
+            onClick={handleExport}
+            disabled={rows.length === 0}
+            title={`Export ${rows.length} rows to CSV`}
+          >
+            ↓ Export CSV{rows.length > 0 ? ` (${rows.length})` : ''}
+          </button>
+        </div>
+      )}
       <table className="data-table">
         <thead>
           <tr>

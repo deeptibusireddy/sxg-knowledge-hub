@@ -77,6 +77,14 @@ button { font-family: inherit; cursor: pointer; }
   letter-spacing: .04em;
   margin-bottom: 12px;
 }
+.chart-hint {
+  font-size: 10px;
+  font-weight: 400;
+  text-transform: none;
+  letter-spacing: 0;
+  color: #a19f9d;
+  margin-left: 6px;
+}
 
 /* ─── Data Table ─────────────────────────────────────────────────────────────── */
 .data-table-wrapper { overflow-x: auto; }

@@ -12,12 +12,19 @@ import { BusinessOutcomesSection } from './components/sections/BusinessOutcomesS
 import { ProgramHealthSection } from './components/sections/ProgramHealthSection';
 import { TablesSection } from './components/sections/TablesSection';
 import { EvalResultsSection } from './components/sections/EvalResultsSection';
+import { QuickActions } from './components/common/QuickActions';
 import './App.css';
 
 const DEFAULT_SLICER: SlicerState = {
   lob: 'all',
   dateRange: '30d',
-  severity: 'all',
+  dateFrom: '',
+  dateTo: '',
+  lobTag: 'all',
+  audience: 'all',
+  dataSource: 'all',
+  business: 'all',
+  user: '',
 };
 
 type Product = 'AAQ' | 'CMSP' | 'AI Native';
@@ -59,6 +66,9 @@ export default function App() {
           ))}
         </div>
       </div>
+
+      {/* ── Quick Actions ───────────────────────────────────────────────── */}
+      <QuickActions />
 
       {/* ── Body: main + sidebar ────────────────────────────────────────── */}
       <div className="app__body">

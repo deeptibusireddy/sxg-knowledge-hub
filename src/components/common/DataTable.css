@@ -1,3 +1,23 @@
+.data-table__toolbar {
+  display: flex;
+  justify-content: flex-end;
+  padding: 0 0 8px;
+}
+
+.data-table__export-btn {
+  padding: 5px 12px;
+  border-radius: 6px;
+  border: 1px solid #c7d7ee;
+  background: #f7fbff;
+  color: var(--pbi-blue);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.data-table__export-btn:hover:not(:disabled) { background: #e0eeff; }
+.data-table__export-btn:disabled { opacity: 0.4; cursor: default; }
+
 .data-table__empty {
   text-align: center;
   color: var(--pbi-subtle);
