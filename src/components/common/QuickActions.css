@@ -244,6 +244,71 @@
 .qa-btn--danger:hover:not(:disabled) { background: #a31f25; }
 .qa-btn--danger:disabled { opacity: 0.5; cursor: default; }
 
+/* ─── Onboarding request banner ──────────────────────────────────────────────── */
+.qa-form__banner {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: #eaf3ff;
+  border: 1px solid #b8d9f8;
+  border-radius: 8px;
+  padding: 12px 14px;
+}
+
+.qa-form__banner-icon { font-size: 22px; flex-shrink: 0; }
+
+.qa-form__banner-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: #0057b3;
+  margin: 0 0 2px;
+}
+
+.qa-form__banner-sub {
+  font-size: 11px;
+  color: #0057b3;
+  opacity: 0.8;
+  margin: 0;
+}
+
+.qa-form__banner-link {
+  flex-shrink: 0;
+  text-decoration: none;
+  white-space: nowrap;
+  font-size: 12px;
+  padding: 6px 12px;
+}
+
+/* ─── File input ─────────────────────────────────────────────────────────────── */
+.qa-form__file-wrap { display: flex; flex-direction: column; gap: 4px; }
+
+.qa-form__file-label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+}
+
+.qa-form__file-input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  overflow: hidden;
+}
+
+.qa-form__file-name {
+  font-size: 12px;
+  color: var(--pbi-muted, #888);
+  font-style: italic;
+}
+
+.qa-form__hint {
+  font-size: 11px;
+  color: var(--pbi-muted, #888);
+  margin: -4px 0 0;
+}
+
 /* ─── Star rating ────────────────────────────────────────────────────────────── */
 .qa-stars {
   display: flex;

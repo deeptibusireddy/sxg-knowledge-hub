@@ -31,42 +31,102 @@ function ModalShell({ title, icon, onClose, children }: {
 
 function AddContentModal({ onClose }: { onClose: () => void }) {
   const [submitted, setSubmitted] = useState(false);
-  const [form, setForm] = useState({ title: '', lob: 'all', description: '', priority: 'Medium' });
+  const [form, setForm] = useState({
+    teamName: '',
+    description: '',
+    contacts: '',
+    agentType: 'AAQ',
+    fileName: '',
+  });
+
+  const isValid = form.teamName.trim() && form.description.trim() && form.contacts.trim() && form.fileName;
 
   if (submitted) return (
-    <ModalShell title="Request Content Addition" icon="➕" onClose={onClose}>
+    <ModalShell title="Knowledge Agent Onboarding Request" icon="➕" onClose={onClose}>
       <div className="qa-modal__success">
         <span className="qa-modal__success-icon">✓</span>
-        <p>Your request has been submitted. The content team will review and follow up.</p>
+        <p>Your onboarding request has been submitted. The KA team will review and reach out to your SxG contacts.</p>
         <button className="qa-btn qa-btn--primary" onClick={onClose}>Done</button>
       </div>
     </ModalShell>
   );
 
   return (
-    <ModalShell title="Request Content Addition" icon="➕" onClose={onClose}>
-      <p className="qa-modal__desc">Ask the content team to create or import new knowledge article content.</p>
+    <ModalShell title="Knowledge Agent Onboarding Request" icon="➕" onClose={onClose}>
+      <p className="qa-modal__desc">
+        Submit an onboarding request to the SxG Knowledge Agent. Complete the Excel template first, then attach it below.
+      </p>
+
       <div className="qa-form">
-        <label className="qa-form__label">Content Title / Topic <span className="qa-form__req">*</span></label>
-        <input className="qa-form__input" placeholder="e.g. Intune – Device Enrollment Troubleshooting" value={form.title} onChange={e => setForm(f => ({ ...f, title: e.target.value }))} />
+        {/* Template download banner */}
+        <div className="qa-form__banner">
+          <span className="qa-form__banner-icon">📋</span>
+          <div>
+            <p className="qa-form__banner-title">Download the Onboarding Template first</p>
+            <p className="qa-form__banner-sub">One row = one onboarding item · All required columns must be populated</p>
+          </div>
+          <a
+            className="qa-btn qa-btn--primary qa-form__banner-link"
+            href="https://aka.ms/Content_KA_Onboarding"
+            target="_blank"
+            rel="noreferrer"
+          >Download ↗</a>
+        </div>
 
-        <label className="qa-form__label">Line of Business</label>
-        <select className="qa-form__select" value={form.lob} onChange={e => setForm(f => ({ ...f, lob: e.target.value }))}>
-          {['all', 'Azure', 'Microsoft 365', 'Windows', 'Surface', 'Xbox', 'Intune'].map(l => (
-            <option key={l} value={l}>{l === 'all' ? 'All / Not sure' : l}</option>
-          ))}
+        <label className="qa-form__label">Team / Project Name <span className="qa-form__req">*</span></label>
+        <input
+          className="qa-form__input"
+          placeholder="e.g. Surface – Device Support"
+          value={form.teamName}
+          onChange={e => setForm(f => ({ ...f, teamName: e.target.value }))}
+        />
+
+        <label className="qa-form__label">Brief Description of Onboarding Request <span className="qa-form__req">*</span></label>
+        <textarea
+          className="qa-form__textarea"
+          rows={3}
+          placeholder="Team context and onboarding goals…"
+          value={form.description}
+          onChange={e => setForm(f => ({ ...f, description: e.target.value }))}
+        />
+
+        <label className="qa-form__label">SxG Project Contacts — PM, Eng, POC <span className="qa-form__req">*</span></label>
+        <input
+          className="qa-form__input"
+          placeholder="e.g. Jane Smith (PM), John Doe (Eng)"
+          value={form.contacts}
+          onChange={e => setForm(f => ({ ...f, contacts: e.target.value }))}
+        />
+
+        <label className="qa-form__label">Agent Type <span className="qa-form__req">*</span></label>
+        <select
+          className="qa-form__select"
+          value={form.agentType}
+          onChange={e => setForm(f => ({ ...f, agentType: e.target.value }))}
+        >
+          <option>AAQ</option>
+          <option>KA</option>
         </select>
 
-        <label className="qa-form__label">Priority</label>
-        <select className="qa-form__select" value={form.priority} onChange={e => setForm(f => ({ ...f, priority: e.target.value }))}>
-          {['High', 'Medium', 'Low'].map(p => <option key={p}>{p}</option>)}
-        </select>
-
-        <label className="qa-form__label">Description &amp; Business Justification <span className="qa-form__req">*</span></label>
-        <textarea className="qa-form__textarea" rows={4} placeholder="Describe what content is needed and why it would be valuable..." value={form.description} onChange={e => setForm(f => ({ ...f, description: e.target.value }))} />
+        <label className="qa-form__label">Attach Completed Excel File <span className="qa-form__req">*</span></label>
+        <div className="qa-form__file-wrap">
+          <label className="qa-form__file-label">
+            <input
+              type="file"
+              accept=".xlsx,.xls"
+              className="qa-form__file-input"
+              onChange={e => setForm(f => ({ ...f, fileName: e.target.files?.[0]?.name ?? '' }))}
+            />
+            <span className="qa-btn">📎 Choose File</span>
+            <span className="qa-form__file-name">{form.fileName || 'No file selected'}</span>
+          </label>
+        </div>
+        <p className="qa-form__hint">Requests without a completed Excel will remain <strong>Blocked</strong>.</p>
 
         <div className="qa-form__footer">
-          <button className="qa-btn qa-btn--primary" disabled={!form.title || !form.description} onClick={() => setSubmitted(true)}>Submit Request</button>
+          <button className="qa-btn qa-btn--primary" disabled={!isValid} onClick={() => setSubmitted(true)}>
+            Submit Request
+          </button>
           <button className="qa-btn" onClick={onClose}>Cancel</button>
         </div>
       </div>
@@ -259,7 +319,7 @@ function KnowledgeBotModal({ onClose }: { onClose: () => void }) {
 // ── Main QuickActions bar ────────────────────────────────────────────────────
 
 const ACTIONS = [
-  { type: 'add' as ActionType,      icon: '➕', label: 'Request Content',   sub: 'Add a new article or topic', color: 'green' },
+  { type: 'add' as ActionType,      icon: '➕', label: 'Onboarding Request', sub: 'Onboard new KA content',  color: 'green' },
   { type: 'remove' as ActionType,   icon: '🗑️', label: 'Remove Content',    sub: 'Flag content for removal',   color: 'red' },
   { type: 'feedback' as ActionType, icon: '💬', label: 'Give Feedback',     sub: 'Share dashboard feedback',   color: 'blue' },
   { type: 'feature' as ActionType,  icon: '🚀', label: 'Feature Request',   sub: 'Suggest an enhancement',     color: 'purple' },
