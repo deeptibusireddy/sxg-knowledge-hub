@@ -726,22 +726,23 @@ const ACTIONS = [
   { type: 'bot' as ActionType,      icon: '🤖', label: 'Knowledge Bot',             sub: 'Self-serve Q&A',                       color: 'teal'   },
 ];
 
-export function QuickActions() {
+export function QuickActions({ vertical = false }: { vertical?: boolean }) {
   const [open, setOpen] = useState<ModalState | null>(null);
 
   return (
     <>
-      <div className="quick-actions">
-        <div className="quick-actions__inner">
+      <div className={vertical ? 'quick-actions quick-actions--vertical' : 'quick-actions'}>
+        <div className={vertical ? 'quick-actions__inner quick-actions__inner--vertical' : 'quick-actions__inner'}>
           {ACTIONS.map(a => (
             <button
               key={a.type}
-              className={`quick-actions__btn quick-actions__btn--${a.color}`}
+              className={`quick-actions__btn quick-actions__btn--${a.color}${vertical ? ' quick-actions__btn--compact' : ''}`}
               onClick={() => setOpen({ type: a.type })}
+              title={vertical ? `${a.label} — ${a.sub}` : undefined}
             >
               <span className="quick-actions__icon">{a.icon}</span>
-              <span className="quick-actions__label">{a.label}</span>
-              <span className="quick-actions__sub">{a.sub}</span>
+              {!vertical && <span className="quick-actions__label">{a.label}</span>}
+              {!vertical && <span className="quick-actions__sub">{a.sub}</span>}
             </button>
           ))}
         </div>

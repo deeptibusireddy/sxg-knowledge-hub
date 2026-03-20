@@ -106,6 +106,17 @@
   line-height: 1.4;
 }
 
+/* Vertical mode (Layout B) */
+.quick-actions--vertical { border-left: none; border-bottom: none; width: 100%; }
+.quick-actions__inner--vertical { flex-direction: column; padding: 8px 6px; gap: 8px; }
+.quick-actions__btn--compact {
+  flex-direction: column;
+  padding: 10px 6px;
+  border-radius: 10px;
+  width: 68px;
+}
+.quick-actions__btn--compact .quick-actions__icon { font-size: 20px; }
+
 /* ─── Modal Overlay ──────────────────────────────────────────────────────────── */
 .qa-overlay {
   position: fixed;
