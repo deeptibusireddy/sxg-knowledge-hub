@@ -27,8 +27,16 @@ export const CONFIG = {
    */
   REMOVAL_FLOW_URL: '',
 
+  /**
+   * Power Automate / Azure Function URL for New Partner Onboarding → ADO Task creation.
+   */
   ONBOARDING_FLOW_URL: '',
 
-  /** Reply-to / destination shown in the mailto fallback */
+  /**
+   * Deep link URL for the Teams Knowledge Bot.
+   * e.g. https://teams.microsoft.com/l/chat/0/0?users=28:bot-id
+   * Leave empty to show "coming soon" state.
+   */
+  TEAMS_BOT_URL: '',
   FEEDBACK_EMAIL: 'SxGCorePM@microsoft.com',
 };

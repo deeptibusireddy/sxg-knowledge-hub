@@ -523,25 +523,6 @@ function FeatureRequestModal({ onClose }: { onClose: () => void }) {
   );
 }
 
-const BOT_RESPONSES: Record<string, string> = {
-  default: "I can help answer questions about the Knowledge Health Dashboard, content gaps, article performance, and more. Try asking something like: *What are the top blocked articles?* or *How do I request new content?*",
-  blocked: "Currently there are **14 blocked articles** across all LOBs. The top reasons are missing owner approval (8) and flagged content policy terms (6). You can view the full list in the Tables section below.",
-  gap: "The Content Intelligence Workspace identifies **23 content gaps** — high-value topics with no matching article. The top gaps are in Intune Device Enrollment and Azure Networking.",
-  feedback: "Feedback is collected via thumbs up/down on articles in AaQ and Copilot Hub. Articles with a score below 60% are flagged for owner review.",
-  content: "To request new content, close this chat and click the **➕ Request Content Addition** button. Your request goes directly to the content team.",
-};
-
-function getBotResponse(msg: string): string {
-  const lower = msg.toLowerCase();
-  if (lower.includes('block')) return BOT_RESPONSES.blocked;
-  if (lower.includes('gap') || lower.includes('miss')) return BOT_RESPONSES.gap;
-  if (lower.includes('feedback') || lower.includes('thumbs')) return BOT_RESPONSES.feedback;
-  if (lower.includes('content') || lower.includes('add') || lower.includes('creat')) return BOT_RESPONSES.content;
-  return BOT_RESPONSES.default;
-}
-
-interface ChatMessage { role: 'user' | 'bot'; text: string; }
-
 type OnboardStatus = 'idle' | 'sending' | 'success' | 'error';
 
 const CALLING_METHODS = [
@@ -699,40 +680,36 @@ function KAOnboardModal({ onClose }: { onClose: () => void }) {
 }
 
 function KnowledgeBotModal({ onClose }: { onClose: () => void }) {
-  const [messages, setMessages] = useState<ChatMessage[]>([
-    { role: 'bot', text: BOT_RESPONSES.default },
-  ]);
-  const [input, setInput] = useState('');
-
-  const send = () => {
-    if (!input.trim()) return;
-    const userMsg = input.trim();
-    setInput('');
-    setMessages(m => [...m, { role: 'user', text: userMsg }, { role: 'bot', text: getBotResponse(userMsg) }]);
-  };
-
   return (
-    <ModalShell title="Chat with Knowledge Bot" icon="🤖" onClose={onClose}>
-      <p className="qa-modal__desc">Ask questions about content health, gaps, article performance, or how to use the dashboard.</p>
-      <div className="qa-chat">
-        <div className="qa-chat__messages">
-          {messages.map((msg, i) => (
-            <div key={i} className={`qa-chat__msg qa-chat__msg--${msg.role}`}>
-              {msg.role === 'bot' && <span className="qa-chat__avatar">🤖</span>}
-              <span className="qa-chat__bubble">{msg.text}</span>
-            </div>
-          ))}
+    <ModalShell title="Knowledge Bot" icon="🤖" onClose={onClose}>
+      <div className="qa-bot-placeholder">
+        <span className="qa-bot-placeholder__icon">🤖</span>
+        <h3 className="qa-bot-placeholder__title">Coming Soon</h3>
+        <p className="qa-bot-placeholder__desc">
+          The Knowledge Bot will open a <strong>Microsoft Teams chat</strong> where you can ask self-serve questions about content health, knowledge gaps, blocked articles, and more — powered by the SxG Knowledge Agent.
+        </p>
+        <div className="qa-bot-placeholder__capabilities">
+          <p className="qa-bot-placeholder__cap-title">What you'll be able to ask:</p>
+          <ul className="qa-bot-placeholder__cap-list">
+            <li>What articles are currently blocked and why?</li>
+            <li>Which LOBs have the most content gaps?</li>
+            <li>How do I request new content or report an issue?</li>
+            <li>What's the quality score trend for my team?</li>
+          </ul>
         </div>
-        <div className="qa-chat__input-row">
-          <input
-            className="qa-form__input qa-chat__input"
-            placeholder="Ask the Knowledge Bot..."
-            value={input}
-            onChange={e => setInput(e.target.value)}
-            onKeyDown={e => e.key === 'Enter' && send()}
-          />
-          <button className="qa-btn qa-btn--primary" onClick={send} disabled={!input.trim()}>Send</button>
-        </div>
+        {CONFIG.TEAMS_BOT_URL ? (
+          <a
+            className="qa-btn qa-btn--primary qa-bot-placeholder__cta"
+            href={CONFIG.TEAMS_BOT_URL}
+            target="_blank"
+            rel="noreferrer"
+            onClick={onClose}
+          >
+            Open in Teams ↗
+          </a>
+        ) : (
+          <p className="qa-bot-placeholder__soon">Teams integration in progress — check back soon.</p>
+        )}
       </div>
     </ModalShell>
   );
