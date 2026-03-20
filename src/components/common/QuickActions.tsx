@@ -136,35 +136,101 @@ function AddContentModal({ onClose }: { onClose: () => void }) {
 
 function RemoveContentModal({ onClose }: { onClose: () => void }) {
   const [submitted, setSubmitted] = useState(false);
-  const [form, setForm] = useState({ content: '', reason: '', urgency: 'Normal' });
+  const [form, setForm] = useState({
+    teamName: '',
+    agentType: 'AAQ',
+    reason: '',
+    articles: '',
+    fileName: '',
+    urgency: 'Normal',
+  });
+
+  const isValid = form.teamName.trim() && form.reason.trim() && (form.articles.trim() || form.fileName);
 
   if (submitted) return (
-    <ModalShell title="Request Content Removal" icon="🗑️" onClose={onClose}>
+    <ModalShell title="Content Removal Request" icon="🗑️" onClose={onClose}>
       <div className="qa-modal__success">
         <span className="qa-modal__success-icon">✓</span>
-        <p>Removal request submitted. The content team will review within 2 business days.</p>
+        <p>Your removal request has been submitted. The KA team will review within 2 business days.</p>
         <button className="qa-btn qa-btn--primary" onClick={onClose}>Done</button>
       </div>
     </ModalShell>
   );
 
   return (
-    <ModalShell title="Request Content Removal" icon="🗑️" onClose={onClose}>
-      <p className="qa-modal__desc">Request that an article or content item be removed or retired from the knowledge base.</p>
+    <ModalShell title="Content Removal Request" icon="🗑️" onClose={onClose}>
+      <p className="qa-modal__desc">
+        Request that one or more articles be removed from the Knowledge Agent. Provide the article(s) below or upload a list.
+      </p>
       <div className="qa-form">
-        <label className="qa-form__label">Article Title or ID <span className="qa-form__req">*</span></label>
-        <input className="qa-form__input" placeholder="e.g. KB0012345 or article title" value={form.content} onChange={e => setForm(f => ({ ...f, content: e.target.value }))} />
+
+        <label className="qa-form__label">Team / Project Name <span className="qa-form__req">*</span></label>
+        <input
+          className="qa-form__input"
+          placeholder="e.g. Surface – Device Support"
+          value={form.teamName}
+          onChange={e => setForm(f => ({ ...f, teamName: e.target.value }))}
+        />
+
+        <label className="qa-form__label">Agent Type <span className="qa-form__req">*</span></label>
+        <select
+          className="qa-form__select"
+          value={form.agentType}
+          onChange={e => setForm(f => ({ ...f, agentType: e.target.value }))}
+        >
+          <option>AAQ</option>
+          <option>KA</option>
+        </select>
 
         <label className="qa-form__label">Urgency</label>
-        <select className="qa-form__select" value={form.urgency} onChange={e => setForm(f => ({ ...f, urgency: e.target.value }))}>
-          {['Urgent – harmful content', 'High – outdated', 'Normal – cleanup'].map(u => <option key={u}>{u}</option>)}
+        <select
+          className="qa-form__select"
+          value={form.urgency}
+          onChange={e => setForm(f => ({ ...f, urgency: e.target.value }))}
+        >
+          <option>Normal</option>
+          <option>High – outdated / inaccurate</option>
+          <option>Urgent – harmful or sensitive content</option>
         </select>
 
         <label className="qa-form__label">Reason for Removal <span className="qa-form__req">*</span></label>
-        <textarea className="qa-form__textarea" rows={4} placeholder="Explain why this content should be removed..." value={form.reason} onChange={e => setForm(f => ({ ...f, reason: e.target.value }))} />
+        <textarea
+          className="qa-form__textarea"
+          rows={3}
+          placeholder="Why should this content be removed?"
+          value={form.reason}
+          onChange={e => setForm(f => ({ ...f, reason: e.target.value }))}
+        />
+
+        <label className="qa-form__label">Article ID(s) / URL(s) <span className="qa-form__req">*</span></label>
+        <textarea
+          className="qa-form__textarea"
+          rows={3}
+          placeholder="Paste one article per line — ID, URL, or title"
+          value={form.articles}
+          onChange={e => setForm(f => ({ ...f, articles: e.target.value }))}
+        />
+
+        <div className="qa-form__divider"><span>or upload a list</span></div>
+
+        <div className="qa-form__file-wrap">
+          <label className="qa-form__file-label">
+            <input
+              type="file"
+              accept=".xlsx,.xls,.csv"
+              className="qa-form__file-input"
+              onChange={e => setForm(f => ({ ...f, fileName: e.target.files?.[0]?.name ?? '' }))}
+            />
+            <span className="qa-btn">📎 Upload Article List</span>
+            <span className="qa-form__file-name">{form.fileName || 'No file selected'}</span>
+          </label>
+        </div>
+        <p className="qa-form__hint">Accepted formats: .xlsx, .xls, .csv — one article per row.</p>
 
         <div className="qa-form__footer">
-          <button className="qa-btn qa-btn--danger" disabled={!form.content || !form.reason} onClick={() => setSubmitted(true)}>Submit Request</button>
+          <button className="qa-btn qa-btn--danger" disabled={!isValid} onClick={() => setSubmitted(true)}>
+            Submit Request
+          </button>
           <button className="qa-btn" onClick={onClose}>Cancel</button>
         </div>
       </div>
@@ -320,7 +386,7 @@ function KnowledgeBotModal({ onClose }: { onClose: () => void }) {
 
 const ACTIONS = [
   { type: 'add' as ActionType,      icon: '➕', label: 'Content Ingestion Request', sub: 'Onboard new KA content',  color: 'green' },
-  { type: 'remove' as ActionType,   icon: '🗑️', label: 'Remove Content',    sub: 'Flag content for removal',   color: 'red' },
+  { type: 'remove' as ActionType,   icon: '🗑️', label: 'Content Removal Request', sub: 'Flag content for removal',   color: 'red' },
   { type: 'feedback' as ActionType, icon: '💬', label: 'Give Feedback',     sub: 'Share dashboard feedback',   color: 'blue' },
   { type: 'feature' as ActionType,  icon: '🚀', label: 'Feature Request',   sub: 'Suggest an enhancement',     color: 'purple' },
   { type: 'bot' as ActionType,      icon: '🤖', label: 'Knowledge Bot',     sub: 'Self-serve Q&A',            color: 'teal' },

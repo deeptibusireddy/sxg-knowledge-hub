@@ -309,6 +309,24 @@
   margin: -4px 0 0;
 }
 
+.qa-form__divider {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--pbi-muted, #888);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: .05em;
+}
+
+.qa-form__divider::before,
+.qa-form__divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: #e8e8e8;
+}
+
 /* ─── Star rating ────────────────────────────────────────────────────────────── */
 .qa-stars {
   display: flex;
