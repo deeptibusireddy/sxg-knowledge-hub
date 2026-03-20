@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import './QuickActions.css';
+import { CONFIG } from '../../config';
 
 type ActionType = 'add' | 'remove' | 'feedback' | 'feature' | 'bot';
 
@@ -238,27 +239,112 @@ function RemoveContentModal({ onClose }: { onClose: () => void }) {
   );
 }
 
+const FEEDBACK_CATEGORIES = [
+  'Content Quality',
+  'Knowledge Gap',
+  'Dashboard / UX',
+  'Data Accuracy',
+  'Article Feedback',
+  'Other / General',
+];
+
+type FeedbackStatus = 'idle' | 'sending' | 'success' | 'error';
+
 function FeedbackModal({ onClose }: { onClose: () => void }) {
-  const [submitted, setSubmitted] = useState(false);
+  const [status, setStatus] = useState<FeedbackStatus>('idle');
   const [rating, setRating] = useState(0);
   const [hovered, setHovered] = useState(0);
-  const [text, setText] = useState('');
+  const [form, setForm] = useState({
+    category: FEEDBACK_CATEGORIES[0],
+    subject: '',
+    feedback: '',
+    alias: '',
+  });
 
-  if (submitted) return (
-    <ModalShell title="General Feedback" icon="💬" onClose={onClose}>
+  const isValid = form.feedback.trim() && form.subject.trim();
+
+  async function submit() {
+    if (!isValid) return;
+    setStatus('sending');
+
+    const payload = {
+      category: form.category,
+      subject: form.subject,
+      feedback: form.feedback,
+      rating: rating || null,
+      alias: form.alias || 'Anonymous',
+      submittedAt: new Date().toISOString(),
+    };
+
+    if (!CONFIG.FEEDBACK_FLOW_URL) {
+      // No flow configured — open mailto as fallback
+      const body = encodeURIComponent(
+        `Category: ${payload.category}\nRating: ${payload.rating ?? 'N/A'}/5\nAlias: ${payload.alias}\n\n${payload.feedback}`
+      );
+      window.open(
+        `mailto:${CONFIG.FEEDBACK_EMAIL}?subject=${encodeURIComponent(`[SxG Knowledge Hub Feedback] ${payload.subject}`)}&body=${body}`,
+        '_blank'
+      );
+      setStatus('success');
+      return;
+    }
+
+    try {
+      await fetch(CONFIG.FEEDBACK_FLOW_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+      setStatus('success');
+    } catch {
+      setStatus('error');
+    }
+  }
+
+  if (status === 'success') return (
+    <ModalShell title="Give Feedback" icon="💬" onClose={onClose}>
       <div className="qa-modal__success">
         <span className="qa-modal__success-icon">✓</span>
-        <p>Thank you for your feedback! It helps us improve the dashboard.</p>
+        <p>Thank you! Your feedback has been sent to the SxG Knowledge team.</p>
         <button className="qa-btn qa-btn--primary" onClick={onClose}>Done</button>
       </div>
     </ModalShell>
   );
 
   return (
-    <ModalShell title="General Feedback" icon="💬" onClose={onClose}>
-      <p className="qa-modal__desc">Share your thoughts on the dashboard, data quality, or anything else.</p>
+    <ModalShell title="Give Feedback" icon="💬" onClose={onClose}>
+      <p className="qa-modal__desc">
+        Share feedback with the SxG Knowledge team — about content quality, gaps, the dashboard, or anything else.
+      </p>
       <div className="qa-form">
-        <label className="qa-form__label">Overall Rating</label>
+
+        <label className="qa-form__label">Category <span className="qa-form__req">*</span></label>
+        <select
+          className="qa-form__select"
+          value={form.category}
+          onChange={e => setForm(f => ({ ...f, category: e.target.value }))}
+        >
+          {FEEDBACK_CATEGORIES.map(c => <option key={c}>{c}</option>)}
+        </select>
+
+        <label className="qa-form__label">Subject <span className="qa-form__req">*</span></label>
+        <input
+          className="qa-form__input"
+          placeholder="Brief summary of your feedback"
+          value={form.subject}
+          onChange={e => setForm(f => ({ ...f, subject: e.target.value }))}
+        />
+
+        <label className="qa-form__label">Your Feedback <span className="qa-form__req">*</span></label>
+        <textarea
+          className="qa-form__textarea"
+          rows={5}
+          placeholder="What's working well? What could be better? Be as specific as you like…"
+          value={form.feedback}
+          onChange={e => setForm(f => ({ ...f, feedback: e.target.value }))}
+        />
+
+        <label className="qa-form__label">Overall Rating (optional)</label>
         <div className="qa-stars">
           {[1, 2, 3, 4, 5].map(n => (
             <button
@@ -267,17 +353,32 @@ function FeedbackModal({ onClose }: { onClose: () => void }) {
               className={`qa-star${n <= (hovered || rating) ? ' qa-star--active' : ''}`}
               onMouseEnter={() => setHovered(n)}
               onMouseLeave={() => setHovered(0)}
-              onClick={() => setRating(n)}
+              onClick={() => setRating(r => r === n ? 0 : n)}
               aria-label={`${n} star`}
             >★</button>
           ))}
         </div>
 
-        <label className="qa-form__label">Your Feedback <span className="qa-form__req">*</span></label>
-        <textarea className="qa-form__textarea" rows={5} placeholder="What's working well? What could be better?" value={text} onChange={e => setText(e.target.value)} />
+        <label className="qa-form__label">Your Name / Alias (optional)</label>
+        <input
+          className="qa-form__input"
+          placeholder="Leave blank to submit anonymously"
+          value={form.alias}
+          onChange={e => setForm(f => ({ ...f, alias: e.target.value }))}
+        />
+
+        {status === 'error' && (
+          <p className="qa-form__error">Something went wrong sending your feedback. Please try again.</p>
+        )}
 
         <div className="qa-form__footer">
-          <button className="qa-btn qa-btn--primary" disabled={!text} onClick={() => setSubmitted(true)}>Send Feedback</button>
+          <button
+            className="qa-btn qa-btn--primary"
+            disabled={!isValid || status === 'sending'}
+            onClick={submit}
+          >
+            {status === 'sending' ? 'Sending…' : 'Send Feedback'}
+          </button>
           <button className="qa-btn" onClick={onClose}>Cancel</button>
         </div>
       </div>
