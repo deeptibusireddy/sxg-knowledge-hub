@@ -42,8 +42,8 @@ export default function App() {
           <div className="app__logo">
             <span className="app__logo-icon">◈</span>
             <div>
-              <h1 className="app__title">SxG Knowledge Health</h1>
-              <p className="app__subtitle">Knowledge Agent · Partner Dashboard</p>
+              <h1 className="app__title">SxG Knowledge Hub</h1>
+              <p className="app__subtitle">Actionable Insights · Partner Dashboard</p>
             </div>
           </div>
           <div className="app__header-meta">
