@@ -2,7 +2,7 @@ import { useState } from 'react';
 import './QuickActions.css';
 import { CONFIG } from '../../config';
 
-type ActionType = 'add' | 'remove' | 'feedback' | 'feature' | 'bot';
+type ActionType = 'add' | 'remove' | 'feedback' | 'feature' | 'onboard' | 'bot';
 
 interface ModalState {
   type: ActionType;
@@ -542,6 +542,162 @@ function getBotResponse(msg: string): string {
 
 interface ChatMessage { role: 'user' | 'bot'; text: string; }
 
+type OnboardStatus = 'idle' | 'sending' | 'success' | 'error';
+
+const CALLING_METHODS = [
+  {
+    value: 'v2',
+    label: 'Execute CoPilot and Wait (V2)',
+    description: 'Allows partners to initiate the CoPilot process and wait for completion before proceeding (Agent-to-Agent scenario).',
+  },
+  {
+    value: 'mcp',
+    label: 'SxG MCP Server',
+    description: 'Partner intends to interact with the Knowledge Agent by invoking it directly from a declarative agent or via a direct Web API call.',
+  },
+];
+
+function KAOnboardModal({ onClose }: { onClose: () => void }) {
+  const [status, setStatus] = useState<OnboardStatus>('idle');
+  const [form, setForm] = useState({
+    teamName: '',
+    callingMethod: 'v2',
+    purpose: '',
+    mcsOrgName: '',
+    npaAccount: '',
+    mcpAccessObtained: 'No',
+    environment: 'Pre-Production',
+    rps: '',
+  });
+
+  const set = (field: keyof typeof form) =>
+    (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) =>
+      setForm(f => ({ ...f, [field]: e.target.value }));
+
+  const selectedMethod = CALLING_METHODS.find(m => m.value === form.callingMethod);
+  const isValid = form.teamName.trim() && form.purpose.trim();
+
+  async function submit() {
+    if (!isValid) return;
+    setStatus('sending');
+    const payload = { ...form, submittedAt: new Date().toISOString() };
+
+    if (!CONFIG.ONBOARDING_FLOW_URL) {
+      const lines = [
+        `Team Name: ${form.teamName}`,
+        `Calling Method: ${selectedMethod?.label}`,
+        `Purpose: ${form.purpose}`,
+        `MCS Org Name: ${form.mcsOrgName || 'N/A'}`,
+        form.callingMethod === 'v2' ? `NPA Account: ${form.npaAccount || 'N/A'}` : `MCP Access Obtained: ${form.mcpAccessObtained}`,
+        `Environment: ${form.environment}`,
+        `Expected RPS: ${form.rps || 'N/A'}`,
+      ];
+      window.open(
+        `mailto:${CONFIG.FEEDBACK_EMAIL}?subject=${encodeURIComponent(`[SxG KA Onboarding Request] ${form.teamName}`)}&body=${encodeURIComponent(lines.join('\n'))}`,
+        '_blank'
+      );
+      setStatus('success');
+      return;
+    }
+
+    try {
+      await fetch(CONFIG.ONBOARDING_FLOW_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+      setStatus('success');
+    } catch {
+      setStatus('error');
+    }
+  }
+
+  if (status === 'success') return (
+    <ModalShell title="Knowledge Agent Onboarding" icon="🌐" onClose={onClose}>
+      <div className="qa-modal__success">
+        <span className="qa-modal__success-icon">✓</span>
+        <p>Your onboarding request has been submitted. The SxG team will follow up to discuss next steps.</p>
+        <button className="qa-btn qa-btn--primary" onClick={onClose}>Done</button>
+      </div>
+    </ModalShell>
+  );
+
+  return (
+    <ModalShell title="Knowledge Agent Onboarding" icon="🌐" onClose={onClose}>
+      <p className="qa-modal__desc">
+        For new partners only. Complete this form to request access to the SxG Knowledge Agent.
+        Unsupported scenarios will be discussed and evaluated separately.
+      </p>
+      <div className="qa-form">
+
+        <label className="qa-form__label">Team Name <span className="qa-form__req">*</span></label>
+        <input className="qa-form__input" placeholder="e.g. Surface – Device Support" value={form.teamName} onChange={set('teamName')} />
+
+        <label className="qa-form__label">Preferred Calling Method <span className="qa-form__req">*</span></label>
+        <div className="qa-radio-group">
+          {CALLING_METHODS.map(m => (
+            <label key={m.value} className={`qa-radio-card${form.callingMethod === m.value ? ' qa-radio-card--selected' : ''}`}>
+              <input
+                type="radio"
+                name="callingMethod"
+                value={m.value}
+                checked={form.callingMethod === m.value}
+                onChange={set('callingMethod')}
+                className="qa-radio-input"
+              />
+              <div>
+                <p className="qa-radio-label">{m.label}</p>
+                <p className="qa-radio-desc">{m.description}</p>
+              </div>
+            </label>
+          ))}
+        </div>
+
+        <label className="qa-form__label">Purpose &amp; Where It Will Be Used <span className="qa-form__req">*</span></label>
+        <textarea className="qa-form__textarea" rows={3} placeholder="Describe the purpose of calling the Knowledge Agent and where it will be integrated" value={form.purpose} onChange={set('purpose')} />
+
+        <label className="qa-form__label">MCS Org Name</label>
+        <input className="qa-form__input" placeholder="Your MCS org name" value={form.mcsOrgName} onChange={set('mcsOrgName')} />
+
+        {form.callingMethod === 'v2' ? (
+          <>
+            <label className="qa-form__label">NPA Account</label>
+            <input className="qa-form__input" placeholder="NPA account for Execute CoPilot and Wait (V2)" value={form.npaAccount} onChange={set('npaAccount')} />
+          </>
+        ) : (
+          <>
+            <label className="qa-form__label">MCP Access Obtained?</label>
+            <select className="qa-form__select" value={form.mcpAccessObtained} onChange={set('mcpAccessObtained')}>
+              <option>No</option>
+              <option>Yes</option>
+            </select>
+          </>
+        )}
+
+        <label className="qa-form__label">Environment</label>
+        <select className="qa-form__select" value={form.environment} onChange={set('environment')}>
+          <option>Pre-Production</option>
+          <option>Production</option>
+        </select>
+
+        <label className="qa-form__label">Expected Requests per Second (RPS)</label>
+        <input className="qa-form__input" type="number" min={0} placeholder="e.g. 10" value={form.rps} onChange={set('rps')} />
+
+        {status === 'error' && (
+          <p className="qa-form__error">Something went wrong submitting your request. Please try again.</p>
+        )}
+
+        <div className="qa-form__footer">
+          <button className="qa-btn qa-btn--primary" disabled={!isValid || status === 'sending'} onClick={submit}>
+            {status === 'sending' ? 'Submitting…' : 'Submit Request'}
+          </button>
+          <button className="qa-btn" onClick={onClose}>Cancel</button>
+        </div>
+      </div>
+    </ModalShell>
+  );
+}
+
 function KnowledgeBotModal({ onClose }: { onClose: () => void }) {
   const [messages, setMessages] = useState<ChatMessage[]>([
     { role: 'bot', text: BOT_RESPONSES.default },
@@ -585,11 +741,12 @@ function KnowledgeBotModal({ onClose }: { onClose: () => void }) {
 // ── Main QuickActions bar ────────────────────────────────────────────────────
 
 const ACTIONS = [
-  { type: 'add' as ActionType,      icon: '➕', label: 'Content Ingestion Request', sub: 'Onboard new KA content',  color: 'green' },
-  { type: 'remove' as ActionType,   icon: '🗑️', label: 'Content Removal Request', sub: 'Flag content for removal',   color: 'red' },
-  { type: 'feedback' as ActionType, icon: '💬', label: 'Give Feedback',     sub: 'Share dashboard feedback',   color: 'blue' },
-  { type: 'feature' as ActionType,  icon: '🚀', label: 'Feature Request',   sub: 'Suggest an enhancement',     color: 'purple' },
-  { type: 'bot' as ActionType,      icon: '🤖', label: 'Knowledge Bot',     sub: 'Self-serve Q&A',            color: 'teal' },
+  { type: 'add' as ActionType,      icon: '➕', label: 'Content Ingestion Request', sub: 'Onboard new KA content',              color: 'green'  },
+  { type: 'remove' as ActionType,   icon: '🗑️', label: 'Content Removal Request',   sub: 'Flag content for removal',             color: 'red'    },
+  { type: 'feedback' as ActionType, icon: '💬', label: 'Give Feedback',             sub: 'Share dashboard feedback',             color: 'blue'   },
+  { type: 'feature' as ActionType,  icon: '🚀', label: 'Feature Request',           sub: 'Suggest an enhancement',               color: 'purple' },
+  { type: 'onboard' as ActionType,  icon: '🌐', label: 'New Partner Onboarding',    sub: 'Request KA access — new partners only', color: 'orange' },
+  { type: 'bot' as ActionType,      icon: '🤖', label: 'Knowledge Bot',             sub: 'Self-serve Q&A',                       color: 'teal'   },
 ];
 
 export function QuickActions() {
@@ -617,6 +774,7 @@ export function QuickActions() {
       {open?.type === 'remove'   && <RemoveContentModal  onClose={() => setOpen(null)} />}
       {open?.type === 'feedback' && <FeedbackModal       onClose={() => setOpen(null)} />}
       {open?.type === 'feature'  && <FeatureRequestModal onClose={() => setOpen(null)} />}
+      {open?.type === 'onboard'  && <KAOnboardModal      onClose={() => setOpen(null)} />}
       {open?.type === 'bot'      && <KnowledgeBotModal   onClose={() => setOpen(null)} />}
     </>
   );

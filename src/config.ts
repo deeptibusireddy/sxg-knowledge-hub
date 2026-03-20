@@ -27,6 +27,8 @@ export const CONFIG = {
    */
   REMOVAL_FLOW_URL: '',
 
+  ONBOARDING_FLOW_URL: '',
+
   /** Reply-to / destination shown in the mailto fallback */
   FEEDBACK_EMAIL: 'SxGCorePM@microsoft.com',
 };
