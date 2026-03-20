@@ -319,7 +319,7 @@ function KnowledgeBotModal({ onClose }: { onClose: () => void }) {
 // ── Main QuickActions bar ────────────────────────────────────────────────────
 
 const ACTIONS = [
-  { type: 'add' as ActionType,      icon: '➕', label: 'Onboarding Request', sub: 'Onboard new KA content',  color: 'green' },
+  { type: 'add' as ActionType,      icon: '➕', label: 'Content Ingestion Request', sub: 'Onboard new KA content',  color: 'green' },
   { type: 'remove' as ActionType,   icon: '🗑️', label: 'Remove Content',    sub: 'Flag content for removal',   color: 'red' },
   { type: 'feedback' as ActionType, icon: '💬', label: 'Give Feedback',     sub: 'Share dashboard feedback',   color: 'blue' },
   { type: 'feature' as ActionType,  icon: '🚀', label: 'Feature Request',   sub: 'Suggest an enhancement',     color: 'purple' },
