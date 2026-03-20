@@ -386,15 +386,65 @@ function FeedbackModal({ onClose }: { onClose: () => void }) {
   );
 }
 
-function FeatureRequestModal({ onClose }: { onClose: () => void }) {
-  const [submitted, setSubmitted] = useState(false);
-  const [form, setForm] = useState({ title: '', useCase: '', impact: 'Medium' });
+type FeatureStatus = 'idle' | 'sending' | 'success' | 'error';
 
-  if (submitted) return (
+function FeatureRequestModal({ onClose }: { onClose: () => void }) {
+  const [status, setStatus] = useState<FeatureStatus>('idle');
+  const [form, setForm] = useState({
+    title: '',
+    summary: '',
+    krAccrual: '',
+    valueProposition: '',
+    experienceToday: '',
+    useCase: '',
+    targetTimeline: '',
+    costing: '',
+    whyNow: '',
+    dreamState: '',
+    dependencies: '',
+    capabilitySource: '',
+  });
+
+  const set = (field: keyof typeof form) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
+    setForm(f => ({ ...f, [field]: e.target.value }));
+
+  const isValid = form.title.trim() && form.summary.trim();
+
+  async function submit() {
+    if (!isValid) return;
+    setStatus('sending');
+
+    const payload = { ...form, submittedAt: new Date().toISOString() };
+
+    if (!CONFIG.FEATURE_REQUEST_FLOW_URL) {
+      const body = encodeURIComponent(
+        Object.entries(form).map(([k, v]) => `${k}:\n${v}`).join('\n\n')
+      );
+      window.open(
+        `mailto:${CONFIG.FEEDBACK_EMAIL}?subject=${encodeURIComponent(`[SxG Feature Request] ${form.title}`)}&body=${body}`,
+        '_blank'
+      );
+      setStatus('success');
+      return;
+    }
+
+    try {
+      await fetch(CONFIG.FEATURE_REQUEST_FLOW_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+      setStatus('success');
+    } catch {
+      setStatus('error');
+    }
+  }
+
+  if (status === 'success') return (
     <ModalShell title="Feature Request" icon="🚀" onClose={onClose}>
       <div className="qa-modal__success">
         <span className="qa-modal__success-icon">✓</span>
-        <p>Feature request submitted! We review all requests during sprint planning.</p>
+        <p>Your feature request has been submitted. The SxG team will review it during sprint planning.</p>
         <button className="qa-btn qa-btn--primary" onClick={onClose}>Done</button>
       </div>
     </ModalShell>
@@ -402,21 +452,70 @@ function FeatureRequestModal({ onClose }: { onClose: () => void }) {
 
   return (
     <ModalShell title="Feature Request" icon="🚀" onClose={onClose}>
-      <p className="qa-modal__desc">Suggest a new feature or enhancement for the Knowledge Health Dashboard.</p>
+      <p className="qa-modal__desc">
+        Submit a feature request to the SxG Knowledge team. Fields marked <span className="qa-form__req">*</span> are required — fill in as much as you can for the others.
+      </p>
       <div className="qa-form">
-        <label className="qa-form__label">Feature Title <span className="qa-form__req">*</span></label>
-        <input className="qa-form__input" placeholder="e.g. Email digest of weekly content gaps" value={form.title} onChange={e => setForm(f => ({ ...f, title: e.target.value }))} />
 
-        <label className="qa-form__label">Expected Impact</label>
-        <select className="qa-form__select" value={form.impact} onChange={e => setForm(f => ({ ...f, impact: e.target.value }))}>
-          {['High', 'Medium', 'Low'].map(i => <option key={i}>{i}</option>)}
-        </select>
+        {/* ── The Ask ── */}
+        <p className="qa-form__section">The Ask</p>
 
-        <label className="qa-form__label">Use Case &amp; Description <span className="qa-form__req">*</span></label>
-        <textarea className="qa-form__textarea" rows={4} placeholder="Describe the problem this solves and how you'd use it..." value={form.useCase} onChange={e => setForm(f => ({ ...f, useCase: e.target.value }))} />
+        <label className="qa-form__label">Title <span className="qa-form__req">*</span></label>
+        <input className="qa-form__input" placeholder="Short name for the feature" value={form.title} onChange={set('title')} />
+
+        <label className="qa-form__label">One-Sentence Description <span className="qa-form__req">*</span></label>
+        <input className="qa-form__input" placeholder="Scope, work, and outcome in one sentence" value={form.summary} onChange={set('summary')} />
+
+        {/* ── Value & Impact ── */}
+        <p className="qa-form__section">Value &amp; Impact</p>
+
+        <label className="qa-form__label">KR Accrual</label>
+        <textarea className="qa-form__textarea" rows={3} placeholder="Which KR does this accrue toward? What is the estimated impact?" value={form.krAccrual} onChange={set('krAccrual')} />
+
+        <label className="qa-form__label">Value Proposition</label>
+        <textarea className="qa-form__textarea" rows={4} placeholder="How will success be measured? Who benefits? What is the ROI over the next 3 semesters?" value={form.valueProposition} onChange={set('valueProposition')} />
+
+        <label className="qa-form__label">Why Now</label>
+        <textarea className="qa-form__textarea" rows={3} placeholder="Risk of not doing? Is there a deadline or critical business need?" value={form.whyNow} onChange={set('whyNow')} />
+
+        {/* ── Problem & Solution ── */}
+        <p className="qa-form__section">Problem &amp; Solution</p>
+
+        <label className="qa-form__label">Experience Today</label>
+        <textarea className="qa-form__textarea" rows={3} placeholder="What is the problem statement or existing gap to address?" value={form.experienceToday} onChange={set('experienceToday')} />
+
+        <label className="qa-form__label">Use Case</label>
+        <textarea className="qa-form__textarea" rows={4} placeholder="As a (persona) I want (goal) so that I can (result). One persona per use case." value={form.useCase} onChange={set('useCase')} />
+
+        <label className="qa-form__label">Dream State</label>
+        <textarea className="qa-form__textarea" rows={3} placeholder="What is the desired outcome? Is this 1 semester, 1 year, or a 3–5 year vision?" value={form.dreamState} onChange={set('dreamState')} />
+
+        {/* ── Planning ── */}
+        <p className="qa-form__section">Planning</p>
+
+        <label className="qa-form__label">Target Timeline</label>
+        <input className="qa-form__input" placeholder="e.g. Q3 FY26 — are there hard compliance or business deadlines?" value={form.targetTimeline} onChange={set('targetTimeline')} />
+
+        <label className="qa-form__label">Dependencies</label>
+        <textarea className="qa-form__textarea" rows={2} placeholder="Other teams, scenarios, or features this depends on" value={form.dependencies} onChange={set('dependencies')} />
+
+        <label className="qa-form__label">Costing</label>
+        <textarea className="qa-form__textarea" rows={3} placeholder="Resourcing estimate (e.g. 2 engineers for 1 month). Any Azure spend or licensing costs?" value={form.costing} onChange={set('costing')} />
+
+        {/* ── Stakeholders ── */}
+        <p className="qa-form__section">Stakeholders</p>
+
+        <label className="qa-form__label">Capability Ask Source</label>
+        <textarea className="qa-form__textarea" rows={3} placeholder="Who is asking? Primary sponsor? Stakeholder priority level and commitment?" value={form.capabilitySource} onChange={set('capabilitySource')} />
+
+        {status === 'error' && (
+          <p className="qa-form__error">Something went wrong submitting your request. Please try again.</p>
+        )}
 
         <div className="qa-form__footer">
-          <button className="qa-btn qa-btn--primary" disabled={!form.title || !form.useCase} onClick={() => setSubmitted(true)}>Submit Request</button>
+          <button className="qa-btn qa-btn--primary" disabled={!isValid || status === 'sending'} onClick={submit}>
+            {status === 'sending' ? 'Submitting…' : 'Submit Request'}
+          </button>
           <button className="qa-btn" onClick={onClose}>Cancel</button>
         </div>
       </div>
