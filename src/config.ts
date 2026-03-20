@@ -37,6 +37,6 @@ export const CONFIG = {
    * e.g. https://teams.microsoft.com/l/chat/0/0?users=28:bot-id
    * Leave empty to show "coming soon" state.
    */
-  TEAMS_BOT_URL: '',
+  TEAMS_BOT_URL: 'https://teams.microsoft.com/l/app/1ef3c012-7ba0-4e29-b6e7-e724183ab93f?source=app-header-share-entrypoint&templateInstanceId=cc587468-85eb-45e1-929d-06aae6f6d4e5&environment=033fc568-1ab1-ee30-8eb1-1ba1faa87719',
   FEEDBACK_EMAIL: 'SxGCorePM@microsoft.com',
 };
