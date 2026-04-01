@@ -5,20 +5,29 @@ export const kpiCards: KpiCardData[] = [
   {
     id: 'hrr',
     label: 'Hit Rate Resolution',
-    value: '74',
+    value: '86',
     unit: '%',
     trend: 'down',
-    trendLabel: '−3% vs last month',
+    trendLabel: '−2% vs last month',
     positiveIsUp: true,
   },
   {
     id: 'aht',
-    label: 'Avg Handle Time',
-    value: '9.2',
+    label: 'AHT (Copilot-assisted)',
+    value: '55',
     unit: 'min',
-    trend: 'up',
-    trendLabel: '+0.8 min vs last month',
+    trend: 'down',
+    trendLabel: '−70 min vs non-Copilot baseline',
     positiveIsUp: false,
+  },
+  {
+    id: 'copilotAdoption',
+    label: 'Copilot Adoption',
+    value: '11',
+    unit: '%',
+    trend: 'up',
+    trendLabel: 'Consumer at 96% — commercial far behind',
+    positiveIsUp: true,
   },
   // Support Quality
   {
@@ -61,8 +70,8 @@ export const kpiCards: KpiCardData[] = [
   // Program Health
   {
     id: 'retrievalSuccess',
-    label: 'Retrieval Success',
-    value: '79',
+    label: 'Helpful Response Rate',
+    value: '67',
     unit: '%',
     trend: 'down',
     trendLabel: '−4% vs last month',
