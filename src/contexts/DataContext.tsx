@@ -17,7 +17,7 @@ import {
 } from 'react';
 import { useMsal } from '@azure/msal-react';
 
-import { MSAL_CONFIG, POWERBI_WORKSPACE_ID, POWERBI_FLOW_URL, POWERBI_QUERIES } from '../config';
+import { MSAL_CONFIG, POWERBI_WORKSPACE_ID, POWERBI_FLOW_URL, POWERBI_QUERIES, STATIC_DEMO_ONLY } from '../config';
 import { executePbiQuery, executeViaFlow, type PbiRow } from '../services/powerBiService';
 import { loadAllStaticData } from '../services/staticDataService';
 
@@ -165,6 +165,7 @@ const DataContext = createContext<DataContextValue>({
 
 /** Returns true when live data can be attempted (flow URL or MSAL). */
 function isLiveDataConfigured(): boolean {
+  if (STATIC_DEMO_ONLY) return false;
   if (POWERBI_FLOW_URL.trim()) return true;
   return Boolean(MSAL_CONFIG.clientId && POWERBI_WORKSPACE_ID);
 }
@@ -227,7 +228,7 @@ export function DataProvider({ children }: { children: ReactNode }) {
         ...(static_.recentIncidents        && { recentIncidents:        static_.recentIncidents        as DashboardData['recentIncidents'] }),
         ...(static_.adoWorkItems           && { adoWorkItems:           static_.adoWorkItems           as DashboardData['adoWorkItems'] }),
       }));
-      setIsLive(true);
+      setIsLive(false);
     });
   }, []);
 

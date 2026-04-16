@@ -1,9 +1,11 @@
 import { useMsal } from '@azure/msal-react';
-import { MSAL_CONFIG } from '../../config';
+import { MSAL_CONFIG, STATIC_DEMO_ONLY } from '../../config';
 import { POWERBI_SCOPES } from '../../auth/msalConfig';
 import './AuthButton.css';
 
 export function AuthButton() {
+  if (STATIC_DEMO_ONLY) return null;
+
   const { instance, accounts } = useMsal();
   const configured = Boolean(MSAL_CONFIG.clientId);
 

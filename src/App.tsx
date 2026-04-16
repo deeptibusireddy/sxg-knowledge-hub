@@ -16,6 +16,7 @@ import { EvalResultsSection } from './components/sections/EvalResultsSection';
 import { QuickActions } from './components/common/QuickActions';
 import { AuthButton } from './components/common/AuthButton';
 import { SchemaExplorer } from './components/dev/SchemaExplorer';
+import { STATIC_DEMO_ONLY } from './config';
 import './App.css';
 
 const DEFAULT_SLICER: SlicerState = {
@@ -110,7 +111,9 @@ function Dashboard() {
               </span>
             )}
             {!isLive && (
-              <span style={{ fontSize: 11, color: '#a19f9d' }}>Mock data</span>
+              <span style={{ fontSize: 11, color: '#a19f9d' }}>
+                {STATIC_DEMO_ONLY ? 'Synthetic demo data' : 'Mock data'}
+              </span>
             )}
             <AuthButton />
             {loading && <span style={{ fontSize: 11, color: '#0078d4' }}>Loading…</span>}

@@ -13,6 +13,16 @@
 export const POWERBI_FLOW_URL = '';
 
 /**
+ * Static demo mode for public sharing.
+ *
+ * When true:
+ * - Dashboard uses synthetic/static data only
+ * - Live Power BI fetch is skipped
+ * - Auth prompts are hidden
+ */
+export const STATIC_DEMO_ONLY = true;
+
+/**
  * Azure AD app registration (optional — only needed if POWERBI_FLOW_URL is empty).
  * Grant delegated permission: Power BI Service → Dataset.Read.All
  * Redirect URI (SPA): http://localhost:5173 (dev) + your production URL
