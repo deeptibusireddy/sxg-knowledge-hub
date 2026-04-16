@@ -1,0 +1,7 @@
+[
+  { "name": "Azure",   "copilot": 55,  "nonCopilot": 128 },
+  { "name": "M365",    "copilot": 41,  "nonCopilot": 96  },
+  { "name": "Windows", "copilot": 176, "nonCopilot": 150 },
+  { "name": "Surface", "copilot": 38,  "nonCopilot": 84  },
+  { "name": "Intune",  "copilot": 62,  "nonCopilot": 135 }
+]

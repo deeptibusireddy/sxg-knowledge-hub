@@ -1,0 +1,8 @@
+[
+  { "date": "Oct", "Ingested": 4200, "Blocked": 610, "Pending": 280 },
+  { "date": "Nov", "Ingested": 4450, "Blocked": 590, "Pending": 310 },
+  { "date": "Dec", "Ingested": 4100, "Blocked": 700, "Pending": 350 },
+  { "date": "Jan", "Ingested": 4380, "Blocked": 720, "Pending": 290 },
+  { "date": "Feb", "Ingested": 4250, "Blocked": 850, "Pending": 320 },
+  { "date": "Mar", "Ingested": 4160, "Blocked": 890, "Pending": 340 }
+]

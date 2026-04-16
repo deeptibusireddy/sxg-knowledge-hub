@@ -4,7 +4,7 @@ import {
   XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid, Legend
 } from 'recharts';
 import type { SlicerState } from '../../types';
-import { retrievalSuccessTrend, qualityByLob, incidentVolume } from '../../data/mockCharts';
+import { useData } from '../../contexts/DataContext';
 import { retrievalDetailByMonth, qualityDetailByLob, incidentsByMonth } from '../../data/mockDrilldown';
 import { DrilldownDrawer } from '../common/DrilldownDrawer';
 import type { DrilldownContent } from '../common/DrilldownDrawer';
@@ -19,6 +19,7 @@ const QUALITY_COLS   = [{ key: 'metric', header: 'Metric' }, { key: 'jan', heade
 const INCIDENT_COLS  = [{ key: 'incident', header: 'ID' }, { key: 'summary', header: 'Summary' }, { key: 'severity', header: 'Sev' }, { key: 'lob', header: 'LOB' }, { key: 'status', header: 'Status' }];
 
 export function ProgramHealthSection({ slicer }: Props) {
+  const { retrievalSuccessTrend, qualityByLob, incidentVolume } = useData();
   const [drilldown, setDrilldown] = useState<DrilldownContent | null>(null);
 
   const filteredQuality = useMemo(() => {

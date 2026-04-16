@@ -1,0 +1,14 @@
+[
+  { "id": "BA001", "article": "Azure AD Conditional Access Policy Guide",          "lob": "Azure Core",               "owner": "Priya Nair",   "reason": "Missing LOB metadata tag",             "ageDays": 14 },
+  { "id": "BA002", "article": "Intune Device Enrollment Troubleshooting",          "lob": "SCIM Sec & Compliance",    "owner": "James Okafor", "reason": "PII detected in content",              "ageDays": 9  },
+  { "id": "BA003", "article": "M365 Admin Center — Licensing Overview",            "lob": "Modern Work",              "owner": "Sara Chen",    "reason": "Duplicate content detected",           "ageDays": 6  },
+  { "id": "BA004", "article": "Windows 11 Upgrade Compatibility FAQ",              "lob": "Windows",                  "owner": "Unassigned",   "reason": "Missing product tag",                  "ageDays": 21 },
+  { "id": "BA005", "article": "Azure Private Endpoint for Storage",                "lob": "Developer Azure Services", "owner": "Omar Farouk",  "reason": "Missing LOB metadata tag",             "ageDays": 9  },
+  { "id": "BA006", "article": "Azure Blob Storage Access Control",                 "lob": "Azure Core",               "owner": "Priya Nair",   "reason": "Missing LOB metadata tag",             "ageDays": 18 },
+  { "id": "BA007", "article": "Power Platform Connector Reference",                "lob": "BizApps",                  "owner": "Unassigned",   "reason": "Outdated content (>2 years)",           "ageDays": 44 },
+  { "id": "BA008", "article": "Entra ID — PIM Role Assignment Guide",              "lob": "SCIM Sec & Compliance",    "owner": "Diana Patel",  "reason": "PII detected in content",              "ageDays": 11 },
+  { "id": "BA009", "article": "Conditional Access Policy — Supportability Wiki",   "lob": "Azure Core",               "owner": "Unassigned",   "reason": "Compliance scan failure (rate limit)", "ageDays": 5  },
+  { "id": "BA010", "article": "Teams GCC Tenant Configuration Guide",              "lob": "Modern Work",              "owner": "Unassigned",   "reason": "Compliance scan failure (rate limit)", "ageDays": 5  },
+  { "id": "BA011", "article": "ASIM Security Schema Reference",                    "lob": "Azure Core",               "owner": "Unassigned",   "reason": "Compliance scan failure (rate limit)", "ageDays": 5  },
+  { "id": "BA012", "article": "Azure Monitor Alerts Configuration",                "lob": "Developer Azure Services", "owner": "Unassigned",   "reason": "Compliance scan failure (rate limit)", "ageDays": 5  }
+]

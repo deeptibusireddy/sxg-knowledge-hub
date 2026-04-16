@@ -1,0 +1,38 @@
+.auth-button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.auth-button__name {
+  font-size: 12px;
+  color: #605e5c;
+  max-width: 160px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.auth-button__btn {
+  font-size: 12px;
+  padding: 4px 12px;
+  border-radius: 4px;
+  border: 1px solid;
+  cursor: pointer;
+  font-family: inherit;
+  transition: opacity 0.15s;
+}
+
+.auth-button__btn:hover { opacity: 0.8; }
+
+.auth-button__btn--in {
+  background: #0078d4;
+  color: #fff;
+  border-color: #0078d4;
+}
+
+.auth-button__btn--out {
+  background: transparent;
+  color: #605e5c;
+  border-color: #c8c6c4;
+}

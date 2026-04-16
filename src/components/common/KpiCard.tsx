@@ -3,9 +3,10 @@ import './KpiCard.css';
 
 interface Props {
   data: KpiCardData;
+  onClick?: () => void;
 }
 
-export function KpiCard({ data }: Props) {
+export function KpiCard({ data, onClick }: Props) {
   const { label, value, unit, trend, trendLabel, positiveIsUp } = data;
 
   const isGood = positiveIsUp ? trend === 'up' : trend === 'down';
@@ -15,7 +16,14 @@ export function KpiCard({ data }: Props) {
   const arrow = trend === 'up' ? '↑' : trend === 'down' ? '↓' : '→';
 
   return (
-    <div className="kpi-card surface">
+    <div
+      className={`kpi-card surface${onClick ? ' kpi-card--clickable' : ''}`}
+      onClick={onClick}
+      role={onClick ? 'button' : undefined}
+      tabIndex={onClick ? 0 : undefined}
+      onKeyDown={onClick ? (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onClick(); } } : undefined}
+      aria-label={onClick ? `${label}: ${value}${unit ?? ''} — click for details` : undefined}
+    >
       <span className="kpi-card__label">{label}</span>
       <div className="kpi-card__value-row">
         <span className="kpi-card__value">{value}</span>
@@ -24,6 +32,7 @@ export function KpiCard({ data }: Props) {
       <span className={`kpi-card__trend ${trendClass}`}>
         {arrow} {trendLabel}
       </span>
+      {onClick && <span className="kpi-card__drill-hint">↗ View details</span>}
     </div>
   );
 }

@@ -1,0 +1,11 @@
+[
+  { "id": "hrr", "label": "Hit Rate Resolution", "value": "86", "unit": "%", "trend": "down", "trendLabel": "−2% vs last month", "positiveIsUp": true },
+  { "id": "aht", "label": "AHT (Copilot-assisted)", "value": "55", "unit": "min", "trend": "down", "trendLabel": "−70 min vs non-Copilot baseline", "positiveIsUp": false },
+  { "id": "copilotAdoption", "label": "Copilot Adoption", "value": "11", "unit": "%", "trend": "up", "trendLabel": "Consumer at 96% — commercial far behind", "positiveIsUp": true },
+  { "id": "emptyResults", "label": "Empty Results Rate", "value": "18", "unit": "%", "trend": "up", "trendLabel": "+5% vs last 30d", "positiveIsUp": false },
+  { "id": "citationCoverage", "label": "Citation Coverage", "value": "61", "unit": "%", "trend": "down", "trendLabel": "−7% vs last 30d", "positiveIsUp": true },
+  { "id": "ingestionRate", "label": "Ingestion Success", "value": "83", "unit": "%", "trend": "up", "trendLabel": "+2% vs last month", "positiveIsUp": true },
+  { "id": "blockedPct", "label": "Blocked Articles", "value": "17", "unit": "%", "trend": "down", "trendLabel": "+1% vs last month", "positiveIsUp": false },
+  { "id": "retrievalSuccess", "label": "Helpful Response Rate", "value": "67", "unit": "%", "trend": "down", "trendLabel": "−4% vs last month", "positiveIsUp": true },
+  { "id": "openIncidents", "label": "Open Incidents", "value": "7", "trend": "up", "trendLabel": "+3 vs last month", "positiveIsUp": false }
+]

@@ -1,0 +1,7 @@
+[
+  { "name": "Azure Core",    "jan": 77, "feb": 74, "mar": 72 },
+  { "name": "Modern Work",   "jan": 83, "feb": 82, "mar": 81 },
+  { "name": "Windows",       "jan": 80, "feb": 79, "mar": 78 },
+  { "name": "BizApps",       "jan": 89, "feb": 88, "mar": 86 },
+  { "name": "SCIM Identity", "jan": 93, "feb": 92, "mar": 91 }
+]

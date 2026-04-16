@@ -58,6 +58,16 @@ export interface IncidentRow {
   summary: string;
 }
 
+export interface AdoWorkItemRow {
+  id: string;
+  title: string;
+  type: string;
+  state: string;
+  assignedTo: string;
+  createdDate: string;
+  url: string;
+}
+
 // ── Actionable Insights ─────────────────────────────────────────────────────
 export type PersonaTag = 'Content Manager' | 'Support Engineer' | 'LOB Leader' | 'Program Leader';
 export type Priority = 'High' | 'Medium' | 'Low';

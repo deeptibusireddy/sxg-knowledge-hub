@@ -6,6 +6,26 @@
   min-width: 160px;
 }
 
+.kpi-card--clickable {
+  cursor: pointer;
+  transition: box-shadow 0.15s ease, transform 0.1s ease;
+}
+
+.kpi-card--clickable:hover {
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.14);
+  transform: translateY(-2px);
+}
+
+.kpi-card--clickable:active {
+  transform: translateY(0);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+}
+
+.kpi-card--clickable:focus-visible {
+  outline: 2px solid var(--pbi-accent, #0078d4);
+  outline-offset: 2px;
+}
+
 .kpi-card__label {
   font-size: 11px;
   font-weight: 600;
@@ -42,3 +62,16 @@
 
 .kpi-card__trend--good { color: var(--pbi-green); }
 .kpi-card__trend--bad  { color: var(--pbi-red); }
+
+.kpi-card__drill-hint {
+  font-size: 10px;
+  color: var(--pbi-accent, #0078d4);
+  margin-top: 5px;
+  opacity: 0;
+  transition: opacity 0.15s ease;
+}
+
+.kpi-card--clickable:hover .kpi-card__drill-hint,
+.kpi-card--clickable:focus-visible .kpi-card__drill-hint {
+  opacity: 1;
+}

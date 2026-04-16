@@ -148,3 +148,51 @@
 
 .drilldown-drawer__table tbody tr:hover td { background: #f8f9fa; }
 .drilldown-drawer__table tbody tr:last-child td { border-bottom: none; }
+
+/* Back navigation */
+.drilldown-drawer__back {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: none;
+  border: none;
+  padding: 0 0 6px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--pbi-accent, #0078d4);
+  cursor: pointer;
+}
+.drilldown-drawer__back:hover { text-decoration: underline; }
+
+/* "Click to drill in" hint */
+.drilldown-drawer__clickable-hint {
+  font-weight: 400;
+  color: var(--pbi-accent, #0078d4);
+  font-style: italic;
+}
+
+/* Drill indicator column */
+.drilldown-drawer__th-drill,
+.drilldown-drawer__td-drill {
+  width: 20px;
+  text-align: center;
+  padding: 0 6px !important;
+  color: var(--pbi-muted, #aaa);
+  font-size: 16px;
+  font-weight: 300;
+}
+
+/* Clickable rows */
+.drilldown-drawer__row--clickable {
+  cursor: pointer;
+}
+.drilldown-drawer__row--clickable:hover td {
+  background: #edf4ff !important;
+}
+.drilldown-drawer__row--clickable:hover .drilldown-drawer__td-drill {
+  color: var(--pbi-accent, #0078d4);
+}
+.drilldown-drawer__row--clickable:focus-visible td {
+  outline: 2px solid var(--pbi-accent, #0078d4);
+  outline-offset: -2px;
+}

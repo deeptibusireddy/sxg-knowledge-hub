@@ -22,3 +22,13 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Daily pull configs — contain credentials / PATs, never commit
+ado_pull_config.json
+data_pull_config.json
+powerbi_pull_config.json
+
+# Python cache artifacts
+__pycache__/
+*.py[cod]
+

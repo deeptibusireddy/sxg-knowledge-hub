@@ -7,3 +7,32 @@
 .tables-section__table {
   overflow: hidden;
 }
+
+.tables-section--full-width {
+  width: 100%;
+}
+
+/* ADO work item badges */
+.ado-id-link {
+  color: var(--color-accent, #0078d4);
+  font-weight: 600;
+  text-decoration: none;
+}
+.ado-id-link:hover {
+  text-decoration: underline;
+}
+
+.ado-state-badge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 10px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.ado-state-badge--active   { background: #dff0ff; color: #0078d4; }
+.ado-state-badge--new      { background: #f3f2f1; color: #605e5c; }
+.ado-state-badge--resolved { background: #dff6dd; color: #107c10; }
+.ado-state-badge--closed   { background: #e8e8e8; color: #444; }
+.ado-state-badge--unknown  { background: #f3f2f1; color: #605e5c; }
+

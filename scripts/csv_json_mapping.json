@@ -1,0 +1,195 @@
+{
+  "_comment": "Maps Power BI / SQL CSV exports to the JSON files the dashboard reads from public/data/. Each entry has: source_csv (in data/), target_json (in public/data/), and columns (CSV column → JSON key). Optional: type hints per JSON key ('number' or 'string', default 'string'). Set 'enabled': false to skip a mapping without deleting it.",
+
+  "mappings": [
+
+    {
+      "name": "kpi-cards",
+      "enabled": true,
+      "source_csv": "data/kpi-cards.csv",
+      "target_json": "public/data/kpi-cards.json",
+      "columns": {
+        "Id":            "id",
+        "Label":         "label",
+        "Value":         "value",
+        "Unit":          "unit",
+        "Trend":         "trend",
+        "TrendLabel":    "trendLabel",
+        "PositiveIsUp":  "positiveIsUp"
+      },
+      "types": {
+        "positiveIsUp": "boolean"
+      }
+    },
+
+    {
+      "name": "hrr-trend",
+      "enabled": true,
+      "source_csv": "data/hrr-trend.csv",
+      "target_json": "public/data/hrr-trend.json",
+      "columns": {
+        "Date": "date",
+        "HRR":  "hrr"
+      },
+      "types": { "hrr": "number" }
+    },
+
+    {
+      "name": "aht-by-product",
+      "enabled": true,
+      "source_csv": "data/aht-by-product.csv",
+      "target_json": "public/data/aht-by-product.json",
+      "columns": {
+        "Name":       "name",
+        "Copilot":    "copilot",
+        "NonCopilot": "nonCopilot"
+      },
+      "types": { "copilot": "number", "nonCopilot": "number" }
+    },
+
+    {
+      "name": "feedback-distribution",
+      "enabled": true,
+      "source_csv": "data/feedback-distribution.csv",
+      "target_json": "public/data/feedback-distribution.json",
+      "columns": {
+        "Name":  "name",
+        "Value": "value"
+      },
+      "types": { "value": "number" }
+    },
+
+    {
+      "name": "empty-results-by-lob",
+      "enabled": true,
+      "source_csv": "data/empty-results-by-lob.csv",
+      "target_json": "public/data/empty-results-by-lob.json",
+      "columns": {
+        "Name":  "name",
+        "Count": "count"
+      },
+      "types": { "count": "number" }
+    },
+
+    {
+      "name": "ingestion-status",
+      "enabled": true,
+      "source_csv": "data/ingestion-status.csv",
+      "target_json": "public/data/ingestion-status.json",
+      "columns": {
+        "Date":     "date",
+        "Ingested": "Ingested",
+        "Blocked":  "Blocked",
+        "Pending":  "Pending"
+      },
+      "types": { "Ingested": "number", "Blocked": "number", "Pending": "number" }
+    },
+
+    {
+      "name": "blocked-by-lob",
+      "enabled": true,
+      "source_csv": "data/blocked-by-lob.csv",
+      "target_json": "public/data/blocked-by-lob.json",
+      "columns": {
+        "Name":  "name",
+        "Count": "count"
+      },
+      "types": { "count": "number" }
+    },
+
+    {
+      "name": "answer-quality-trend",
+      "enabled": true,
+      "source_csv": "data/answer-quality-trend.csv",
+      "target_json": "public/data/answer-quality-trend.json",
+      "columns": {
+        "Date":  "date",
+        "Score": "Score"
+      },
+      "types": { "Score": "number" }
+    },
+
+    {
+      "name": "retrieval-success-trend",
+      "enabled": true,
+      "source_csv": "data/retrieval-success-trend.csv",
+      "target_json": "public/data/retrieval-success-trend.json",
+      "columns": {
+        "Date": "date",
+        "Rate": "Rate"
+      },
+      "types": { "Rate": "number" }
+    },
+
+    {
+      "name": "quality-by-lob",
+      "enabled": true,
+      "source_csv": "data/quality-by-lob.csv",
+      "target_json": "public/data/quality-by-lob.json",
+      "columns": {
+        "Name": "name",
+        "Jan":  "jan",
+        "Feb":  "feb",
+        "Mar":  "mar"
+      },
+      "types": { "jan": "number", "feb": "number", "mar": "number" }
+    },
+
+    {
+      "name": "escalations-by-lob",
+      "enabled": true,
+      "source_csv": "data/escalations-by-lob.csv",
+      "target_json": "public/data/escalations-by-lob.json",
+      "columns": {
+        "Name":  "name",
+        "Count": "count"
+      },
+      "types": { "count": "number" }
+    },
+
+    {
+      "name": "incident-volume",
+      "enabled": true,
+      "source_csv": "data/incident-volume.csv",
+      "target_json": "public/data/incident-volume.json",
+      "columns": {
+        "Date":  "date",
+        "Count": "Count"
+      },
+      "types": { "Count": "number" }
+    },
+
+    {
+      "name": "blocked-articles",
+      "enabled": true,
+      "source_csv": "data/blocked-articles.csv",
+      "target_json": "public/data/blocked-articles.json",
+      "columns": {
+        "Id":      "id",
+        "Article": "article",
+        "LOB":     "lob",
+        "Owner":   "owner",
+        "Reason":  "reason",
+        "AgeDays": "ageDays"
+      },
+      "types": { "ageDays": "number" }
+    },
+
+    {
+      "name": "recent-incidents",
+      "enabled": true,
+      "source_csv": "data/recent-incidents.csv",
+      "target_json": "public/data/recent-incidents.json",
+      "columns": {
+        "Id":       "id",
+        "LOB":      "lob",
+        "Severity": "severity",
+        "Status":   "status",
+        "Opened":   "opened",
+        "Summary":  "summary"
+      },
+      "types": {}
+    }
+
+  ]
+}

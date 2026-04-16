@@ -4,7 +4,7 @@ import {
   XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid, Legend
 } from 'recharts';
 import type { SlicerState } from '../../types';
-import { hrrTrend, ahtByProduct, escalationsByLob } from '../../data/mockCharts';
+import { useData } from '../../contexts/DataContext';
 import { hrrDetailByMonth, ahtDetailByProduct, escalationsByLobDetail } from '../../data/mockDrilldown';
 import { DrilldownDrawer } from '../common/DrilldownDrawer';
 import type { DrilldownContent } from '../common/DrilldownDrawer';
@@ -19,6 +19,7 @@ const AHT_COLS  = [{ key: 'category', header: 'Category' }, { key: 'current', he
 const ESCL_COLS = [{ key: 'incident', header: 'Incident' }, { key: 'summary', header: 'Summary' }, { key: 'severity', header: 'Severity' }, { key: 'status', header: 'Status' }, { key: 'opened', header: 'Opened' }];
 
 export function BusinessOutcomesSection({ slicer }: Props) {
+  const { hrrTrend, ahtByProduct, escalationsByLob } = useData();
   const [drilldown, setDrilldown] = useState<DrilldownContent | null>(null);
 
   const filteredEscalations = useMemo(() => {

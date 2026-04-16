@@ -4,7 +4,7 @@ import {
   CartesianGrid, Legend, Cell
 } from 'recharts';
 import type { SlicerState } from '../../types';
-import { ingestionStatusOverTime, blockedByLob } from '../../data/mockCharts';
+import { useData } from '../../contexts/DataContext';
 import { blockedArticlesByLob, ingestionByMonth } from '../../data/mockDrilldown';
 import { DrilldownDrawer } from '../common/DrilldownDrawer';
 import type { DrilldownContent } from '../common/DrilldownDrawer';
@@ -33,6 +33,7 @@ const INGESTION_COLS = [
 const COLORS = ['#118dff','#0078d4','#12239e','#8764b8','#ca5010','#107c10'];
 
 export function ContentHealthSection({ slicer }: Props) {
+  const { ingestionStatusOverTime, blockedByLob } = useData();
   const [drilldown, setDrilldown] = useState<DrilldownContent | null>(null);
 
   const filteredBlocked = useMemo(() => {

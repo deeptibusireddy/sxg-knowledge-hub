@@ -1,0 +1,36 @@
+{
+  "output_dir": "data",
+  "write_latest_alias": true,
+  "connections": {
+    "sql_prod": {
+      "module": "pyodbc",
+      "connect": "DRIVER={ODBC Driver 18 for SQL Server};SERVER=tcp:your-server.database.windows.net,1433;DATABASE=YourDatabase;UID=${SQL_USER};PWD=${SQL_PASSWORD};Encrypt=yes;TrustServerCertificate=no;"
+    },
+    "postgres_reporting": {
+      "module": "psycopg2",
+      "connect_kwargs": {
+        "host": "your-server.postgres.database.azure.com",
+        "port": 5432,
+        "dbname": "reporting",
+        "user": "${PG_USER}",
+        "password": "${PG_PASSWORD}",
+        "sslmode": "require"
+      }
+    }
+  },
+  "exports": [
+    {
+      "name": "UsageMetricsReport",
+      "connection": "sql_prod",
+      "query": "SELECT * FROM dbo.UsageMetricsReport"
+    },
+    {
+      "name": "IncidentSummary",
+      "connection": "postgres_reporting",
+      "table": "public.incident_summary",
+      "columns": ["incident_id", "lob", "severity", "status", "opened_at"],
+      "where": "opened_at >= CURRENT_DATE - INTERVAL '30 day'",
+      "order_by": ["opened_at DESC"]
+    }
+  ]
+}

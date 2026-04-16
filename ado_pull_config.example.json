@@ -1,0 +1,18 @@
+{
+  "_comment": "Copy this to ado_pull_config.json and fill in your values. Never commit ado_pull_config.json.",
+
+  "org_url":    "https://dev.azure.com/your-org",
+  "project":    "YourProject",
+
+  "pat_env_var": "ADO_PAT",
+
+  "area_path":  "YourProject\\SxG Knowledge Hub",
+
+  "tags": ["sxg-knowledge-hub"],
+
+  "days_back": 90,
+
+  "max_items": 200,
+
+  "output_file": "public/data/ado-work-items.json"
+}

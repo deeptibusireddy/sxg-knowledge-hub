@@ -1,0 +1,89 @@
+{
+  "tenantId": "72f988bf-86f1-41af-91ab-2d7cd011db47",
+  "workspaceId": "a20ce897-3f88-41ed-9e33-67fa2ae68e90",
+  "outputDir": "data",
+  "writeLatestAlias": true,
+  "jobs": [
+    {
+      "name": "Actionable_Feedback_Commercial",
+      "datasetId": "eae1f80b-9ed3-45ed-a89c-d7c226b501ac",
+      "fileBase": "Actionable_Feedback_Commercial",
+      "enabled": true,
+      "pullAllTables": true,
+      "tableRowLimit": 0,
+      "tables": []
+    },
+    {
+      "name": "Actionable_Feedback_Consumer",
+      "datasetId": "0dd76d62-26da-46c2-b3dc-75cb2c3dffd3",
+      "fileBase": "Actionable_Feedback_Consumer",
+      "enabled": true,
+      "pullAllTables": true,
+      "tableRowLimit": 0,
+      "tables": []
+    },
+    {
+      "name": "Agent Copilot Metrics Commercial_Prod",
+      "datasetId": "3a470a02-0567-4a1f-86e5-d685e9fa4866",
+      "fileBase": "Agent_Copilot_Metrics_Commercial_Prod",
+      "enabled": true,
+      "pullAllTables": true,
+      "tableRowLimit": 0,
+      "tables": []
+    },
+    {
+      "name": "Agent Copilot Metrics Consumer - PROD",
+      "datasetId": "dc97cb0c-e1d1-4357-93b6-7b9169f5d75e",
+      "fileBase": "Agent_Copilot_Metrics_Consumer_PROD",
+      "enabled": true,
+      "pullAllTables": true,
+      "tableRowLimit": 0,
+      "tables": []
+    },
+    {
+      "name": "Agentic Copilot Auto Case Update",
+      "datasetId": "9a50a464-28dd-4d5d-bbeb-62035c09cee5",
+      "fileBase": "Agentic_Copilot_Auto_Case_Update",
+      "enabled": true,
+      "pullAllTables": true,
+      "tableRowLimit": 0,
+      "tables": []
+    },
+    {
+      "name": "AIPodSemanticModel",
+      "datasetId": "44a64562-8364-4b5f-abca-33c95148274a",
+      "fileBase": "AIPodSemanticModel",
+      "enabled": true,
+      "pullAllTables": true,
+      "tableRowLimit": 0,
+      "tables": []
+    },
+    {
+      "name": "BlockedContentDashboard",
+      "datasetId": "d03b0a1e-379d-478c-a5fe-6f9ee28c2abb",
+      "fileBase": "BlockedContentDashboard",
+      "enabled": true,
+      "pullAllTables": true,
+      "tableRowLimit": 0,
+      "tables": []
+    },
+    {
+      "name": "Content Self-Serve Dashboard",
+      "datasetId": "d2bdd653-3bf7-4dfc-8d4f-d24c9a0fcc20",
+      "fileBase": "Content_Self_Serve_Dashboard",
+      "enabled": true,
+      "pullAllTables": true,
+      "tableRowLimit": 0,
+      "tables": []
+    },
+    {
+      "name": "Knowledge harvesting",
+      "datasetId": "3e42d076-3507-4e3c-8473-e4c35220f654",
+      "fileBase": "Knowledge_harvesting",
+      "enabled": true,
+      "pullAllTables": true,
+      "tableRowLimit": 0,
+      "tables": []
+    }
+  ]
+}

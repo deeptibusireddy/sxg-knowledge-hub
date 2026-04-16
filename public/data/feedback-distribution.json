@@ -1,0 +1,9 @@
+[
+  { "name": "Response not relevant", "value": 29 },
+  { "name": "No information provided", "value": 28 },
+  { "name": "Not helpful", "value": 11 },
+  { "name": "Inaccurate information", "value": 9 },
+  { "name": "Incorrect source", "value": 8 },
+  { "name": "Incomplete / outdated", "value": 8 },
+  { "name": "Hallucinating", "value": 7 }
+]

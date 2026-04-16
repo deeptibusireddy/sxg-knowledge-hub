@@ -1,0 +1,105 @@
+.schema-explorer {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 32px 24px;
+  font-family: 'Segoe UI', sans-serif;
+  font-size: 13px;
+  color: #201f1e;
+}
+
+.schema-explorer__header {
+  margin-bottom: 28px;
+}
+
+.schema-explorer__header h1 {
+  font-size: 20px;
+  font-weight: 600;
+  margin: 0 0 6px;
+  color: #0078d4;
+}
+
+.schema-explorer__header p {
+  margin: 0 0 16px;
+  color: #605e5c;
+}
+
+.schema-btn {
+  padding: 5px 14px;
+  border-radius: 4px;
+  border: 1px solid #c8c6c4;
+  background: #fff;
+  cursor: pointer;
+  font-size: 12px;
+  font-family: inherit;
+  transition: opacity 0.15s;
+}
+.schema-btn:hover { opacity: 0.8; }
+.schema-btn--primary { background: #0078d4; color: #fff; border-color: #0078d4; }
+.schema-btn--sm      { padding: 2px 8px; font-size: 11px; }
+.schema-btn:disabled { opacity: 0.5; cursor: default; }
+
+.schema-explorer__datasets {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.schema-card {
+  border: 1px solid #e1dfdd;
+  border-radius: 6px;
+  overflow: hidden;
+  background: #fff;
+}
+.schema-card--error { border-color: #d83b01; }
+
+.schema-card__title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  cursor: pointer;
+  background: #faf9f8;
+  user-select: none;
+  flex-wrap: wrap;
+}
+.schema-card__title:hover { background: #f3f2f1; }
+
+.schema-card__arrow { font-size: 10px; color: #605e5c; flex-shrink: 0; }
+.schema-card__id    { font-size: 11px; color: #a19f9d; }
+.schema-card__count { font-size: 11px; color: #107c10; margin-left: auto; }
+.schema-card__err   { font-size: 11px; color: #d83b01; margin-left: auto; }
+
+.schema-card__body {
+  padding: 10px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.schema-table summary.schema-table__name {
+  cursor: pointer;
+  font-weight: 600;
+  padding: 4px 0;
+  color: #0078d4;
+}
+.schema-table summary:hover { opacity: 0.8; }
+
+.schema-table__cols {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 4px;
+  font-size: 12px;
+}
+.schema-table__cols th {
+  text-align: left;
+  padding: 4px 8px;
+  background: #f3f2f1;
+  border-bottom: 1px solid #e1dfdd;
+  color: #605e5c;
+  font-weight: 600;
+}
+.schema-table__cols td {
+  padding: 3px 8px;
+  border-bottom: 1px solid #f3f2f1;
+}
+.schema-table__cols code { font-size: 11px; color: #ca5010; }

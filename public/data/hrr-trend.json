@@ -1,0 +1,14 @@
+[
+  { "date": "Apr", "hrr": 90 },
+  { "date": "May", "hrr": 91 },
+  { "date": "Jun", "hrr": 91 },
+  { "date": "Jul", "hrr": 90 },
+  { "date": "Aug", "hrr": 89 },
+  { "date": "Sep", "hrr": 90 },
+  { "date": "Oct", "hrr": 89 },
+  { "date": "Nov", "hrr": 88 },
+  { "date": "Dec", "hrr": 88 },
+  { "date": "Jan", "hrr": 88 },
+  { "date": "Feb", "hrr": 87 },
+  { "date": "Mar", "hrr": 86 }
+]

@@ -1,0 +1,49 @@
+OrganizationId,ReportGuid,ReportName,WorkspaceId,IsUsageMetricsReport
+"","a560341d-8b5f-4ca8-8cbf-e3eedbdcac33","AI Native Exec Reporting","7e0b9c30-bcdd-4d21-9b8c-3aa92f9712de",False
+"","57a8f901-ec77-4ed5-ad34-bc7757fd5f63","Content Self-Serve Dashboard_multitag","7e0b9c30-bcdd-4d21-9b8c-3aa92f9712de",False
+"","c3c96a23-40de-47e6-8172-44700ed0ba1b","Xbox_Agent_Report_Shadow_Prod-V3__toBeDeleted","7e0b9c30-bcdd-4d21-9b8c-3aa92f9712de",False
+"","937251d4-b5ac-4a5c-943a-5fb1b17eb35d","AIMetrics_V2","7e0b9c30-bcdd-4d21-9b8c-3aa92f9712de",False
+"","0bf86c33-859f-4fe3-94e3-f75bbf4e0a99","Dashboard Usage Metrics Report","7e0b9c30-bcdd-4d21-9b8c-3aa92f9712de",True
+"","77d47fa2-9108-40ef-9961-3060488f9666","Content Self-Serve Dashboard","7e0b9c30-bcdd-4d21-9b8c-3aa92f9712de",False
+"","7808036c-b205-4d41-8568-49b23a21ba3e","DTP_Shadow_Experimentation_1113","7e0b9c30-bcdd-4d21-9b8c-3aa92f9712de",False
+"","7a4f1aa8-f757-4a0e-8eab-774b043a6bfe","AI-Native-Success-Metrics-Dataset-StalenessCheckSev4","7e0b9c30-bcdd-4d21-9b8c-3aa92f9712de",False
+"","95395726-c1ef-47e4-b7a1-101fd6b04354","exec_latest","7e0b9c30-bcdd-4d21-9b8c-3aa92f9712de",False
+"","a99855f7-e2c0-47c0-982f-720abae0f84e","Agentic Copilot Outlook","7e0b9c30-bcdd-4d21-9b8c-3aa92f9712de",False
+"","ee6b697e-08ef-4069-82f1-83d34100356b","MFADataProtection-ShadowDashboard-Prod","7e0b9c30-bcdd-4d21-9b8c-3aa92f9712de",False
+"","c4757435-a914-4a65-af1a-a175bcaafe8a","Surface_Shadow_Experimentation_PROD","7e0b9c30-bcdd-4d21-9b8c-3aa92f9712de",False
+"","8a1864fd-52c4-4839-9db4-9417b4e9ed03","AIMetrics_V1","7e0b9c30-bcdd-4d21-9b8c-3aa92f9712de",False
+"","01a2a706-ba79-47f4-935c-9c3f843364a5","Usage Metrics Report","7e0b9c30-bcdd-4d21-9b8c-3aa92f9712de",True
+"","a87e57c7-4d50-403a-84a5-94ebe0b91a98","Actionable_Feedback_Commercial","7e0b9c30-bcdd-4d21-9b8c-3aa92f9712de",False
+"","6d549ec4-a493-4e08-b91d-7b8ae089cc8c","Agentic Copilot Auto Case Update","7e0b9c30-bcdd-4d21-9b8c-3aa92f9712de",False
+"","50e807b4-cf2e-411a-ad08-72ac39ee9592","SCIM_ShadowDashboard_Prod","7e0b9c30-bcdd-4d21-9b8c-3aa92f9712de",False
+"","420eaab0-b010-41ae-8a54-9627cf69589d","AIMetrics_backup_28_08","7e0b9c30-bcdd-4d21-9b8c-3aa92f9712de",False
+"","15eeb56e-9b1f-4b2e-bbbe-ab9cd19ffa5a","AIPodSemanticModel_V2","7e0b9c30-bcdd-4d21-9b8c-3aa92f9712de",False
+"","a1a490a8-3c7f-403e-ac2c-2c1192a9d6e0","AI Native Success Metrics demo","7e0b9c30-bcdd-4d21-9b8c-3aa92f9712de",False
+"","72785364-953b-4955-859d-78d58cfc48c9","exec","7e0b9c30-bcdd-4d21-9b8c-3aa92f9712de",False
+"","2d12187b-f426-4d2b-93bd-623c4123e7ed","Agent Copilot Metrics Consumer - PROD","7e0b9c30-bcdd-4d21-9b8c-3aa92f9712de",False
+"","3012317e-28e3-47f6-8f18-b62156a689a6","Actionable_Feedback_Consumer","7e0b9c30-bcdd-4d21-9b8c-3aa92f9712de",False
+"","f6fe26cf-6a48-47a8-a2c2-658b3a8d4573","Report Usage Metrics Report","7e0b9c30-bcdd-4d21-9b8c-3aa92f9712de",True
+"","8aaf5f64-eeee-4189-9576-19940557907f","Surface_Shadow_Experimentation_PPE","7e0b9c30-bcdd-4d21-9b8c-3aa92f9712de",False
+"","3acc2784-5fe6-4eb1-940f-7977c8482295","AIMetrics_Draft","7e0b9c30-bcdd-4d21-9b8c-3aa92f9712de",False
+"","f8f9f871-a3d8-4967-a7c5-ad8d0fbf6260","AI-Native-Success-Metrics-Dataset-StalenessCheckSev3","7e0b9c30-bcdd-4d21-9b8c-3aa92f9712de",False
+"","6ab2576c-07ca-40a1-9ce8-4ad55a2f0e68","AI Success Metrics","7e0b9c30-bcdd-4d21-9b8c-3aa92f9712de",False
+"","e3925099-65f3-4972-844a-819ed070701c","Agent Copilot Metrics Commercial-Report","7e0b9c30-bcdd-4d21-9b8c-3aa92f9712de",False
+"","bda22592-3cbd-4a38-a8d6-71693e78c67f","Knowledge harvesting","7e0b9c30-bcdd-4d21-9b8c-3aa92f9712de",False
+"","ea861f5c-d3c7-472a-9f97-d165f8ce3a7a","DTP_Shadow_Experimentation","7e0b9c30-bcdd-4d21-9b8c-3aa92f9712de",False
+"","a53af7fa-1f35-45ad-aa96-0dab3fb166d7","Agent Copilot Metrics Commercial_Prod","7e0b9c30-bcdd-4d21-9b8c-3aa92f9712de",False
+"","1c56e11c-3466-4772-85a2-6eb88b67ef03","AIMetrics","7e0b9c30-bcdd-4d21-9b8c-3aa92f9712de",False
+"","3ca9559c-8fc7-46f5-a038-8909a45c16a7","DTP-ConsumptionReport","7e0b9c30-bcdd-4d21-9b8c-3aa92f9712de",False
+"","47b84f17-cf9e-4c47-9034-47e13e8f34c8","AI Native Exec Reporting - PROD","7e0b9c30-bcdd-4d21-9b8c-3aa92f9712de",False
+"","e8028d04-fa5b-462a-a09f-3031743bd290","exec","7e0b9c30-bcdd-4d21-9b8c-3aa92f9712de",False
+"","d15c99aa-374c-45e0-a871-57117b579b02","SCIM_KnowledgeAgent_Prod","7e0b9c30-bcdd-4d21-9b8c-3aa92f9712de",False
+"","c24c6f74-11ad-4f2a-b6ab-ca5a63ad27a9","DTP-ConsumptionReport-Prod","7e0b9c30-bcdd-4d21-9b8c-3aa92f9712de",False
+"","a882e820-db14-4af6-8d3f-ebdf891dbf15","XBOX Shadow Experimentation","7e0b9c30-bcdd-4d21-9b8c-3aa92f9712de",False
+"","d42812e4-13bc-484c-b59b-7fdf5ed2cd8e","Xbox_Agent_Report_Prod_to_be_deleted","7e0b9c30-bcdd-4d21-9b8c-3aa92f9712de",False
+"","6aff705c-420b-4be3-8e55-2563580348c6","Content Self-Serve Dashboard - Perf Changes","7e0b9c30-bcdd-4d21-9b8c-3aa92f9712de",False
+"","f6d1e505-ec9f-407a-b2c5-694e347212b6","Agentic Copilot Features","7e0b9c30-bcdd-4d21-9b8c-3aa92f9712de",False
+"","70ecec85-fdcc-4872-a275-7f3141f239e0","KPI Details","7e0b9c30-bcdd-4d21-9b8c-3aa92f9712de",False
+"","8a665184-0cd0-4dac-8cae-2774c4cf81ae","Content Self-Serve Dashboard-N","7e0b9c30-bcdd-4d21-9b8c-3aa92f9712de",False
+"","42807bba-2117-4c91-903f-0931c9b87aff","AI Native Exec Reporting demo","7e0b9c30-bcdd-4d21-9b8c-3aa92f9712de",False
+"","f54dac9b-8ef5-465d-95e7-fce20bb78bf4","Agent Copilot Metrics Consumer - OLD","7e0b9c30-bcdd-4d21-9b8c-3aa92f9712de",False
+"","811e4052-52ba-4030-9b44-4ad4fd1a9a16","InteractionTypeTesting","7e0b9c30-bcdd-4d21-9b8c-3aa92f9712de",False
+"","b650fbe0-1f41-42a7-9a56-9911a26b6de4","Agent Operation View","7e0b9c30-bcdd-4d21-9b8c-3aa92f9712de",False

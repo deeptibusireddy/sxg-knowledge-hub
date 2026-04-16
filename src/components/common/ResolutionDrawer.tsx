@@ -97,7 +97,7 @@ export function ResolutionDrawer({ item, onClose }: Props) {
       assignedTo: d.adoDefaults?.assignedTo ?? '',
       areaPath:   d.adoDefaults?.areaPath   ?? '',
       priority:   d.adoDefaults?.priority   ?? '2',
-      tags:       d.adoDefaults?.tags       ?? '',
+      tags:       d.adoDefaults?.tags       ?? 'sxg-knowledge-hub',
     });
 
     setBugForm({
@@ -688,7 +688,7 @@ function ContentRequestFlow({ item }: { item: ActionItem }) {
   const [adoAssignee, setAdoAssignee]     = useState(detail.contentRequestDefaults?.assignedTo ?? 'LOB Content Lead');
   const [adoAreaPath, setAdoAreaPath]     = useState(detail.contentRequestDefaults?.areaPath ?? '');
   const [adoPriority, setAdoPriority]     = useState<'1'|'2'|'3'|'4'>('2');
-  const [adoTags, setAdoTags]             = useState(detail.contentRequestDefaults?.tags ?? '');
+  const [adoTags, setAdoTags]             = useState(detail.contentRequestDefaults?.tags ?? 'sxg-knowledge-hub');
   const [adoSuccess, setAdoSuccess]       = useState(false);
   const [adoId, setAdoId]                 = useState('');
 

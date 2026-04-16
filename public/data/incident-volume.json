@@ -1,0 +1,8 @@
+[
+  { "date": "Oct", "count": 3 },
+  { "date": "Nov", "count": 2 },
+  { "date": "Dec", "count": 5 },
+  { "date": "Jan", "count": 4 },
+  { "date": "Feb", "count": 6 },
+  { "date": "Mar", "count": 7 }
+]
