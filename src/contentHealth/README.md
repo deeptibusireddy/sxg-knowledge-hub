@@ -33,18 +33,38 @@ Aggregation into panel-level view-models lives in `selectors.ts` here.
 
 ## Layout
 
+The dashboard is grouped into 4 sections aligned to the Knowledge Manager
+job description (hygiene / AI readiness / lifecycle / cross-team & outcomes):
+
 ```
-ContentHealthApp.tsx        Page shell (header, slicer, KPI strip, panels)
+ContentHealthApp.tsx        Page shell (header, slicer, KPI strip, sections)
 ContentHealthApp.css        Page styles
 types.ts                    Panel view-model types (local)
 selectors.ts                Aggregations over shared fixtures
-components/                 KPI strip, slicer, and 11 panels:
-                              · Coverage              · Freshness
-                              · Quality signals       · Authoring throughput
-                              · LOB health scorecard  · Readability distribution
-                              · Top performing docs   · Document aging heatmap
-                              · Stale / at-risk       · Search-miss → coverage gap
-                              · Feedback & usage
+components/                 KPI strip, slicer, and 18 panels:
+
+  A · Knowledge hygiene
+    Coverage              Freshness
+    Quality signals       Authoring throughput
+    LOB health scorecard  Readability distribution
+    Document aging heatmap
+
+  B · AI readiness & quality
+    AI readiness          AI quality
+
+  C · Lifecycle (intake → retire)
+    Intake & review queue
+    Priority scenarios
+    Stale / at-risk articles
+
+  D · Cross-team & outcomes
+    Owner / SBU rollup
+    Self-help resolution success
+    Search analytics
+    Top performing docs
+    Search-miss → coverage gap
+    Feedback & usage
+
 __tests__/                  Smoke render test
 ```
 

@@ -424,3 +424,99 @@
   color: #a19f9d;
   font-style: italic;
 }
+
+/* ── Section heading ───────────────────────────────────────── */
+.ch-section {
+  font-size: 12px;
+  font-weight: 700;
+  color: #605e5c;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin: 16px 0 -4px 4px;
+  padding-bottom: 4px;
+  border-bottom: 1px solid #e1dfdd;
+}
+
+/* ── Readiness / KPI tile grid (used by AI readiness, AI quality,
+ *    self-help, search analytics, priority scenarios totals) ── */
+.ch-readiness-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 8px;
+}
+.ch-readiness-tile {
+  background: #fafafa;
+  border: 1px solid #e1dfdd;
+  border-left: 3px solid #c8c6c4;
+  border-radius: 4px;
+  padding: 10px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.ch-readiness-tile--good { border-left-color: #107c10; }
+.ch-readiness-tile--warn { border-left-color: #e8b336; }
+.ch-readiness-tile--bad  { border-left-color: #d83b01; }
+.ch-readiness-tile__value {
+  font-size: 22px;
+  font-weight: 700;
+  color: #201f1e;
+  line-height: 1.1;
+}
+.ch-readiness-tile__label {
+  font-size: 11px;
+  color: #605e5c;
+}
+
+/* ── Status / priority pills (priority scenarios) ──────────── */
+.ch-status,
+.ch-prio {
+  display: inline-block;
+  padding: 1px 8px;
+  border-radius: 10px;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.ch-status--good { background: #dff6dd; color: #107c10; }
+.ch-status--warn { background: #fff4ce; color: #8a6100; }
+.ch-status--bad  { background: #fde7e9; color: #a4262c; }
+
+.ch-prio--P0 { background: #d83b01; color: #fff; }
+.ch-prio--P1 { background: #e8b336; color: #3b2f00; }
+.ch-prio--P2 { background: #c8c6c4; color: #201f1e; }
+
+/* ── Intake kanban ─────────────────────────────────────────── */
+.ch-kanban {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+}
+.ch-kanban__col {
+  background: #fafafa;
+  border: 1px solid #e1dfdd;
+  border-top: 3px solid #c8c6c4;
+  border-radius: 4px;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+.ch-kanban__col--good    { border-top-color: #107c10; }
+.ch-kanban__col--warn    { border-top-color: #e8b336; }
+.ch-kanban__col--bad     { border-top-color: #d83b01; }
+.ch-kanban__col--neutral { border-top-color: #0078d4; }
+.ch-kanban__count {
+  font-size: 28px;
+  font-weight: 700;
+  color: #201f1e;
+  line-height: 1;
+}
+.ch-kanban__label {
+  font-size: 11px;
+  color: #605e5c;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}

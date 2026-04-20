@@ -25,19 +25,38 @@ describe('ContentHealthApp', () => {
     expect(back).toHaveAttribute('href', '/');
   });
 
-  it('renders all eleven panel headings', () => {
+  it('renders all eighteen panel headings', () => {
     renderApp();
+    // Section A — hygiene
     expect(screen.getByRole('heading', { name: 'Coverage' })).toBeInTheDocument();
     expect(screen.getByRole('heading', { name: 'Freshness' })).toBeInTheDocument();
     expect(screen.getByRole('heading', { name: 'Quality signals' })).toBeInTheDocument();
     expect(screen.getByRole('heading', { name: 'Authoring throughput' })).toBeInTheDocument();
-    expect(screen.getByRole('heading', { name: /Feedback/i })).toBeInTheDocument();
     expect(screen.getByRole('heading', { name: 'LOB health scorecard' })).toBeInTheDocument();
     expect(screen.getByRole('heading', { name: 'Readability distribution' })).toBeInTheDocument();
-    expect(screen.getByRole('heading', { name: 'Top performing docs' })).toBeInTheDocument();
     expect(screen.getByRole('heading', { name: 'Document aging heatmap' })).toBeInTheDocument();
+    // Section B — AI
+    expect(screen.getByRole('heading', { name: 'AI readiness' })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: 'AI quality' })).toBeInTheDocument();
+    // Section C — lifecycle
+    expect(screen.getByRole('heading', { name: /Intake & review queue/i })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: 'Priority scenarios' })).toBeInTheDocument();
     expect(screen.getByRole('heading', { name: 'Stale / at-risk articles' })).toBeInTheDocument();
+    // Section D — cross-team & outcomes
+    expect(screen.getByRole('heading', { name: 'Owner / SBU rollup' })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: 'Self-help resolution success' })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: 'Search analytics' })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: 'Top performing docs' })).toBeInTheDocument();
     expect(screen.getByRole('heading', { name: 'Search-miss → coverage gap' })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: /Feedback/i })).toBeInTheDocument();
+  });
+
+  it('renders all four section headings', () => {
+    renderApp();
+    expect(screen.getByRole('heading', { name: /Knowledge hygiene/i })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: /AI readiness & quality/i })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: /Lifecycle/i })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: /Cross-team & outcomes/i })).toBeInTheDocument();
   });
 
   it('renders product pills with AAQ active and CMSP / AI Native disabled & out-of-scope', () => {

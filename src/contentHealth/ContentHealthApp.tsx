@@ -2,15 +2,22 @@ import { useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import {
   selectAgingHeatmap,
+  selectAiQuality,
+  selectAiReadiness,
   selectCoverage,
   selectFeedback,
   selectFreshness,
+  selectIntakeQueue,
   selectKpis,
   selectLobScorecards,
+  selectOwnerSbu,
+  selectPriorityScenarios,
   selectQualitySignals,
   selectReadability,
+  selectSearchAnalytics,
   selectSearchGapMap,
   selectSearchMisses,
+  selectSelfHelp,
   selectStaleArticles,
   selectThroughput,
   selectTopPerformers,
@@ -29,6 +36,13 @@ import { TopPerformersPanel } from './components/TopPerformersPanel';
 import { AgingHeatmapPanel } from './components/AgingHeatmapPanel';
 import { ReadabilityDistributionPanel } from './components/ReadabilityDistributionPanel';
 import { SearchGapMapPanel } from './components/SearchGapMapPanel';
+import { AiReadinessPanel } from './components/AiReadinessPanel';
+import { AiQualityPanel } from './components/AiQualityPanel';
+import { PriorityScenariosPanel } from './components/PriorityScenariosPanel';
+import { IntakeQueuePanel } from './components/IntakeQueuePanel';
+import { OwnerSbuRolloutPanel } from './components/OwnerSbuRolloutPanel';
+import { SelfHelpResolutionPanel } from './components/SelfHelpResolutionPanel';
+import { SearchAnalyticsPanel } from './components/SearchAnalyticsPanel';
 import './ContentHealthApp.css';
 
 const DEFAULT_FILTER: ContentHealthFilter = {
@@ -59,6 +73,13 @@ export default function ContentHealthApp() {
   const agingHeatmap = useMemo(() => selectAgingHeatmap(filter), [filter]);
   const readability = useMemo(() => selectReadability(filter), [filter]);
   const searchGap = useMemo(() => selectSearchGapMap(filter), [filter]);
+  const aiReadiness = useMemo(() => selectAiReadiness(filter), [filter]);
+  const aiQuality = useMemo(() => selectAiQuality(filter), [filter]);
+  const priorityScenarios = useMemo(() => selectPriorityScenarios(filter), [filter]);
+  const intakeQueue = useMemo(() => selectIntakeQueue(filter), [filter]);
+  const ownerSbu = useMemo(() => selectOwnerSbu(filter), [filter]);
+  const selfHelp = useMemo(() => selectSelfHelp(filter), [filter]);
+  const searchAnalytics = useMemo(() => selectSearchAnalytics(filter), [filter]);
 
   return (
     <div className="ch-app">
@@ -108,6 +129,7 @@ export default function ContentHealthApp() {
         <ContentHealthSlicer value={filter} onChange={setFilter} />
         <ContentHealthKpiStrip kpis={kpis} />
 
+        <h2 className="ch-section">A · Knowledge hygiene</h2>
         <div className="ch-grid">
           <CoveragePanel rows={coverage} />
           <FreshnessPanel
@@ -122,13 +144,38 @@ export default function ContentHealthApp() {
           />
           <LobScorecardPanel rows={scorecards} />
           <ReadabilityDistributionPanel distribution={readability} />
-          <TopPerformersPanel rows={topPerformers} />
           <div className="ch-grid__wide">
             <AgingHeatmapPanel heatmap={agingHeatmap} />
+          </div>
+        </div>
+
+        <h2 className="ch-section">B · AI readiness &amp; quality</h2>
+        <div className="ch-grid">
+          <AiReadinessPanel summary={aiReadiness} />
+          <AiQualityPanel summary={aiQuality} />
+        </div>
+
+        <h2 className="ch-section">C · Lifecycle (intake → retire)</h2>
+        <div className="ch-grid">
+          <div className="ch-grid__wide">
+            <IntakeQueuePanel summary={intakeQueue} />
+          </div>
+          <div className="ch-grid__wide">
+            <PriorityScenariosPanel summary={priorityScenarios} />
           </div>
           <div className="ch-grid__wide">
             <StaleArticlesPanel rows={staleArticles} />
           </div>
+        </div>
+
+        <h2 className="ch-section">D · Cross-team &amp; outcomes</h2>
+        <div className="ch-grid">
+          <div className="ch-grid__wide">
+            <OwnerSbuRolloutPanel rows={ownerSbu} />
+          </div>
+          <SelfHelpResolutionPanel summary={selfHelp} />
+          <SearchAnalyticsPanel summary={searchAnalytics} />
+          <TopPerformersPanel rows={topPerformers} />
           <div className="ch-grid__wide">
             <SearchGapMapPanel rows={searchGap} />
           </div>

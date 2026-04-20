@@ -139,3 +139,98 @@ export interface SearchGapRow {
   /** 0–100; higher = bigger gap (lots of misses, few docs). */
   gapScore: number;
 }
+
+// ── KM-aligned panels (round 2) ─────────────────────────────────────
+
+export interface AiReadinessSummary {
+  totalDocs: number;
+  indexedPct: number;
+  schemaValidPct: number;
+  hasQaBlockPct: number;
+  embeddingFreshPct: number;
+  evalPassPct: number;
+  /** Docs that fail one or more readiness checks. */
+  blockedDocs: Array<{
+    id: string;
+    title: string;
+    lob: LobArea;
+    issues: string[];
+  }>;
+}
+
+export interface AiQualitySummary {
+  totalAnswers: number;
+  accuracyPct: number;
+  meanConfidencePct: number;
+  groundedPct: number;
+  fallbackPct: number;
+  /** Daily accuracy series for trend chart. */
+  accuracyTrend: Array<{ date: string; accuracyPct: number; answers: number }>;
+  /** Worst-performing LOBs by accuracy. */
+  byLob: Array<{ lob: LobArea; accuracyPct: number; answers: number; fallbackPct: number }>;
+}
+
+export interface PriorityScenarioRow {
+  id: string;
+  title: string;
+  lob: import('../shared/contentHealth/types').LobArea;
+  priority: import('../shared/contentHealth/types').ScenarioPriority;
+  status: import('../shared/contentHealth/types').ScenarioStatus;
+  linkedDocCount: number;
+  lastValidatedAt: string | null;
+}
+
+export interface PriorityScenarioSummary {
+  rows: PriorityScenarioRow[];
+  totals: {
+    total: number;
+    covered: number;
+    draft: number;
+    gap: number;
+    outdated: number;
+    coveragePct: number;
+    p0Coverage: { covered: number; total: number };
+  };
+}
+
+export interface IntakeQueueSummary {
+  byState: Record<import('../shared/contentHealth/types').IntakeState, number>;
+  slaBreaches: Array<{
+    id: string;
+    title: string;
+    lob: LobArea;
+    state: import('../shared/contentHealth/types').IntakeState;
+    ageInStateDays: number;
+    slaTargetDays: number;
+    overBy: number;
+  }>;
+  total: number;
+  breachPct: number;
+}
+
+export interface OwnerSbuRow {
+  sbu: import('../shared/contentHealth/types').Sbu;
+  docs: number;
+  staleDocs: number;
+  staleSharePct: number;
+  qualityIssueDocs: number;
+  qualityIssueSharePct: number;
+  intakeOpen: number;
+  intakeBreaches: number;
+}
+
+export interface SelfHelpSummary {
+  totalSessions: number;
+  resolvedPct: number;
+  fallbackPct: number;
+  trend: Array<{ date: string; sessions: number; resolvedPct: number }>;
+  byLob: Array<{ lob: LobArea; sessions: number; resolvedPct: number }>;
+}
+
+export interface SearchAnalyticsSummary {
+  totalSearches: number;
+  successRatePct: number;
+  zeroClickRatePct: number;
+  trend: Array<{ date: string; searches: number; successRatePct: number }>;
+  byLob: Array<{ lob: LobArea; searches: number; successRatePct: number; zeroClickRatePct: number }>;
+}

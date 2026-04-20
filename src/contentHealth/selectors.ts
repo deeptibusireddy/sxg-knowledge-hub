@@ -7,23 +7,32 @@ import type {
   Doc,
   AuthoringEvent,
   FeedbackEvent,
+  IntakeState,
   LobArea,
+  Sbu,
 } from '../shared/contentHealth/types';
 import type {
   AgingHeatmap,
+  AiQualitySummary,
+  AiReadinessSummary,
   ContentHealthFilter,
   ContributorRow,
   CoverageRow,
   FeedbackSummary,
   FreshnessBucket,
+  IntakeQueueSummary,
   KpiSummary,
   LobGrade,
   LobScorecardRow,
+  OwnerSbuRow,
+  PriorityScenarioSummary,
   QualitySignals,
   ReadabilityBin,
   ReadabilityDistribution,
+  SearchAnalyticsSummary,
   SearchGapRow,
   SearchMissRow,
+  SelfHelpSummary,
   StaleArticleRow,
   ThroughputPoint,
   TopPerformerRow,
@@ -410,5 +419,262 @@ export function selectKpis(filter: ContentHealthFilter): KpiSummary {
     prsLastWindow: prs,
     thumbsRatioPct: fb.thumbsRatioPct,
     searchMissCount: contentHealthDataset.searchMisses.reduce((s, m) => s + m.occurrences, 0),
+  };
+}
+
+// ── KM-aligned panels (round 2) ─────────────────────────────────────
+
+const EMBEDDING_FRESH_DAYS = 30;
+
+function pct(n: number, d: number, decimals = 1): number {
+  if (d === 0) return 0;
+  const f = Math.pow(10, decimals);
+  return Math.round((n / d) * 100 * f) / f;
+}
+
+export function selectAiReadiness(filter: ContentHealthFilter): AiReadinessSummary {
+  const docs = filterDocs(filter);
+  let indexed = 0, schema = 0, qa = 0, embFresh = 0, evalPass = 0;
+  const blocked: AiReadinessSummary['blockedDocs'] = [];
+  for (const d of docs) {
+    if (d.ai.indexedInAiStore) indexed++;
+    if (d.ai.schemaValid) schema++;
+    if (d.ai.hasQaBlock) qa++;
+    if (d.ai.embeddingAgeDays <= EMBEDDING_FRESH_DAYS) embFresh++;
+    if (d.ai.lastAiEval === 'pass') evalPass++;
+
+    const issues: string[] = [];
+    if (!d.ai.indexedInAiStore) issues.push('not indexed');
+    if (!d.ai.schemaValid) issues.push('schema invalid');
+    if (!d.ai.hasQaBlock) issues.push('no Q&A block');
+    if (d.ai.embeddingAgeDays > EMBEDDING_FRESH_DAYS) issues.push(`embedding ${d.ai.embeddingAgeDays}d old`);
+    if (d.ai.lastAiEval !== 'pass') issues.push(d.ai.lastAiEval === 'fail' ? 'eval failed' : 'never evaluated');
+    if (issues.length >= 2) {
+      blocked.push({ id: d.id, title: d.title, lob: d.lob, issues });
+    }
+  }
+  return {
+    totalDocs: docs.length,
+    indexedPct: pct(indexed, docs.length),
+    schemaValidPct: pct(schema, docs.length),
+    hasQaBlockPct: pct(qa, docs.length),
+    embeddingFreshPct: pct(embFresh, docs.length),
+    evalPassPct: pct(evalPass, docs.length),
+    blockedDocs: blocked
+      .sort((a, b) => b.issues.length - a.issues.length)
+      .slice(0, 8),
+  };
+}
+
+export function selectAiQuality(filter: ContentHealthFilter): AiQualitySummary {
+  const events = contentHealthDataset.aiAnswers.filter(
+    (e) =>
+      withinWindow(e.date, filter.windowDays) &&
+      (filter.lob === 'all' || e.lob === filter.lob),
+  );
+  const total = events.length;
+  let accSum = 0, confSum = 0, grounded = 0, fallback = 0;
+  const byDay = new Map<string, { sum: number; n: number }>();
+  const byLobMap = new Map<LobArea, { sum: number; n: number; fb: number }>();
+  for (const e of events) {
+    accSum += e.accuracy;
+    confSum += e.confidence;
+    if (e.grounded) grounded++;
+    if (e.fellBackToHuman) fallback++;
+    const d = byDay.get(e.date) ?? { sum: 0, n: 0 };
+    d.sum += e.accuracy;
+    d.n += 1;
+    byDay.set(e.date, d);
+    const l = byLobMap.get(e.lob) ?? { sum: 0, n: 0, fb: 0 };
+    l.sum += e.accuracy;
+    l.n += 1;
+    if (e.fellBackToHuman) l.fb += 1;
+    byLobMap.set(e.lob, l);
+  }
+  const trend = [...byDay.entries()]
+    .map(([date, v]) => ({ date, accuracyPct: pct(v.sum, v.n), answers: v.n }))
+    .sort((a, b) => a.date.localeCompare(b.date));
+  const byLob = [...byLobMap.entries()]
+    .map(([lob, v]) => ({ lob, accuracyPct: pct(v.sum, v.n), answers: v.n, fallbackPct: pct(v.fb, v.n) }))
+    .sort((a, b) => a.accuracyPct - b.accuracyPct);
+  return {
+    totalAnswers: total,
+    accuracyPct: total === 0 ? 0 : Math.round((accSum / total) * 1000) / 10,
+    meanConfidencePct: total === 0 ? 0 : Math.round((confSum / total) * 1000) / 10,
+    groundedPct: pct(grounded, total),
+    fallbackPct: pct(fallback, total),
+    accuracyTrend: trend,
+    byLob,
+  };
+}
+
+export function selectPriorityScenarios(filter: ContentHealthFilter): PriorityScenarioSummary {
+  const all = contentHealthDataset.priorityScenarios.filter(
+    (s) => filter.lob === 'all' || s.lob === filter.lob,
+  );
+  const totals = { total: all.length, covered: 0, draft: 0, gap: 0, outdated: 0, coveragePct: 0, p0Coverage: { covered: 0, total: 0 } };
+  for (const s of all) {
+    totals[s.status]++;
+    if (s.priority === 'P0') {
+      totals.p0Coverage.total++;
+      if (s.status === 'covered') totals.p0Coverage.covered++;
+    }
+  }
+  totals.coveragePct = pct(totals.covered, totals.total);
+  // Sort: gaps first, then outdated, then by priority
+  const order: Record<string, number> = { gap: 0, outdated: 1, draft: 2, covered: 3 };
+  const prioOrder: Record<string, number> = { P0: 0, P1: 1, P2: 2 };
+  const rows = all
+    .map((s) => ({ ...s }))
+    .sort((a, b) => order[a.status] - order[b.status] || prioOrder[a.priority] - prioOrder[b.priority]);
+  return { rows, totals };
+}
+
+export function selectIntakeQueue(filter: ContentHealthFilter): IntakeQueueSummary {
+  const all = contentHealthDataset.intake.filter(
+    (r) => filter.lob === 'all' || r.lob === filter.lob,
+  );
+  const byState: Record<IntakeState, number> = { pending: 0, in_review: 0, blocked: 0, published: 0 };
+  const breaches: IntakeQueueSummary['slaBreaches'] = [];
+  for (const r of all) {
+    byState[r.state]++;
+    const overBy = r.ageInStateDays - r.slaTargetDays;
+    // Don't count published items as breaches (they're done).
+    if (r.state !== 'published' && overBy > 0) {
+      breaches.push({
+        id: r.id,
+        title: r.title,
+        lob: r.lob,
+        state: r.state,
+        ageInStateDays: r.ageInStateDays,
+        slaTargetDays: r.slaTargetDays,
+        overBy,
+      });
+    }
+  }
+  breaches.sort((a, b) => b.overBy - a.overBy);
+  const openTotal = byState.pending + byState.in_review + byState.blocked;
+  return {
+    byState,
+    slaBreaches: breaches.slice(0, 6),
+    total: all.length,
+    breachPct: pct(breaches.length, openTotal),
+  };
+}
+
+export function selectOwnerSbu(filter: ContentHealthFilter): OwnerSbuRow[] {
+  const docs = filterDocs(filter);
+  const intake = contentHealthDataset.intake;
+  const bySbu = new Map<Sbu, { docs: number; stale: number; quality: number }>();
+  for (const d of docs) {
+    const cur = bySbu.get(d.sbu) ?? { docs: 0, stale: 0, quality: 0 };
+    cur.docs++;
+    if (daysSince(d.lastUpdated) > STALE_THRESHOLD_DAYS) cur.stale++;
+    if (d.brokenLinkCount > 0 || !d.hasMetadata || d.readability < HARD_TO_READ_THRESHOLD) cur.quality++;
+    bySbu.set(d.sbu, cur);
+  }
+  const intakeBySbu = new Map<Sbu, { open: number; breaches: number }>();
+  for (const r of intake) {
+    if (r.state === 'published') continue;
+    const cur = intakeBySbu.get(r.sbu) ?? { open: 0, breaches: 0 };
+    cur.open++;
+    if (r.ageInStateDays > r.slaTargetDays) cur.breaches++;
+    intakeBySbu.set(r.sbu, cur);
+  }
+  const rows: OwnerSbuRow[] = [];
+  for (const [sbu, v] of bySbu) {
+    const ix = intakeBySbu.get(sbu) ?? { open: 0, breaches: 0 };
+    rows.push({
+      sbu,
+      docs: v.docs,
+      staleDocs: v.stale,
+      staleSharePct: pct(v.stale, v.docs),
+      qualityIssueDocs: v.quality,
+      qualityIssueSharePct: pct(v.quality, v.docs),
+      intakeOpen: ix.open,
+      intakeBreaches: ix.breaches,
+    });
+  }
+  // Sort by combined risk: stale share + quality share + breach count.
+  return rows.sort((a, b) =>
+    (b.staleSharePct + b.qualityIssueSharePct + b.intakeBreaches * 5) -
+    (a.staleSharePct + a.qualityIssueSharePct + a.intakeBreaches * 5),
+  );
+}
+
+export function selectSelfHelp(filter: ContentHealthFilter): SelfHelpSummary {
+  const events = contentHealthDataset.selfHelp.filter(
+    (s) =>
+      withinWindow(s.date, filter.windowDays) &&
+      (filter.lob === 'all' || s.lob === filter.lob),
+  );
+  const total = events.length;
+  let resolved = 0, fallback = 0;
+  const byDay = new Map<string, { n: number; r: number }>();
+  const byLobMap = new Map<LobArea, { n: number; r: number }>();
+  for (const e of events) {
+    if (e.resolved) resolved++;
+    if (e.fellBackToHuman) fallback++;
+    const d = byDay.get(e.date) ?? { n: 0, r: 0 };
+    d.n++; if (e.resolved) d.r++;
+    byDay.set(e.date, d);
+    const l = byLobMap.get(e.lob) ?? { n: 0, r: 0 };
+    l.n++; if (e.resolved) l.r++;
+    byLobMap.set(e.lob, l);
+  }
+  const trend = [...byDay.entries()]
+    .map(([date, v]) => ({ date, sessions: v.n, resolvedPct: pct(v.r, v.n) }))
+    .sort((a, b) => a.date.localeCompare(b.date));
+  const byLob = [...byLobMap.entries()]
+    .map(([lob, v]) => ({ lob, sessions: v.n, resolvedPct: pct(v.r, v.n) }))
+    .sort((a, b) => a.resolvedPct - b.resolvedPct);
+  return {
+    totalSessions: total,
+    resolvedPct: pct(resolved, total),
+    fallbackPct: pct(fallback, total),
+    trend,
+    byLob,
+  };
+}
+
+export function selectSearchAnalytics(filter: ContentHealthFilter): SearchAnalyticsSummary {
+  const events = contentHealthDataset.searchEvents.filter(
+    (e) =>
+      withinWindow(e.date, filter.windowDays) &&
+      (filter.lob === 'all' || e.lob === filter.lob),
+  );
+  const total = events.length;
+  let success = 0, zeroClick = 0;
+  const byDay = new Map<string, { n: number; s: number }>();
+  const byLobMap = new Map<LobArea, { n: number; s: number; z: number }>();
+  for (const e of events) {
+    if (e.hadResult) success++;
+    if (e.hadResult && !e.clicked) zeroClick++;
+    const d = byDay.get(e.date) ?? { n: 0, s: 0 };
+    d.n++; if (e.hadResult) d.s++;
+    byDay.set(e.date, d);
+    const l = byLobMap.get(e.lob) ?? { n: 0, s: 0, z: 0 };
+    l.n++;
+    if (e.hadResult) l.s++;
+    if (e.hadResult && !e.clicked) l.z++;
+    byLobMap.set(e.lob, l);
+  }
+  const trend = [...byDay.entries()]
+    .map(([date, v]) => ({ date, searches: v.n, successRatePct: pct(v.s, v.n) }))
+    .sort((a, b) => a.date.localeCompare(b.date));
+  const byLob = [...byLobMap.entries()]
+    .map(([lob, v]) => ({
+      lob,
+      searches: v.n,
+      successRatePct: pct(v.s, v.n),
+      zeroClickRatePct: pct(v.z, v.n),
+    }))
+    .sort((a, b) => a.successRatePct - b.successRatePct);
+  return {
+    totalSearches: total,
+    successRatePct: pct(success, total),
+    zeroClickRatePct: pct(zeroClick, total),
+    trend,
+    byLob,
   };
 }
