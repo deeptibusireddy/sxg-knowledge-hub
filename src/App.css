@@ -53,6 +53,26 @@
   color: rgba(255,255,255,.6);
 }
 
+/* Header link to the Content Health Dashboard sub-project. */
+.app__content-health-link {
+  display: inline-flex;
+  align-items: center;
+  padding: 5px 12px;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: background 0.15s, border-color 0.15s;
+  white-space: nowrap;
+}
+.app__content-health-link:hover {
+  background: rgba(255, 255, 255, 0.18);
+  border-color: rgba(255, 255, 255, 0.7);
+}
+
 /* ─── Environment pills (header) ─────────────────────────────────────────────── */
 .app__env-pills { display: flex; gap: 8px; align-items: center; }
 

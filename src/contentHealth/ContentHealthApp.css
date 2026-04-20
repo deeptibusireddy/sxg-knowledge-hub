@@ -1,0 +1,426 @@
+/* Content Health Dashboard — standalone sub-page styles.
+   Scoped under .ch-app to avoid leaking into the hub. */
+
+.ch-app {
+  min-height: 100vh;
+  background: #f7f7f9;
+  display: flex;
+  flex-direction: column;
+}
+
+.ch-app__header {
+  background: #2d3748;
+  color: #fff;
+}
+
+.ch-app__header-inner {
+  max-width: 1600px;
+  margin: 0 auto;
+  padding: 16px 24px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+/* ── Product pills (AAQ in scope; CMSP / AI Native out of scope) ── */
+.ch-app__product-pills {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.ch-app__product-pill {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1px;
+  padding: 6px 18px;
+  border-radius: 18px;
+  border: 1.5px solid rgba(255, 255, 255, 0.3);
+  background: rgba(255, 255, 255, 0.10);
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
+  line-height: 1.15;
+}
+.ch-app__product-pill:hover:not(.ch-app__product-pill--disabled) {
+  background: rgba(255, 255, 255, 0.22);
+  color: #fff;
+}
+.ch-app__product-pill--active {
+  background: #0078d4;
+  border-color: #0078d4;
+  color: #fff;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.25);
+}
+.ch-app__product-pill--disabled {
+  background: rgba(255, 255, 255, 0.04);
+  color: rgba(255, 255, 255, 0.35);
+  border-color: rgba(255, 255, 255, 0.15);
+  border-style: dashed;
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+.ch-app__product-pill-name { font-size: 13px; }
+.ch-app__product-pill-tag {
+  font-size: 9px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: rgba(255, 255, 255, 0.55);
+}
+
+/* ── Scope banner ─────────────────────────────────────────── */
+.ch-app__scope-banner {
+  max-width: 1600px;
+  margin: 0 auto;
+  padding: 6px 24px 12px;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.85);
+}
+.ch-app__scope-banner strong { color: #fff; }
+
+.ch-app__title-block { display: flex; flex-direction: column; gap: 2px; }
+
+.ch-app__back {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.75);
+  text-decoration: none;
+  margin-bottom: 4px;
+  width: fit-content;
+}
+.ch-app__back:hover { color: #fff; text-decoration: underline; }
+
+.ch-app__title {
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  margin: 0;
+}
+
+.ch-app__subtitle {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.7);
+  margin: 0;
+}
+
+.ch-app__owner-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.12);
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 11px;
+  white-space: nowrap;
+}
+
+.ch-app__owner-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #66d9a1;
+}
+
+.ch-app__main {
+  max-width: 1600px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 16px 24px 48px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* ── Slicer ────────────────────────────────────────────────── */
+.ch-slicer {
+  display: flex;
+  gap: 12px;
+  align-items: flex-end;
+  flex-wrap: wrap;
+  background: #fff;
+  border: 1px solid #e1dfdd;
+  border-radius: 6px;
+  padding: 12px;
+}
+
+.ch-slicer__field { display: flex; flex-direction: column; gap: 4px; }
+.ch-slicer__label {
+  font-size: 11px;
+  color: #605e5c;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.ch-slicer__field select {
+  padding: 6px 8px;
+  border: 1px solid #c8c6c4;
+  border-radius: 4px;
+  background: #fff;
+  font-size: 13px;
+  min-width: 160px;
+}
+
+/* ── KPI strip ─────────────────────────────────────────────── */
+.ch-kpi-strip {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 12px;
+}
+
+@media (max-width: 1100px) {
+  .ch-kpi-strip { grid-template-columns: repeat(3, 1fr); }
+}
+
+.ch-kpi-strip__tile {
+  background: #fff;
+  border: 1px solid #e1dfdd;
+  border-left: 3px solid #c8c6c4;
+  border-radius: 6px;
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.ch-kpi-strip__tile--good { border-left-color: #107c10; }
+.ch-kpi-strip__tile--warn { border-left-color: #e8b336; }
+.ch-kpi-strip__tile--bad  { border-left-color: #d83b01; }
+
+.ch-kpi-strip__label {
+  font-size: 11px;
+  color: #605e5c;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.ch-kpi-strip__value {
+  font-size: 24px;
+  font-weight: 700;
+  color: #201f1e;
+  line-height: 1.1;
+}
+.ch-kpi-strip__hint { font-size: 11px; color: #605e5c; }
+
+/* ── Grid of panels ────────────────────────────────────────── */
+.ch-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.ch-grid__wide { grid-column: 1 / -1; }
+
+@media (max-width: 900px) {
+  .ch-grid { grid-template-columns: 1fr; }
+}
+
+/* ── Panel shell ───────────────────────────────────────────── */
+.ch-panel {
+  background: #fff;
+  border: 1px solid #e1dfdd;
+  border-radius: 6px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 0;
+}
+
+.ch-panel__header { display: flex; flex-direction: column; gap: 2px; }
+.ch-panel__title { margin: 0; font-size: 14px; font-weight: 700; color: #201f1e; }
+.ch-panel__subtitle { margin: 0; font-size: 12px; color: #605e5c; }
+.ch-panel__sub {
+  font-size: 11px;
+  color: #605e5c;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin-top: 4px;
+}
+.ch-panel__list { margin: 0; padding: 0 0 0 0; list-style: none; font-size: 12px; color: #323130; }
+.ch-panel__list li { padding: 4px 0; border-top: 1px solid #f3f2f1; }
+.ch-panel__list li:first-child { border-top: none; }
+
+/* ── Coverage heatmap ──────────────────────────────────────── */
+.ch-coverage-grid {
+  display: grid;
+  gap: 4px;
+  font-size: 12px;
+}
+.ch-coverage-grid__corner { }
+.ch-coverage-grid__col-head {
+  font-size: 11px;
+  color: #605e5c;
+  text-align: center;
+  padding-bottom: 4px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.ch-coverage-grid__row-head {
+  font-size: 12px;
+  font-weight: 600;
+  color: #323130;
+  display: flex;
+  align-items: center;
+}
+.ch-coverage-grid__cell {
+  padding: 8px 6px;
+  text-align: center;
+  border-radius: 3px;
+  font-weight: 600;
+}
+.ch-coverage-grid__cell--gap {
+  outline: 1px dashed #d83b01;
+  color: #d83b01;
+}
+
+.ch-tag {
+  display: inline-block;
+  padding: 1px 6px;
+  border-radius: 8px;
+  font-size: 10px;
+  font-weight: 700;
+  margin-right: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.ch-tag--warn { background: #fdf6f0; color: #d83b01; }
+
+/* ── Quality list ──────────────────────────────────────────── */
+.ch-quality-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 8px; }
+.ch-quality-list__item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  border: 1px solid #e1dfdd;
+  border-left: 3px solid #c8c6c4;
+  border-radius: 4px;
+  background: #fafafa;
+}
+.ch-quality-list__item--bad     { border-left-color: #d83b01; }
+.ch-quality-list__item--warn    { border-left-color: #e8b336; }
+.ch-quality-list__item--neutral { border-left-color: #c8c6c4; }
+.ch-quality-list__value { font-size: 20px; font-weight: 700; min-width: 56px; }
+.ch-quality-list__meta { display: flex; flex-direction: column; }
+.ch-quality-list__label { font-size: 13px; color: #201f1e; }
+.ch-quality-list__hint  { font-size: 11px; color: #605e5c; }
+
+/* ── Compact table ─────────────────────────────────────────── */
+.ch-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+.ch-table th, .ch-table td {
+  text-align: left;
+  padding: 6px 8px;
+  border-bottom: 1px solid #f3f2f1;
+}
+.ch-table th { color: #605e5c; font-weight: 600; text-transform: uppercase; font-size: 10px; letter-spacing: 0.04em; }
+.ch-pos { color: #107c10; font-weight: 600; }
+.ch-neg { color: #d83b01; font-weight: 600; }
+
+/* ── Score bar (LOB scorecard, search gap) ─────────────────── */
+.ch-scorebar {
+  position: relative;
+  background: #f3f2f1;
+  border-radius: 3px;
+  height: 16px;
+  min-width: 80px;
+  overflow: hidden;
+}
+.ch-scorebar__fill {
+  position: absolute;
+  inset: 0 auto 0 0;
+  border-radius: 3px;
+}
+.ch-scorebar__num {
+  position: relative;
+  z-index: 1;
+  font-size: 10px;
+  font-weight: 700;
+  color: #201f1e;
+  padding: 0 6px;
+  line-height: 16px;
+  mix-blend-mode: difference;
+  filter: invert(1) grayscale(1) contrast(9);
+}
+.ch-scorebar--gap { min-width: 100px; }
+
+.ch-grade {
+  display: inline-block;
+  width: 22px;
+  text-align: center;
+  font-weight: 700;
+  font-size: 12px;
+  border-radius: 11px;
+  padding: 2px 0;
+  color: #fff;
+}
+.ch-grade--good { background: #107c10; }
+.ch-grade--warn { background: #e8b336; color: #3b2f00; }
+.ch-grade--bad  { background: #d83b01; }
+
+/* ── Aging heatmap ─────────────────────────────────────────── */
+.ch-heatmap {
+  display: grid;
+  gap: 4px;
+  font-size: 12px;
+}
+.ch-heatmap__col-head {
+  font-size: 10px;
+  color: #605e5c;
+  text-align: center;
+  padding-bottom: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.ch-heatmap__row-head {
+  font-size: 12px;
+  font-weight: 600;
+  color: #323130;
+  display: flex;
+  align-items: center;
+}
+.ch-heatmap__cell {
+  padding: 8px 6px;
+  text-align: center;
+  border-radius: 3px;
+  font-weight: 600;
+}
+
+/* ── Readability histogram ─────────────────────────────────── */
+.ch-histogram {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.ch-histogram__row {
+  display: grid;
+  grid-template-columns: 140px 1fr 40px;
+  gap: 8px;
+  align-items: center;
+  font-size: 12px;
+}
+.ch-histogram__label { color: #605e5c; }
+.ch-histogram__track {
+  background: #f3f2f1;
+  border-radius: 3px;
+  height: 14px;
+  overflow: hidden;
+}
+.ch-histogram__fill {
+  height: 100%;
+  background: #0078d4;
+  border-radius: 3px;
+}
+.ch-histogram__fill--hard { background: #d83b01; }
+.ch-histogram__count { font-weight: 600; text-align: right; }
+
+.ch-panel__hint {
+  margin: 0;
+  font-size: 11px;
+  color: #a19f9d;
+  font-style: italic;
+}

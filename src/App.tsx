@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { lazy, Suspense, useState } from 'react';
+import { BrowserRouter, Link, Route, Routes } from 'react-router-dom';
 import type { SlicerState } from './types';
 import { DataProvider, useData } from './contexts/DataContext';
 import { KpiCard } from './components/common/KpiCard';
@@ -18,6 +19,8 @@ import { AuthButton } from './components/common/AuthButton';
 import { SchemaExplorer } from './components/dev/SchemaExplorer';
 import { STATIC_DEMO_ONLY } from './config';
 import './App.css';
+
+const ContentHealthApp = lazy(() => import('./contentHealth/ContentHealthApp'));
 
 const DEFAULT_SLICER: SlicerState = {
   lob: 'all',
@@ -95,6 +98,13 @@ function Dashboard() {
           </div>
 
           <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+            <Link
+              to="/content-health"
+              className="app__content-health-link"
+              title="Open the Content Health Dashboard (owned by the Content Health team)"
+            >
+              Content Health Dashboard →
+            </Link>
             {import.meta.env.DEV && (
               <button
                 onClick={() => setShowSchema(true)}
@@ -169,8 +179,20 @@ function Dashboard() {
 
 export default function App() {
   return (
-    <DataProvider>
-      <Dashboard />
-    </DataProvider>
+    <BrowserRouter basename={import.meta.env.BASE_URL}>
+      <DataProvider>
+        <Routes>
+          <Route path="/" element={<Dashboard />} />
+          <Route
+            path="/content-health"
+            element={
+              <Suspense fallback={<div style={{ padding: 24 }}>Loading Content Health Dashboard…</div>}>
+                <ContentHealthApp />
+              </Suspense>
+            }
+          />
+        </Routes>
+      </DataProvider>
+    </BrowserRouter>
   );
 }
