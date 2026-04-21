@@ -21,6 +21,8 @@ export interface KpiSummary {
   prsLastWindow: number;
   thumbsRatioPct: number;
   searchMissCount: number;
+  /** % of windowed search events that returned a usable result. */
+  responseCoveragePct: number;
 }
 
 export interface CoverageRow {
@@ -233,4 +235,31 @@ export interface SearchAnalyticsSummary {
   zeroClickRatePct: number;
   trend: Array<{ date: string; searches: number; successRatePct: number }>;
   byLob: Array<{ lob: LobArea; searches: number; successRatePct: number; zeroClickRatePct: number }>;
+}
+
+export interface SourceBreakdownCell {
+  lob: LobArea;
+  /** Counts per source (in fixed display order). */
+  bySource: Record<import('../shared/contentHealth/types').DocSource, number>;
+  total: number;
+}
+
+export interface SourceBreakdown {
+  /** All sources present anywhere in the in-scope corpus, in display order. */
+  sources: import('../shared/contentHealth/types').DocSource[];
+  rows: SourceBreakdownCell[];
+  /** True if any in-scope doc lacked an explicit source field. */
+  hasUnknown: boolean;
+}
+
+/** Drill-down row shape — minimal columns useful in a doc-list drawer. */
+export interface DocDrilldownRow {
+  id: string;
+  title: string;
+  lob: LobArea;
+  owner: string;
+  lastUpdated: string;
+  daysSince: number;
+  brokenLinks: number;
+  readability: number;
 }

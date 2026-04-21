@@ -28,7 +28,7 @@ describe('ContentHealthApp', () => {
   it('renders all eighteen panel headings', () => {
     renderApp();
     // Section A — hygiene
-    expect(screen.getByRole('heading', { name: 'Coverage' })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: 'Inventory by Product × LOB' })).toBeInTheDocument();
     expect(screen.getByRole('heading', { name: 'Freshness' })).toBeInTheDocument();
     expect(screen.getByRole('heading', { name: 'Quality signals' })).toBeInTheDocument();
     expect(screen.getByRole('heading', { name: 'Authoring throughput' })).toBeInTheDocument();

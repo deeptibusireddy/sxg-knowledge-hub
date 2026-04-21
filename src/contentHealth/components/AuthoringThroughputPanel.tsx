@@ -15,7 +15,7 @@ export function AuthoringThroughputPanel({ series, contributors }: Props) {
       <header className="ch-panel__header">
         <h3 className="ch-panel__title">Authoring throughput</h3>
         <p className="ch-panel__subtitle">
-          <strong>{totalPrs}</strong> PR{totalPrs === 1 ? '' : 's'} merged in window.
+          <strong>{totalPrs}</strong> update{totalPrs === 1 ? '' : 's'} merged in window.
         </p>
       </header>
       <ResponsiveContainer width="100%" height={180}>
@@ -33,7 +33,7 @@ export function AuthoringThroughputPanel({ series, contributors }: Props) {
         <thead>
           <tr>
             <th>Author</th>
-            <th>PRs</th>
+            <th>Updates</th>
             <th>Lines</th>
           </tr>
         </thead>

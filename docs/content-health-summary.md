@@ -32,8 +32,8 @@ any), **Color** (when shown), **Use** (what to walk away with).
 
 ### 1. Docs in scope
 - **Value:** Total docs after applying the LOB filter.
-- **Hint:** "*N* coverage gap(s)" — Product × LOB cells with **< 4 docs**.
-- **Color:** Green if zero gaps, amber otherwise.
+- **Hint:** "*N* thin area(s)" — Product × LOB cells with **< 4 docs**.
+- **Color:** Green if zero thin areas, amber otherwise.
 - **Use:** How big is the corpus and are any combos thin?
 
 ### 2. Stale docs (>180d)
@@ -49,8 +49,9 @@ any), **Color** (when shown), **Use** (what to walk away with).
 - **Color:** Green ≤ 15, amber 16–40, red > 40.
 - **Use:** Sizes the editorial backlog.
 
-### 4. Authoring PRs
-- **Value:** PRs **merged in the selected window**.
+### 4. Updates merged
+- **Value:** PRs **merged in the selected window** (renamed from "Authoring PRs"
+  per business feedback — same metric, friendlier label).
 - **Color:** Neutral (informational).
 - **Use:** "Are we keeping up?" Compare against intake (#10).
 
@@ -59,39 +60,55 @@ any), **Color** (when shown), **Use** (what to walk away with).
 - **Color:** Green ≥ 80%, amber 60–79%, red < 60%.
 - **Use:** Customer-perceived quality headline.
 
-### 6. Search misses
-- **Value:** **All-time** total occurrences of search queries with no useful
-  result (not windowed, not LOB-filtered).
-- **Color:** Always amber (standing watch-item).
-- **Use:** Demand signal for missing content.
+### 6. Response coverage
+- **Value:** % of in-window search events that returned **at least one
+  result** (`hadResult === true`). Replaces the old raw "Search misses" tile —
+  Bob's review: "1.7K, is that good or bad?" needed a denominator.
+- **Color:** Green ≥ 90%, amber 75–89%, red < 75%.
+- **Use:** Headline answer-coverage metric. Raw miss count is still in the
+  Search Analytics panel.
 
 ---
 
 # Section A · Knowledge hygiene
 
-## Coverage panel
-- **Grid:** Product × LOB → doc count.
-- **Gap flag:** Cells with **< 4 docs** are highlighted.
-- **Gap list:** Below the grid, an explicit list of all flagged cells.
+## Inventory by Product × LOB panel
+- **Grid:** Product × LOB → doc count. (Renamed from "Coverage" — Bob/Andy:
+  "coverage" should mean *intent* coverage, not doc count.)
+- **Thin flag:** Cells with **< 4 docs** are tagged "Thin".
+- **Thin list:** Below the grid, an explicit list of all flagged cells.
 - **Use:** Spot dangerously thin product/LOB combos.
+
+## Source attribution panel *(new)*
+- **Stacked bar per LOB:** Segments show how many in-scope docs come from
+  each source (Cornerstone, Learn, Wiki, LLC, GitHub, Other).
+- **Use:** Andy's question — "where did the 64 docs come from?" Quickly see
+  whether an LOB is dominated by one source or balanced across several, and
+  notice obvious gaps (e.g. an LOB with no Learn content).
+- **Note:** Today the source field is **synthetic** (seeded random by LOB).
+  Once the real ingestion pipeline tags docs with a source, this panel
+  becomes real with no dashboard changes.
 
 ## Freshness panel
 - **Bar chart bins:** `0–30d`, `31–90d`, `91–180d`, `181–365d`, `> 365d` —
   by **days since last update**.
 - **Subtitle:** Stale count + stale share (mirrors KPI #2).
-- **Use:** See where rot accumulates.
+- **Click a bar:** Opens a drill-down drawer listing the docs in that
+  freshness bucket (id, title, LOB, days since update). CSV export available.
+- **Use:** See where rot accumulates, then click to action it.
 
 ## Quality signals panel
 Three counters over in-scope docs:
 - **Broken-link docs** (and total broken-link count across them).
 - **Missing-metadata docs** (`hasMetadata === false`).
 - **Hard-to-read docs** (Flesch reading-ease **< 50**).
-- **Use:** Pick the editorial sprint target.
+- **Click a row:** Opens a drill-down drawer listing the offending docs.
+- **Use:** Pick the editorial sprint target, then click straight into the list.
 
 ## Authoring throughput panel
-- **Daily line chart:** PRs merged per day in the window.
-- **Top 6 contributors table:** PR count + total lines changed, sorted by
-  PR count.
+- **Daily line chart:** Updates merged per day in the window.
+- **Top 6 contributors table:** Updates count + total lines changed, sorted by
+  updates count.
 - **Use:** "Are we keeping up, and who's doing the work?"
 
 ## LOB health scorecard
@@ -119,6 +136,8 @@ Three counters over in-scope docs:
 - **Grid:** LOB rows × age-bucket columns (same buckets as Freshness).
 - **Color scale:** Younger = blue, older = red; intensity scaled to the
   hottest cell in view.
+- **Click a cell:** Opens a drill-down drawer listing the docs in that
+  LOB × age-bucket. CSV export available.
 - **Use:** Pair with the Scorecard — bad grade + heavy red tail = top
   candidate for an editorial sprint.
 

@@ -22,7 +22,7 @@ export function ContentHealthKpiStrip({ kpis }: Props) {
     {
       label: 'Docs in scope',
       value: fmt(kpis.coverageDocs),
-      hint: `${kpis.coverageGapAreas} coverage gap${kpis.coverageGapAreas === 1 ? '' : 's'}`,
+      hint: `${kpis.coverageGapAreas} thin area${kpis.coverageGapAreas === 1 ? '' : 's'} (<4 docs)`,
       tone: kpis.coverageGapAreas > 0 ? 'warn' : 'good',
     },
     {
@@ -38,9 +38,9 @@ export function ContentHealthKpiStrip({ kpis }: Props) {
       tone: kpis.qualityIssues > 40 ? 'bad' : kpis.qualityIssues > 15 ? 'warn' : 'good',
     },
     {
-      label: 'Authoring PRs',
+      label: 'Updates merged',
       value: fmt(kpis.prsLastWindow),
-      hint: 'merged in selected window',
+      hint: 'in selected window',
       tone: 'neutral',
     },
     {
@@ -50,10 +50,10 @@ export function ContentHealthKpiStrip({ kpis }: Props) {
       tone: kpis.thumbsRatioPct >= 80 ? 'good' : kpis.thumbsRatioPct >= 60 ? 'warn' : 'bad',
     },
     {
-      label: 'Search misses',
-      value: fmt(kpis.searchMissCount),
-      hint: 'occurrences (all time)',
-      tone: 'warn',
+      label: 'Response coverage',
+      value: `${kpis.responseCoveragePct}%`,
+      hint: 'searches that returned a usable result',
+      tone: kpis.responseCoveragePct >= 90 ? 'good' : kpis.responseCoveragePct >= 75 ? 'warn' : 'bad',
     },
   ];
 

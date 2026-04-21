@@ -6,6 +6,7 @@ import { contentHealthDataset } from '../shared/contentHealth/fixtures';
 import type {
   Doc,
   AuthoringEvent,
+  DocSource,
   FeedbackEvent,
   IntakeState,
   LobArea,
@@ -18,6 +19,7 @@ import type {
   ContentHealthFilter,
   ContributorRow,
   CoverageRow,
+  DocDrilldownRow,
   FeedbackSummary,
   FreshnessBucket,
   IntakeQueueSummary,
@@ -33,6 +35,7 @@ import type {
   SearchGapRow,
   SearchMissRow,
   SelfHelpSummary,
+  SourceBreakdown,
   StaleArticleRow,
   ThroughputPoint,
   TopPerformerRow,
@@ -409,6 +412,7 @@ export function selectKpis(filter: ContentHealthFilter): KpiSummary {
   const { series } = selectThroughput(filter);
   const prs = series.reduce((s, p) => s + p.prs, 0);
   const fb = selectFeedback(filter);
+  const search = selectSearchAnalytics(filter);
 
   return {
     coverageDocs: docs.length,
@@ -419,6 +423,7 @@ export function selectKpis(filter: ContentHealthFilter): KpiSummary {
     prsLastWindow: prs,
     thumbsRatioPct: fb.thumbsRatioPct,
     searchMissCount: contentHealthDataset.searchMisses.reduce((s, m) => s + m.occurrences, 0),
+    responseCoveragePct: search.successRatePct,
   };
 }
 
@@ -677,4 +682,91 @@ export function selectSearchAnalytics(filter: ContentHealthFilter): SearchAnalyt
     trend,
     byLob,
   };
+}
+
+// ── Source attribution ──────────────────────────────────────────────
+
+const SOURCE_DISPLAY_ORDER: DocSource[] = [
+  'Cornerstone', 'Learn', 'Wiki', 'LLC', 'GitHub', 'Other',
+];
+
+export function selectSourceBreakdown(filter: ContentHealthFilter): SourceBreakdown {
+  const docs = filterDocs({ ...filter, lob: 'all' });
+  const lobs: LobArea[] = filter.lob === 'all' ? [...LOBS] : [filter.lob];
+  const empty = (): Record<DocSource, number> => ({
+    Cornerstone: 0, Learn: 0, Wiki: 0, LLC: 0, GitHub: 0, Other: 0,
+  });
+  const byLob = new Map<LobArea, Record<DocSource, number>>();
+  for (const lob of lobs) byLob.set(lob, empty());
+  let hasUnknown = false;
+  for (const d of docs) {
+    if (!lobs.includes(d.lob)) continue;
+    const bucket = byLob.get(d.lob)!;
+    if (d.source) bucket[d.source]++;
+    else { bucket.Other++; hasUnknown = true; }
+  }
+  const rows = lobs.map((lob) => {
+    const bySource = byLob.get(lob)!;
+    const total = SOURCE_DISPLAY_ORDER.reduce((s, k) => s + bySource[k], 0);
+    return { lob, bySource, total };
+  });
+  return { sources: SOURCE_DISPLAY_ORDER, rows, hasUnknown };
+}
+
+// ── Drill-down helpers ──────────────────────────────────────────────
+
+function toDrilldownRow(d: Doc): DocDrilldownRow {
+  return {
+    id: d.id,
+    title: d.title,
+    lob: d.lob,
+    owner: d.owner,
+    lastUpdated: d.lastUpdated,
+    daysSince: daysSince(d.lastUpdated),
+    brokenLinks: d.brokenLinkCount,
+    readability: d.readability,
+  };
+}
+
+export function selectDocsByFreshness(
+  filter: ContentHealthFilter,
+  fromDays: number,
+  toDays: number | null,
+): DocDrilldownRow[] {
+  return filterDocs(filter)
+    .filter((d) => {
+      const age = daysSince(d.lastUpdated);
+      return age >= fromDays && (toDays === null || age <= toDays);
+    })
+    .sort((a, b) => daysSince(b.lastUpdated) - daysSince(a.lastUpdated))
+    .map(toDrilldownRow);
+}
+
+export function selectDocsByAgingCell(
+  filter: ContentHealthFilter,
+  lob: LobArea,
+  fromDays: number,
+  toDays: number | null,
+): DocDrilldownRow[] {
+  return selectDocsByFreshness({ ...filter, lob }, fromDays, toDays);
+}
+
+export type QualityKey = 'broken-links' | 'missing-meta' | 'hard-to-read';
+
+export function selectDocsByQualityIssue(
+  filter: ContentHealthFilter,
+  key: QualityKey,
+): DocDrilldownRow[] {
+  return filterDocs(filter)
+    .filter((d) => {
+      if (key === 'broken-links') return d.brokenLinkCount > 0;
+      if (key === 'missing-meta') return !d.hasMetadata;
+      return d.readability < HARD_TO_READ_THRESHOLD;
+    })
+    .sort((a, b) => {
+      if (key === 'broken-links') return b.brokenLinkCount - a.brokenLinkCount;
+      if (key === 'hard-to-read') return a.readability - b.readability;
+      return a.title.localeCompare(b.title);
+    })
+    .map(toDrilldownRow);
 }

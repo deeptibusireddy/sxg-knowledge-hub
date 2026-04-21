@@ -16,10 +16,10 @@ export function CoveragePanel({ rows }: Props) {
   return (
     <section className="ch-panel">
       <header className="ch-panel__header">
-        <h3 className="ch-panel__title">Coverage</h3>
+        <h3 className="ch-panel__title">Inventory by Product × LOB</h3>
         <p className="ch-panel__subtitle">
-          Docs per product × LOB.{' '}
-          <strong>{gaps.length}</strong> gap area{gaps.length === 1 ? '' : 's'} (&lt; 4 docs).
+          Doc counts per product × LOB.{' '}
+          <strong>{gaps.length}</strong> thin area{gaps.length === 1 ? '' : 's'} (&lt; 4 docs).
         </p>
       </header>
 
@@ -58,7 +58,7 @@ export function CoveragePanel({ rows }: Props) {
         <ul className="ch-panel__list">
           {gaps.slice(0, 4).map((g) => (
             <li key={`${g.product}|${g.lob}`}>
-              <span className="ch-tag ch-tag--warn">Gap</span> {g.product} · {g.lob} — {g.docCount} doc{g.docCount === 1 ? '' : 's'}
+              <span className="ch-tag ch-tag--warn">Thin</span> {g.product} · {g.lob} — {g.docCount} doc{g.docCount === 1 ? '' : 's'}
             </li>
           ))}
         </ul>

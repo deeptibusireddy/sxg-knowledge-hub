@@ -1,10 +1,12 @@
 import type { AgingHeatmap } from '../types';
+import type { LobArea } from '../../shared/contentHealth/types';
 
 interface Props {
   heatmap: AgingHeatmap;
+  onCellClick?: (lob: LobArea, bucket: AgingHeatmap['buckets'][number]) => void;
 }
 
-export function AgingHeatmapPanel({ heatmap }: Props) {
+export function AgingHeatmapPanel({ heatmap, onCellClick }: Props) {
   const { lobs, buckets, counts, max } = heatmap;
   const total = counts.flat().reduce((s, c) => s + c, 0);
 
@@ -15,6 +17,7 @@ export function AgingHeatmapPanel({ heatmap }: Props) {
         <p className="ch-panel__subtitle">
           {total.toLocaleString()} docs across {lobs.length} LOB{lobs.length === 1 ? '' : 's'} ×{' '}
           {buckets.length} age buckets. Darker = more docs; rightmost columns are stale.
+          {onCellClick && <> Click a cell to list docs.</>}
         </p>
       </header>
       <div
@@ -37,12 +40,29 @@ export function AgingHeatmapPanel({ heatmap }: Props) {
                 ? '#fafafa'
                 : `rgba(${hue}, ${0.10 + intensity * 0.60})`;
               const color = intensity > 0.55 ? '#fff' : '#201f1e';
+              const title = `${lob} · ${b.label}: ${count} doc${count === 1 ? '' : 's'}`;
+              const canClick = !!onCellClick && count > 0;
+              if (canClick) {
+                return (
+                  <button
+                    key={`${lob}-${b.label}`}
+                    type="button"
+                    className="ch-heatmap__cell ch-heatmap__cell--clickable"
+                    style={{ background: bg, color }}
+                    title={title}
+                    aria-label={`${title}. Click to list.`}
+                    onClick={() => onCellClick!(lob, b)}
+                  >
+                    {count}
+                  </button>
+                );
+              }
               return (
                 <div
                   key={`${lob}-${b.label}`}
                   className="ch-heatmap__cell"
                   style={{ background: bg, color }}
-                  title={`${lob} · ${b.label}: ${count} doc${count === 1 ? '' : 's'}`}
+                  title={title}
                 >
                   {count}
                 </div>

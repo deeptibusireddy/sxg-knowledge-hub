@@ -5,6 +5,9 @@ import {
   selectAiQuality,
   selectAiReadiness,
   selectCoverage,
+  selectDocsByAgingCell,
+  selectDocsByFreshness,
+  selectDocsByQualityIssue,
   selectFeedback,
   selectFreshness,
   selectIntakeQueue,
@@ -18,11 +21,14 @@ import {
   selectSearchGapMap,
   selectSearchMisses,
   selectSelfHelp,
+  selectSourceBreakdown,
   selectStaleArticles,
   selectThroughput,
   selectTopPerformers,
+  type QualityKey,
 } from './selectors';
-import type { ContentHealthFilter } from './types';
+import type { ContentHealthFilter, DocDrilldownRow } from './types';
+import type { LobArea } from '../shared/contentHealth/types';
 import { ContentHealthSlicer } from './components/ContentHealthSlicer';
 import { ContentHealthKpiStrip } from './components/ContentHealthKpiStrip';
 import { CoveragePanel } from './components/CoveragePanel';
@@ -43,6 +49,8 @@ import { IntakeQueuePanel } from './components/IntakeQueuePanel';
 import { OwnerSbuRolloutPanel } from './components/OwnerSbuRolloutPanel';
 import { SelfHelpResolutionPanel } from './components/SelfHelpResolutionPanel';
 import { SearchAnalyticsPanel } from './components/SearchAnalyticsPanel';
+import { SourceBreakdownPanel } from './components/SourceBreakdownPanel';
+import { DrilldownDrawer, type DrilldownContent, type DrilldownRow } from '../components/common/DrilldownDrawer';
 import './ContentHealthApp.css';
 
 const DEFAULT_FILTER: ContentHealthFilter = {
@@ -59,6 +67,7 @@ const PRODUCT_PILLS: Array<{ id: 'AAQ' | 'CMSP' | 'AI Native'; inScope: boolean 
 
 export default function ContentHealthApp() {
   const [filter, setFilter] = useState<ContentHealthFilter>(DEFAULT_FILTER);
+  const [drilldown, setDrilldown] = useState<DrilldownContent | null>(null);
 
   const kpis = useMemo(() => selectKpis(filter), [filter]);
   const coverage = useMemo(() => selectCoverage(filter), [filter]);
@@ -80,6 +89,58 @@ export default function ContentHealthApp() {
   const ownerSbu = useMemo(() => selectOwnerSbu(filter), [filter]);
   const selfHelp = useMemo(() => selectSelfHelp(filter), [filter]);
   const searchAnalytics = useMemo(() => selectSearchAnalytics(filter), [filter]);
+  const sourceBreakdown = useMemo(() => selectSourceBreakdown(filter), [filter]);
+
+  const docColumns: DrilldownContent['columns'] = [
+    { key: 'title',       header: 'Title' },
+    { key: 'lob',         header: 'LOB' },
+    { key: 'owner',       header: 'Owner' },
+    { key: 'lastUpdated', header: 'Last updated' },
+    { key: 'daysSince',   header: 'Days' },
+    { key: 'brokenLinks', header: 'Broken' },
+    { key: 'readability', header: 'Flesch' },
+  ];
+  const toRows = (rows: DocDrilldownRow[]): DrilldownRow[] =>
+    rows.map((r) => ({
+      id: r.id,
+      title: r.title,
+      lob: r.lob,
+      owner: r.owner,
+      lastUpdated: r.lastUpdated,
+      daysSince: r.daysSince,
+      brokenLinks: r.brokenLinks,
+      readability: r.readability,
+    }));
+
+  const handleFreshnessClick = (bucket: { label: string; fromDays: number; toDays: number | null }) => {
+    const docs = selectDocsByFreshness(filter, bucket.fromDays, bucket.toDays);
+    setDrilldown({
+      title: `Docs · ${bucket.label} since update`,
+      subtitle: `${docs.length} doc${docs.length === 1 ? '' : 's'} in current scope`,
+      columns: docColumns,
+      rows: toRows(docs),
+    });
+  };
+
+  const handleAgingClick = (lob: LobArea, bucket: { label: string; fromDays: number; toDays: number | null }) => {
+    const docs = selectDocsByAgingCell(filter, lob, bucket.fromDays, bucket.toDays);
+    setDrilldown({
+      title: `${lob} · ${bucket.label}`,
+      subtitle: `${docs.length} doc${docs.length === 1 ? '' : 's'}`,
+      columns: docColumns,
+      rows: toRows(docs),
+    });
+  };
+
+  const handleQualityClick = (key: QualityKey, label: string) => {
+    const docs = selectDocsByQualityIssue(filter, key);
+    setDrilldown({
+      title: label,
+      subtitle: `${docs.length} doc${docs.length === 1 ? '' : 's'} in current scope`,
+      columns: docColumns,
+      rows: toRows(docs),
+    });
+  };
 
   return (
     <div className="ch-app">
@@ -136,8 +197,9 @@ export default function ContentHealthApp() {
             buckets={freshness}
             staleCount={kpis.staleDocs}
             staleSharePct={kpis.staleSharePct}
+            onBucketClick={handleFreshnessClick}
           />
-          <QualitySignalsPanel signals={quality} />
+          <QualitySignalsPanel signals={quality} onIssueClick={handleQualityClick} />
           <AuthoringThroughputPanel
             series={throughput.series}
             contributors={throughput.contributors}
@@ -145,7 +207,10 @@ export default function ContentHealthApp() {
           <LobScorecardPanel rows={scorecards} />
           <ReadabilityDistributionPanel distribution={readability} />
           <div className="ch-grid__wide">
-            <AgingHeatmapPanel heatmap={agingHeatmap} />
+            <AgingHeatmapPanel heatmap={agingHeatmap} onCellClick={handleAgingClick} />
+          </div>
+          <div className="ch-grid__wide">
+            <SourceBreakdownPanel breakdown={sourceBreakdown} />
           </div>
         </div>
 
@@ -184,6 +249,8 @@ export default function ContentHealthApp() {
           </div>
         </div>
       </main>
+
+      <DrilldownDrawer content={drilldown} onClose={() => setDrilldown(null)} />
     </div>
   );
 }

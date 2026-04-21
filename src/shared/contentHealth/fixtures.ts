@@ -9,6 +9,7 @@ import type {
   AuthoringEvent,
   ContentHealthDataset,
   Doc,
+  DocSource,
   FeedbackEvent,
   IntakeRequest,
   IntakeState,
@@ -61,6 +62,28 @@ const dayOffset = (n: number) => {
   return d.toISOString().slice(0, 10);
 };
 
+// Per-LOB source weights — modeled loosely after where each LOB's content
+// actually lives today (Cornerstone is the dominant ingestion target).
+const SOURCE_WEIGHTS: Record<LobArea, Array<[DocSource, number]>> = {
+  'Azure':         [['Cornerstone', 50], ['Learn', 25], ['Wiki', 10], ['GitHub', 10], ['LLC', 3],  ['Other', 2]],
+  'Microsoft 365': [['Cornerstone', 45], ['Learn', 30], ['Wiki', 10], ['LLC', 8],     ['GitHub', 4], ['Other', 3]],
+  'Windows':       [['Cornerstone', 40], ['Learn', 20], ['LLC', 25], ['Wiki', 8],     ['GitHub', 4], ['Other', 3]],
+  'Surface':       [['Cornerstone', 55], ['Learn', 20], ['LLC', 15], ['Wiki', 5],     ['GitHub', 2], ['Other', 3]],
+  'Xbox':          [['Cornerstone', 35], ['Wiki', 25], ['LLC', 20], ['Learn', 10],    ['GitHub', 5], ['Other', 5]],
+  'Intune':        [['Cornerstone', 50], ['Learn', 30], ['Wiki', 10], ['LLC', 5],     ['GitHub', 3], ['Other', 2]],
+};
+
+function pickSource(lob: LobArea): DocSource {
+  const weights = SOURCE_WEIGHTS[lob];
+  const total = weights.reduce((s, [, w]) => s + w, 0);
+  let r = rand() * total;
+  for (const [src, w] of weights) {
+    r -= w;
+    if (r <= 0) return src;
+  }
+  return weights[weights.length - 1][0];
+}
+
 function makeDocs(): Doc[] {
   const docs: Doc[] = [];
   for (let i = 0; i < 180; i++) {
@@ -88,6 +111,7 @@ function makeDocs(): Doc[] {
         embeddingAgeDays: intBetween(0, 180),
         lastAiEval: rand() > 0.55 ? 'pass' : rand() > 0.5 ? 'fail' : 'never',
       },
+      source: pickSource(lob),
     });
   }
   return docs;

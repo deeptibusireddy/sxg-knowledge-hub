@@ -36,6 +36,15 @@ export interface AiReadiness {
   lastAiEval: 'pass' | 'fail' | 'never';
 }
 
+/** Where the doc was ingested from. Optional so loaders can backfill safely. */
+export type DocSource =
+  | 'Cornerstone'
+  | 'Learn'
+  | 'Wiki'
+  | 'LLC'
+  | 'GitHub'
+  | 'Other';
+
 /** A single piece of content (article, doc, kb page) tracked in the system. */
 export interface Doc {
   id: string;
@@ -55,6 +64,12 @@ export interface Doc {
   /** Flesch reading ease (0–100). Higher = easier to read. */
   readability: number;
   ai: AiReadiness;
+  /**
+   * Where this doc was ingested from. Optional for backward compatibility —
+   * loaders that don't yet emit a source will be treated as 'Other' by
+   * downstream selectors.
+   */
+  source?: DocSource;
 }
 
 /** Authoring/PR activity row. */
