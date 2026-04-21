@@ -174,6 +174,25 @@ Tiles + trend + worst-LOB table over `aiAnswers` events in the window:
 - **Use:** Watch for **confidence > accuracy** (overconfident AI). Worst-LOB
   table = which content needs work.
 
+## Prod vs Eval panel *(new)*
+Andy's request: "If your LOB is running at 80% in production but evals show 75%,
+go look at your evals." This panel makes that comparison explicit.
+- **Overall trio (top):** **Prod accuracy %** (avg `aiAnswers.accuracy` in
+  window), **Eval pass rate %** (% of in-scope docs with
+  `lastAiEval === 'pass'`, point-in-time snapshot), and **Δ overall** (prod −
+  eval, rounded to 1 decimal).
+- **Per-LOB table:** Same three columns plus an actionable **Hint** column,
+  sorted by `|Δ|` (largest divergence first).
+- **Δ color:** Green |Δ| < 5, amber 5–15, red > 15.
+- **Hint logic:**
+  - |Δ| < 5 → "Eval matches production"
+  - Δ > 5  → "Evals may be too strict — refresh golden set"
+  - Δ < −5 → "Evals miss real failures — refresh golden set"
+- **Caveat (in subtitle):** Prod is **windowed**; eval is a **corpus
+  snapshot**. Use this as a directional diagnostic, not a like-for-like number.
+- **Use:** Spot LOBs where the golden-set evals don't reflect production
+  reality — those evals need refreshing.
+
 ---
 
 # Section C · Lifecycle (intake → retire)

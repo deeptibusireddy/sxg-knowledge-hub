@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SxG Knowledge Hub — Stakeholder Review</title>
+  <style>
+    :root {
+      --blue:   #0078d4;
+      --green:  #107c10;
+      --orange: #ca5010;
+      --red:    #d83b01;
+      --yellow: #e8b336;
+      --purple: #5c2d91;
+      --gray:   #605e5c;
+      --border: #e1dfdd;
+      --surface:#faf9f8;
+      --text:   #201f1e;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Segoe UI', system-ui, sans-serif; font-size: 14px; color: var(--text); background: #f3f2f1; }
+
+    /* ── Print ── */
+    @media print {
+      .no-print { display: none !important; }
+      body { background: #fff; font-size: 12px; }
+      .card { break-inside: avoid; box-shadow: none; border: 1px solid var(--border); }
+      header { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    }
+
+    /* ── Layout ── */
+    header {
+      background: var(--blue);
+      color: #fff;
+      padding: 20px 32px 16px;
+      display: flex; align-items: flex-start; justify-content: space-between; gap: 16px;
+    }
+    header h1 { font-size: 20px; font-weight: 600; letter-spacing: -.3px; }
+    header p  { font-size: 12px; opacity: .85; margin-top: 4px; }
+    .header-meta { text-align: right; font-size: 12px; opacity: .85; white-space: nowrap; }
+    .header-meta strong { display: block; font-size: 15px; font-weight: 600; opacity: 1; }
+
+    main { max-width: 960px; margin: 0 auto; padding: 24px 16px 48px; }
+
+    /* ── Cards ── */
+    .card {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      margin-bottom: 16px;
+      overflow: hidden;
+      box-shadow: 0 1px 4px rgba(0,0,0,.06);
+    }
+    .card__header {
+      padding: 10px 16px;
+      display: flex; align-items: center; gap: 10px;
+      border-bottom: 1px solid var(--border);
+      background: var(--surface);
+      cursor: pointer;
+      user-select: none;
+    }
+    .card__header:hover { background: #edebe9; }
+    .card__tag {
+      font-size: 10px; font-weight: 600; letter-spacing: .5px; text-transform: uppercase;
+      padding: 2px 7px; border-radius: 10px; color: #fff;
+    }
+    .card__title { font-weight: 600; font-size: 14px; flex: 1; }
+    .card__chevron { font-size: 12px; color: var(--gray); transition: transform .15s; }
+    .card__chevron.open { transform: rotate(90deg); }
+    .card__body { padding: 16px; display: none; }
+    .card__body.open { display: block; }
+
+    /* ── Section description ── */
+    .section-desc { font-size: 13px; color: var(--gray); margin-bottom: 14px; line-height: 1.5; }
+
+    /* ── Scenario table ── */
+    .scenario-table { width: 100%; border-collapse: collapse; margin-bottom: 16px; font-size: 13px; }
+    .scenario-table th {
+      text-align: left; font-size: 11px; font-weight: 600; color: var(--gray);
+      text-transform: uppercase; letter-spacing: .4px;
+      padding: 6px 10px; border-bottom: 2px solid var(--border); background: var(--surface);
+    }
+    .scenario-table td { padding: 8px 10px; border-bottom: 1px solid var(--border); vertical-align: top; }
+    .scenario-table tr:last-child td { border-bottom: none; }
+    .scenario-table tr:hover td { background: #f9f8f7; }
+
+    .status-select {
+      font-size: 12px; padding: 3px 6px; border-radius: 4px;
+      border: 1px solid var(--border); background: #fff; cursor: pointer;
+    }
+    .status-select.approved  { background: #dff6dd; border-color: #92c353; color: var(--green); }
+    .status-select.deferred  { background: #fff4ce; border-color: #d3ad26; color: #7a5c00; }
+    .status-select.needs-discussion { background: #fdf6f0; border-color: #e08c50; color: var(--orange); }
+    .status-select.cut       { background: #fde7e9; border-color: #d99; color: var(--red); }
+
+    /* ── Notes box ── */
+    .notes-label { font-size: 11px; font-weight: 600; color: var(--gray); text-transform: uppercase; letter-spacing: .4px; margin-bottom: 4px; }
+    .notes-box {
+      width: 100%; min-height: 56px; padding: 8px; font-size: 13px;
+      border: 1px solid var(--border); border-radius: 4px; resize: vertical;
+      font-family: inherit; color: var(--text); background: var(--surface);
+    }
+    .notes-box:focus { outline: none; border-color: var(--blue); background: #fff; }
+
+    /* ── Open questions ── */
+    .oq-list { list-style: none; margin-bottom: 12px; }
+    .oq-list li {
+      display: flex; align-items: flex-start; gap: 10px;
+      padding: 8px 10px; border-radius: 4px; margin-bottom: 4px;
+      background: var(--surface); border: 1px solid var(--border);
+      font-size: 13px; line-height: 1.45;
+    }
+    .oq-list li input[type=checkbox] { margin-top: 2px; flex-shrink: 0; cursor: pointer; }
+    .oq-list li label { cursor: pointer; flex: 1; }
+    .oq-list li .oq-owner {
+      font-size: 11px; color: var(--gray); white-space: nowrap;
+      border: 1px solid var(--border); border-radius: 10px; padding: 1px 8px;
+      background: #fff; flex-shrink: 0;
+    }
+    .oq-answer {
+      width: 100%; padding: 5px 8px; font-size: 12px; margin-top: 4px;
+      border: 1px dashed var(--border); border-radius: 3px; font-family: inherit;
+      background: #fff; color: var(--text); resize: none;
+    }
+    .oq-answer:focus { outline: none; border-color: var(--blue); }
+
+    /* ── Progress bar ── */
+    .progress-row { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; }
+    .progress-bar { flex: 1; height: 8px; background: var(--border); border-radius: 4px; overflow: hidden; }
+    .progress-fill { height: 100%; background: var(--blue); border-radius: 4px; transition: width .3s; }
+    .progress-label { font-size: 12px; color: var(--gray); white-space: nowrap; }
+
+    /* ── Section titles ── */
+    .section-title { font-size: 13px; font-weight: 600; color: var(--gray); text-transform: uppercase; letter-spacing: .5px; margin: 24px 0 10px; }
+
+    /* ── Action bar ── */
+    .action-bar {
+      position: sticky; bottom: 0; background: #fff;
+      border-top: 1px solid var(--border); padding: 10px 16px;
+      display: flex; gap: 10px; align-items: center; justify-content: flex-end;
+      box-shadow: 0 -2px 8px rgba(0,0,0,.07);
+    }
+    .btn {
+      padding: 6px 16px; border-radius: 4px; font-size: 13px; font-weight: 600;
+      cursor: pointer; border: none; font-family: inherit;
+    }
+    .btn--primary { background: var(--blue); color: #fff; }
+    .btn--primary:hover { background: #005a9e; }
+    .btn--secondary { background: var(--surface); color: var(--text); border: 1px solid var(--border); }
+    .btn--secondary:hover { background: #edebe9; }
+
+    /* ── Legend ── */
+    .legend { display: flex; gap: 16px; flex-wrap: wrap; font-size: 12px; color: var(--gray); margin-bottom: 20px; }
+    .legend-item { display: flex; align-items: center; gap: 5px; }
+    .legend-dot { width: 10px; height: 10px; border-radius: 50%; }
+
+    /* ── Summary section ── */
+    #summary-out { font-size: 13px; line-height: 1.7; color: var(--text); white-space: pre-wrap; }
+  </style>
+</head>
+<body>
+
+<header>
+  <div>
+    <h1>◈ SxG Knowledge Hub — Stakeholder Review</h1>
+    <p>Partner Dashboard · Scenario walkthrough &amp; feedback capture</p>
+  </div>
+  <div class="header-meta">
+    <strong id="review-date"></strong>
+    Reviewer(s): <input id="reviewer-input" style="background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.4);color:#fff;padding:2px 8px;border-radius:3px;font-size:12px;width:200px;font-family:inherit" placeholder="Name(s)…" />
+  </div>
+</header>
+
+<main>
+
+  <!-- Progress -->
+  <div class="progress-row">
+    <span class="progress-label" style="font-weight:600">Review Progress</span>
+    <div class="progress-bar"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
+    <span class="progress-label" id="progress-text">0 / 0 scenarios decided</span>
+  </div>
+
+  <div class="legend">
+    <span class="legend-item"><span class="legend-dot" style="background:#92c353"></span> Approved — ship it</span>
+    <span class="legend-item"><span class="legend-dot" style="background:#d3ad26"></span> Deferred — v2</span>
+    <span class="legend-item"><span class="legend-dot" style="background:#e08c50"></span> Needs discussion</span>
+    <span class="legend-item"><span class="legend-dot" style="background:#d83b01"></span> Cut</span>
+    <span class="legend-item"><span class="legend-dot" style="background:var(--border)"></span> Not reviewed</span>
+  </div>
+
+  <!-- ── SECTION 1: Dashboard Navigation ── -->
+  <div class="section-title">1 · Dashboard Navigation &amp; Header</div>
+
+  <div class="card">
+    <div class="card__header" onclick="toggle(this)">
+      <span class="card__tag" style="background:var(--blue)">Navigation</span>
+      <span class="card__title">Header, Product Switcher &amp; Data Mode</span>
+      <span class="card__chevron">▶</span>
+    </div>
+    <div class="card__body">
+      <p class="section-desc">Top-of-page identity, environment context, and the AAQ / CMSP / AI Native product tabs. Shows whether data is live, mock, or synthetic-demo.</p>
+      <table class="scenario-table">
+        <thead><tr><th>#</th><th>Scenario</th><th>What to demo</th><th>Decision</th></tr></thead>
+        <tbody>
+          <tr>
+            <td>1.1</td>
+            <td>Product tab switcher</td>
+            <td>Click AAQ → CMSP → AI Native; note color changes. <em>Currently visual only — data does not change per product.</em></td>
+            <td><select class="status-select" onchange="onStatus(this)"><option value="">— not reviewed</option><option value="approved">✓ Approved</option><option value="deferred">◷ Deferred</option><option value="needs-discussion">? Needs discussion</option><option value="cut">✕ Cut</option></select></td>
+          </tr>
+          <tr>
+            <td>1.2</td>
+            <td>Live data indicator</td>
+            <td>Show "Synthetic demo data" badge. Discuss expectation when Power BI is connected.</td>
+            <td><select class="status-select" onchange="onStatus(this)"><option value="">— not reviewed</option><option value="approved">✓ Approved</option><option value="deferred">◷ Deferred</option><option value="needs-discussion">? Needs discussion</option><option value="cut">✕ Cut</option></select></td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="notes-label">Notes</div>
+      <textarea class="notes-box" placeholder="Capture stakeholder feedback here…"></textarea>
+    </div>
+  </div>
+
+  <!-- ── SECTION 2: KPIs ── -->
+  <div class="section-title">2 · KPI Cards &amp; Slicers</div>
+
+  <div class="card">
+    <div class="card__header" onclick="toggle(this)">
+      <span class="card__tag" style="background:var(--blue)">KPIs</span>
+      <span class="card__title">Top-line Metrics &amp; Filters</span>
+      <span class="card__chevron">▶</span>
+    </div>
+    <div class="card__body">
+      <p class="section-desc">Six headline KPI cards (HRR, AHT, Copilot Adoption, Retrieval Success, Blocked Articles, Open Incidents) with trend arrows. Slicer bar filters by LOB, date range, audience, and data source.</p>
+      <table class="scenario-table">
+        <thead><tr><th>#</th><th>Scenario</th><th>What to demo</th><th>Decision</th></tr></thead>
+        <tbody>
+          <tr>
+            <td>2.1</td>
+            <td>KPI card display &amp; trend indicators</td>
+            <td>Show all 6 cards; hover over a trend value.</td>
+            <td><select class="status-select" onchange="onStatus(this)"><option value="">— not reviewed</option><option value="approved">✓ Approved</option><option value="deferred">◷ Deferred</option><option value="needs-discussion">? Needs discussion</option><option value="cut">✕ Cut</option></select></td>
+          </tr>
+          <tr>
+            <td>2.2</td>
+            <td>KPI drilldown drawer</td>
+            <td>Click a KPI card → slide-in drawer shows breakdown detail.</td>
+            <td><select class="status-select" onchange="onStatus(this)"><option value="">— not reviewed</option><option value="approved">✓ Approved</option><option value="deferred">◷ Deferred</option><option value="needs-discussion">? Needs discussion</option><option value="cut">✕ Cut</option></select></td>
+          </tr>
+          <tr>
+            <td>2.3</td>
+            <td>Slicer bar — LOB filter</td>
+            <td>Switch LOB → charts and tables update in place (no reload).</td>
+            <td><select class="status-select" onchange="onStatus(this)"><option value="">— not reviewed</option><option value="approved">✓ Approved</option><option value="deferred">◷ Deferred</option><option value="needs-discussion">? Needs discussion</option><option value="cut">✕ Cut</option></select></td>
+          </tr>
+          <tr>
+            <td>2.4</td>
+            <td>Slicer bar — date range</td>
+            <td>Switch 30d → 90d → custom range.</td>
+            <td><select class="status-select" onchange="onStatus(this)"><option value="">— not reviewed</option><option value="approved">✓ Approved</option><option value="deferred">◷ Deferred</option><option value="needs-discussion">? Needs discussion</option><option value="cut">✕ Cut</option></select></td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="notes-label">Notes</div>
+      <textarea class="notes-box" placeholder="Capture stakeholder feedback here…"></textarea>
+    </div>
+  </div>
+
+  <!-- ── SECTION 3: Content Health ── -->
+  <div class="section-title">3 · Content Health</div>
+
+  <div class="card">
+    <div class="card__header" onclick="toggle(this)">
+      <span class="card__tag" style="background:var(--orange)">Content</span>
+      <span class="card__title">Ingestion Pipeline &amp; Blocked Articles</span>
+      <span class="card__chevron">▶</span>
+    </div>
+    <div class="card__body">
+      <p class="section-desc">Stacked bar showing Ingested / Pending / Blocked counts over time. Horizontal bar of blocked articles by LOB. Both charts drill down to article-level details.</p>
+      <table class="scenario-table">
+        <thead><tr><th>#</th><th>Scenario</th><th>What to demo</th><th>Decision</th></tr></thead>
+        <tbody>
+          <tr>
+            <td>3.1</td>
+            <td>Ingestion status over time</td>
+            <td>Click a monthly bar → drawer shows ingestion breakdown for that month.</td>
+            <td><select class="status-select" onchange="onStatus(this)"><option value="">— not reviewed</option><option value="approved">✓ Approved</option><option value="deferred">◷ Deferred</option><option value="needs-discussion">? Needs discussion</option><option value="cut">✕ Cut</option></select></td>
+          </tr>
+          <tr>
+            <td>3.2</td>
+            <td>Blocked articles by LOB</td>
+            <td>Click an LOB bar → drawer lists blocked articles for that LOB with age and reason.</td>
+            <td><select class="status-select" onchange="onStatus(this)"><option value="">— not reviewed</option><option value="approved">✓ Approved</option><option value="deferred">◷ Deferred</option><option value="needs-discussion">? Needs discussion</option><option value="cut">✕ Cut</option></select></td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="notes-label">Notes</div>
+      <textarea class="notes-box" placeholder="Capture stakeholder feedback here…"></textarea>
+    </div>
+  </div>
+
+  <!-- ── SECTION 4: Support Quality ── -->
+  <div class="section-title">4 · Support Quality</div>
+
+  <div class="card">
+    <div class="card__header" onclick="toggle(this)">
+      <span class="card__tag" style="background:var(--purple)">Quality</span>
+      <span class="card__title">Answer Quality, Empty Results &amp; Feedback</span>
+      <span class="card__chevron">▶</span>
+    </div>
+    <div class="card__body">
+      <p class="section-desc">30-day answer quality trend line, empty results by LOB bar, and a donut showing Positive / Negative / Neutral feedback split. All charts are clickable for detail.</p>
+      <table class="scenario-table">
+        <thead><tr><th>#</th><th>Scenario</th><th>What to demo</th><th>Decision</th></tr></thead>
+        <tbody>
+          <tr>
+            <td>4.1</td>
+            <td>Answer quality trend</td>
+            <td>Click a data point → day-level quality breakdown in drawer.</td>
+            <td><select class="status-select" onchange="onStatus(this)"><option value="">— not reviewed</option><option value="approved">✓ Approved</option><option value="deferred">◷ Deferred</option><option value="needs-discussion">? Needs discussion</option><option value="cut">✕ Cut</option></select></td>
+          </tr>
+          <tr>
+            <td>4.2</td>
+            <td>Empty results by LOB</td>
+            <td>Click bar → see the top failing queries and how often they occur.</td>
+            <td><select class="status-select" onchange="onStatus(this)"><option value="">— not reviewed</option><option value="approved">✓ Approved</option><option value="deferred">◷ Deferred</option><option value="needs-discussion">? Needs discussion</option><option value="cut">✕ Cut</option></select></td>
+          </tr>
+          <tr>
+            <td>4.3</td>
+            <td>Feedback distribution donut</td>
+            <td>Click a segment → article-level breakdown for that sentiment category.</td>
+            <td><select class="status-select" onchange="onStatus(this)"><option value="">— not reviewed</option><option value="approved">✓ Approved</option><option value="deferred">◷ Deferred</option><option value="needs-discussion">? Needs discussion</option><option value="cut">✕ Cut</option></select></td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="notes-label">Notes</div>
+      <textarea class="notes-box" placeholder="Capture stakeholder feedback here…"></textarea>
+    </div>
+  </div>
+
+  <!-- ── SECTION 5: Business Outcomes ── -->
+  <div class="section-title">5 · Business Outcomes</div>
+
+  <div class="card">
+    <div class="card__header" onclick="toggle(this)">
+      <span class="card__tag" style="background:var(--green)">Outcomes</span>
+      <span class="card__title">HRR, Average Handle Time &amp; Escalations</span>
+      <span class="card__chevron">▶</span>
+    </div>
+    <div class="card__body">
+      <p class="section-desc">12-month Hit Rate Resolution trend, side-by-side AHT comparison (prior vs current) by product area, and escalations by LOB.</p>
+      <table class="scenario-table">
+        <thead><tr><th>#</th><th>Scenario</th><th>What to demo</th><th>Decision</th></tr></thead>
+        <tbody>
+          <tr>
+            <td>5.1</td>
+            <td>HRR 12-month trend</td>
+            <td>Click a data point → monthly HRR detail breakdown.</td>
+            <td><select class="status-select" onchange="onStatus(this)"><option value="">— not reviewed</option><option value="approved">✓ Approved</option><option value="deferred">◷ Deferred</option><option value="needs-discussion">? Needs discussion</option><option value="cut">✕ Cut</option></select></td>
+          </tr>
+          <tr>
+            <td>5.2</td>
+            <td>AHT by product area</td>
+            <td>Click a product bar → prior vs. current AHT detail with delta.</td>
+            <td><select class="status-select" onchange="onStatus(this)"><option value="">— not reviewed</option><option value="approved">✓ Approved</option><option value="deferred">◷ Deferred</option><option value="needs-discussion">? Needs discussion</option><option value="cut">✕ Cut</option></select></td>
+          </tr>
+          <tr>
+            <td>5.3</td>
+            <td>Escalations by LOB</td>
+            <td>Click a bar → list of escalated incidents with severity and status.</td>
+            <td><select class="status-select" onchange="onStatus(this)"><option value="">— not reviewed</option><option value="approved">✓ Approved</option><option value="deferred">◷ Deferred</option><option value="needs-discussion">? Needs discussion</option><option value="cut">✕ Cut</option></select></td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="notes-label">Notes</div>
+      <textarea class="notes-box" placeholder="Capture stakeholder feedback here…"></textarea>
+    </div>
+  </div>
+
+  <!-- ── SECTION 6: Program Health ── -->
+  <div class="section-title">6 · Program Health</div>
+
+  <div class="card">
+    <div class="card__header" onclick="toggle(this)">
+      <span class="card__tag" style="background:var(--blue)">Program</span>
+      <span class="card__title">Retrieval Success, Quality by LOB &amp; Incidents</span>
+      <span class="card__chevron">▶</span>
+    </div>
+    <div class="card__body">
+      <p class="section-desc">6-month retrieval success rate trend, quality scores across LOBs for the last 3 months, and monthly incident volume bar chart.</p>
+      <table class="scenario-table">
+        <thead><tr><th>#</th><th>Scenario</th><th>What to demo</th><th>Decision</th></tr></thead>
+        <tbody>
+          <tr>
+            <td>6.1</td>
+            <td>Retrieval success trend</td>
+            <td>Click a month point → retrieval success detail for that period.</td>
+            <td><select class="status-select" onchange="onStatus(this)"><option value="">— not reviewed</option><option value="approved">✓ Approved</option><option value="deferred">◷ Deferred</option><option value="needs-discussion">? Needs discussion</option><option value="cut">✕ Cut</option></select></td>
+          </tr>
+          <tr>
+            <td>6.2</td>
+            <td>Quality by LOB — 3 months</td>
+            <td>Click a grouped bar → Jan/Feb/Mar score breakdown per LOB.</td>
+            <td><select class="status-select" onchange="onStatus(this)"><option value="">— not reviewed</option><option value="approved">✓ Approved</option><option value="deferred">◷ Deferred</option><option value="needs-discussion">? Needs discussion</option><option value="cut">✕ Cut</option></select></td>
+          </tr>
+          <tr>
+            <td>6.3</td>
+            <td>Incident volume by month</td>
+            <td>Click a bar → incident list for that month with severity and LOB.</td>
+            <td><select class="status-select" onchange="onStatus(this)"><option value="">— not reviewed</option><option value="approved">✓ Approved</option><option value="deferred">◷ Deferred</option><option value="needs-discussion">? Needs discussion</option><option value="cut">✕ Cut</option></select></td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="notes-label">Notes</div>
+      <textarea class="notes-box" placeholder="Capture stakeholder feedback here…"></textarea>
+    </div>
+  </div>
+
+  <!-- ── SECTION 7: Detailed Tables ── -->
+  <div class="section-title">7 · Detailed Data Tables</div>
+
+  <div class="card">
+    <div class="card__header" onclick="toggle(this)">
+      <span class="card__tag" style="background:var(--gray)">Tables</span>
+      <span class="card__title">Blocked Articles, Incidents &amp; ADO Work Items</span>
+      <span class="card__chevron">▶</span>
+    </div>
+    <div class="card__body">
+      <p class="section-desc">Full sortable/filterable tables for blocked articles (with age and reason), recent incidents, and ADO work items submitted from the dashboard. Each table has a CSV export button.</p>
+      <table class="scenario-table">
+        <thead><tr><th>#</th><th>Scenario</th><th>What to demo</th><th>Decision</th></tr></thead>
+        <tbody>
+          <tr>
+            <td>7.1</td>
+            <td>Blocked articles table</td>
+            <td>Show table; apply LOB slicer to filter; click Export CSV.</td>
+            <td><select class="status-select" onchange="onStatus(this)"><option value="">— not reviewed</option><option value="approved">✓ Approved</option><option value="deferred">◷ Deferred</option><option value="needs-discussion">? Needs discussion</option><option value="cut">✕ Cut</option></select></td>
+          </tr>
+          <tr>
+            <td>7.2</td>
+            <td>Recent incidents table</td>
+            <td>Show severity badges and status labels; export CSV.</td>
+            <td><select class="status-select" onchange="onStatus(this)"><option value="">— not reviewed</option><option value="approved">✓ Approved</option><option value="deferred">◷ Deferred</option><option value="needs-discussion">? Needs discussion</option><option value="cut">✕ Cut</option></select></td>
+          </tr>
+          <tr>
+            <td>7.3</td>
+            <td>ADO work items table</td>
+            <td>Show items submitted from dashboard with live ADO links. Note: daily refresh cadence.</td>
+            <td><select class="status-select" onchange="onStatus(this)"><option value="">— not reviewed</option><option value="approved">✓ Approved</option><option value="deferred">◷ Deferred</option><option value="needs-discussion">? Needs discussion</option><option value="cut">✕ Cut</option></select></td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="notes-label">Notes</div>
+      <textarea class="notes-box" placeholder="Capture stakeholder feedback here…"></textarea>
+    </div>
+  </div>
+
+  <!-- ── SECTION 8: Eval Results ── -->
+  <div class="section-title">8 · AI Evaluation Results</div>
+
+  <div class="card">
+    <div class="card__header" onclick="toggle(this)">
+      <span class="card__tag" style="background:var(--red)">Eval</span>
+      <span class="card__title">Accuracy, Quality Metrics &amp; Content Safety</span>
+      <span class="card__chevron">▶</span>
+    </div>
+    <div class="card__body">
+      <p class="section-desc">Primary accuracy hero metric, per-metric score cards (Relevance, Coherence, Fluency, Intent Resolution), dip detection alert, daily trend lines, score distribution chart, and a content safety pass/fail panel.</p>
+      <table class="scenario-table">
+        <thead><tr><th>#</th><th>Scenario</th><th>What to demo</th><th>Decision</th></tr></thead>
+        <tbody>
+          <tr>
+            <td>8.1</td>
+            <td>Accuracy hero card</td>
+            <td>Show primary metric with % above threshold badge.</td>
+            <td><select class="status-select" onchange="onStatus(this)"><option value="">— not reviewed</option><option value="approved">✓ Approved</option><option value="deferred">◷ Deferred</option><option value="needs-discussion">? Needs discussion</option><option value="cut">✕ Cut</option></select></td>
+          </tr>
+          <tr>
+            <td>8.2</td>
+            <td>Eval dip detection alert</td>
+            <td>Show banner flagging the 03/03–03/07 accuracy dip with root-cause attribution to Azure Networking content gap.</td>
+            <td><select class="status-select" onchange="onStatus(this)"><option value="">— not reviewed</option><option value="approved">✓ Approved</option><option value="deferred">◷ Deferred</option><option value="needs-discussion">? Needs discussion</option><option value="cut">✕ Cut</option></select></td>
+          </tr>
+          <tr>
+            <td>8.3</td>
+            <td>Daily trend lines</td>
+            <td>Show multi-line chart with reference lines marking the dip window.</td>
+            <td><select class="status-select" onchange="onStatus(this)"><option value="">— not reviewed</option><option value="approved">✓ Approved</option><option value="deferred">◷ Deferred</option><option value="needs-discussion">? Needs discussion</option><option value="cut">✕ Cut</option></select></td>
+          </tr>
+          <tr>
+            <td>8.4</td>
+            <td>Content safety panel</td>
+            <td>Show Hate/Unfairness, Sexual, Violence, Self-Harm pass/fail grid.</td>
+            <td><select class="status-select" onchange="onStatus(this)"><option value="">— not reviewed</option><option value="approved">✓ Approved</option><option value="deferred">◷ Deferred</option><option value="needs-discussion">? Needs discussion</option><option value="cut">✕ Cut</option></select></td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="notes-label">Notes</div>
+      <textarea class="notes-box" placeholder="Capture stakeholder feedback here…"></textarea>
+    </div>
+  </div>
+
+  <!-- ── SECTION 9: Quick Actions ── -->
+  <div class="section-title">9 · Quick Actions (Partner Self-Service)</div>
+
+  <div class="card">
+    <div class="card__header" onclick="toggle(this)">
+      <span class="card__tag" style="background:var(--green)">Actions</span>
+      <span class="card__title">Content Requests, Feedback &amp; Teams Bot</span>
+      <span class="card__chevron">▶</span>
+    </div>
+    <div class="card__body">
+      <p class="section-desc">Six action buttons in a persistent action zone: Add Content (onboarding), Remove Content, Give Feedback, Request a Feature, New Partner Onboarding, and Teams Knowledge Bot.</p>
+      <table class="scenario-table">
+        <thead><tr><th>#</th><th>Scenario</th><th>What to demo</th><th>Decision</th></tr></thead>
+        <tbody>
+          <tr>
+            <td>9.1</td>
+            <td>Add Content / Onboarding request</td>
+            <td>Click → modal with template download link, form fields, file attach. <em>Flow URL not wired yet.</em></td>
+            <td><select class="status-select" onchange="onStatus(this)"><option value="">— not reviewed</option><option value="approved">✓ Approved</option><option value="deferred">◷ Deferred</option><option value="needs-discussion">? Needs discussion</option><option value="cut">✕ Cut</option></select></td>
+          </tr>
+          <tr>
+            <td>9.2</td>
+            <td>Remove Content request</td>
+            <td>Click → modal with article ID, reason, urgency. Creates ADO task.</td>
+            <td><select class="status-select" onchange="onStatus(this)"><option value="">— not reviewed</option><option value="approved">✓ Approved</option><option value="deferred">◷ Deferred</option><option value="needs-discussion">? Needs discussion</option><option value="cut">✕ Cut</option></select></td>
+          </tr>
+          <tr>
+            <td>9.3</td>
+            <td>Give Feedback form</td>
+            <td>Click → category / subject / rating / free-text. Routes to SxGCorePM inbox.</td>
+            <td><select class="status-select" onchange="onStatus(this)"><option value="">— not reviewed</option><option value="approved">✓ Approved</option><option value="deferred">◷ Deferred</option><option value="needs-discussion">? Needs discussion</option><option value="cut">✕ Cut</option></select></td>
+          </tr>
+          <tr>
+            <td>9.4</td>
+            <td>Feature Request</td>
+            <td>Click → structured form; creates ADO task when flow URL is configured.</td>
+            <td><select class="status-select" onchange="onStatus(this)"><option value="">— not reviewed</option><option value="approved">✓ Approved</option><option value="deferred">◷ Deferred</option><option value="needs-discussion">? Needs discussion</option><option value="cut">✕ Cut</option></select></td>
+          </tr>
+          <tr>
+            <td>9.5</td>
+            <td>Teams Knowledge Bot deep link</td>
+            <td>Click → opens Teams bot. <em>URL already configured.</em></td>
+            <td><select class="status-select" onchange="onStatus(this)"><option value="">— not reviewed</option><option value="approved">✓ Approved</option><option value="deferred">◷ Deferred</option><option value="needs-discussion">? Needs discussion</option><option value="cut">✕ Cut</option></select></td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="notes-label">Notes</div>
+      <textarea class="notes-box" placeholder="Capture stakeholder feedback here…"></textarea>
+    </div>
+  </div>
+
+  <!-- ── SECTION 10: Actionable Insights ── -->
+  <div class="section-title">10 · Actionable Insights Sidebar</div>
+
+  <div class="card">
+    <div class="card__header" onclick="toggle(this)">
+      <span class="card__tag" style="background:var(--orange)">Insights</span>
+      <span class="card__title">Prioritized Action Items Panel</span>
+      <span class="card__chevron">▶</span>
+    </div>
+    <div class="card__body">
+      <p class="section-desc">Persistent right-side panel listing action items grouped by High / Medium / Low priority. Each item links to the relevant dashboard section and opens a resolution drawer with step-by-step guidance.</p>
+      <table class="scenario-table">
+        <thead><tr><th>#</th><th>Scenario</th><th>What to demo</th><th>Decision</th></tr></thead>
+        <tbody>
+          <tr>
+            <td>10.1</td>
+            <td>Priority-grouped action list</td>
+            <td>Show sidebar with High / Medium / Low groups; scroll through items.</td>
+            <td><select class="status-select" onchange="onStatus(this)"><option value="">— not reviewed</option><option value="approved">✓ Approved</option><option value="deferred">◷ Deferred</option><option value="needs-discussion">? Needs discussion</option><option value="cut">✕ Cut</option></select></td>
+          </tr>
+          <tr>
+            <td>10.2</td>
+            <td>Resolution drawer</td>
+            <td>Click an action item → drawer with summary, failing prompts, affected articles, and suggested next steps.</td>
+            <td><select class="status-select" onchange="onStatus(this)"><option value="">— not reviewed</option><option value="approved">✓ Approved</option><option value="deferred">◷ Deferred</option><option value="needs-discussion">? Needs discussion</option><option value="cut">✕ Cut</option></select></td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="notes-label">Notes</div>
+      <textarea class="notes-box" placeholder="Capture stakeholder feedback here…"></textarea>
+    </div>
+  </div>
+
+  <!-- ── OPEN QUESTIONS ── -->
+  <div class="section-title">Open Questions — Needs Owner &amp; Decision</div>
+
+  <div class="card">
+    <div class="card__header" onclick="toggle(this)" style="background:#fff8f0">
+      <span class="card__tag" style="background:var(--orange)">⚠ Blockers</span>
+      <span class="card__title">Data Connectivity</span>
+      <span class="card__chevron">▶</span>
+    </div>
+    <div class="card__body">
+      <ul class="oq-list" id="oq-data">
+        <li>
+          <input type="checkbox" id="oq1" /><label for="oq1">Which Power BI datasets should be live at v1 launch vs. deferred? (9 datasets mapped, 0 DAX queries written)</label>
+          <span class="oq-owner">Data / Eng</span>
+          <textarea class="oq-answer" rows="2" placeholder="Decision / owner…"></textarea>
+        </li>
+        <li>
+          <input type="checkbox" id="oq2" /><label for="oq2">Who owns setting up the Power Automate HTTP flow? (POWERBI_FLOW_URL is empty)</label>
+          <span class="oq-owner">Eng</span>
+          <textarea class="oq-answer" rows="2" placeholder="Decision / owner…"></textarea>
+        </li>
+        <li>
+          <input type="checkbox" id="oq3" /><label for="oq3">Should ADLS direct-read replace Power BI for any datasets? (3 of 6 ADLS paths are mapped)</label>
+          <span class="oq-owner">Arch</span>
+          <textarea class="oq-answer" rows="2" placeholder="Decision / owner…"></textarea>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card__header" onclick="toggle(this)" style="background:#fff8f0">
+      <span class="card__tag" style="background:var(--orange)">⚠ Blockers</span>
+      <span class="card__title">Action Flows &amp; Integrations</span>
+      <span class="card__chevron">▶</span>
+    </div>
+    <div class="card__body">
+      <ul class="oq-list">
+        <li>
+          <input type="checkbox" id="oq4" /><label for="oq4">Which of the 5 action flows are must-have for launch? (Feedback, Feature Request, Ingestion, Removal, Onboarding — all URLs empty)</label>
+          <span class="oq-owner">PM</span>
+          <textarea class="oq-answer" rows="2" placeholder="Decision / owner…"></textarea>
+        </li>
+        <li>
+          <input type="checkbox" id="oq5" /><label for="oq5">Who provisions the Power Automate flows and what's the timeline?</label>
+          <span class="oq-owner">Eng / IT</span>
+          <textarea class="oq-answer" rows="2" placeholder="Decision / owner…"></textarea>
+        </li>
+        <li>
+          <input type="checkbox" id="oq6" /><label for="oq6">ADO work items table shows "refreshed daily" — is the ado_pull.py pipeline signed off and scheduled?</label>
+          <span class="oq-owner">Eng / ADO Admin</span>
+          <textarea class="oq-answer" rows="2" placeholder="Decision / owner…"></textarea>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card__header" onclick="toggle(this)" style="background:#fff8f0">
+      <span class="card__tag" style="background:var(--yellow)" style="color:#333">📋 Scope</span>
+      <span class="card__title">Product Scope &amp; Ownership</span>
+      <span class="card__chevron">▶</span>
+    </div>
+    <div class="card__body">
+      <ul class="oq-list">
+        <li>
+          <input type="checkbox" id="oq7" /><label for="oq7">Should the AAQ / CMSP / AI Native tab switcher actually filter data differently per product? What's the priority?</label>
+          <span class="oq-owner">PM</span>
+          <textarea class="oq-answer" rows="2" placeholder="Decision / owner…"></textarea>
+        </li>
+        <li>
+          <input type="checkbox" id="oq8" /><label for="oq8">Eval dip alert is hardcoded to a mock scenario — who owns connecting real Azure AI Foundry eval output?</label>
+          <span class="oq-owner">Eng / Data</span>
+          <textarea class="oq-answer" rows="2" placeholder="Decision / owner…"></textarea>
+        </li>
+        <li>
+          <input type="checkbox" id="oq9" /><label for="oq9">What is the target audience for this dashboard — internal SxG team only, or shared with partner LOB leads?</label>
+          <span class="oq-owner">PM / Stakeholder</span>
+          <textarea class="oq-answer" rows="2" placeholder="Decision / owner…"></textarea>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ── SUMMARY ── -->
+  <div class="section-title">Session Summary</div>
+  <div class="card">
+    <div class="card__header" onclick="toggle(this)">
+      <span class="card__tag" style="background:var(--blue)">📝 Summary</span>
+      <span class="card__title">Auto-generated from decisions above</span>
+      <span class="card__chevron">▶</span>
+    </div>
+    <div class="card__body">
+      <div id="summary-out" style="color:var(--gray);font-style:italic">Click "Generate Summary" below to compile all decisions and notes.</div>
+      <br/>
+      <div class="notes-label">Additional overall notes</div>
+      <textarea class="notes-box" id="overall-notes" placeholder="Any final comments or next steps from the meeting…" rows="4"></textarea>
+    </div>
+  </div>
+
+</main>
+
+<div class="action-bar no-print">
+  <button class="btn btn--secondary" onclick="expandAll()">Expand All</button>
+  <button class="btn btn--secondary" onclick="collapseAll()">Collapse All</button>
+  <button class="btn btn--secondary" onclick="generateSummary()">📋 Generate Summary</button>
+  <button class="btn btn--primary" onclick="window.print()">🖨 Print / Save PDF</button>
+</div>
+
+<script>
+  // ── Date ──
+  document.getElementById('review-date').textContent =
+    new Date().toLocaleDateString('en-US', { weekday:'long', year:'numeric', month:'long', day:'numeric' });
+
+  // ── Toggle cards ──
+  function toggle(header) {
+    const body = header.nextElementSibling;
+    const chev = header.querySelector('.card__chevron');
+    const open = body.classList.toggle('open');
+    chev.classList.toggle('open', open);
+  }
+  function expandAll()  { document.querySelectorAll('.card__body').forEach(b => { b.classList.add('open');    b.previousElementSibling.querySelector('.card__chevron').classList.add('open');    }); }
+  function collapseAll(){ document.querySelectorAll('.card__body').forEach(b => { b.classList.remove('open'); b.previousElementSibling.querySelector('.card__chevron').classList.remove('open'); }); }
+
+  // ── Status change → restyle & update progress ──
+  function onStatus(sel) {
+    sel.className = 'status-select ' + sel.value;
+    updateProgress();
+  }
+
+  function updateProgress() {
+    const all = document.querySelectorAll('.scenario-table .status-select');
+    const decided = [...all].filter(s => s.value && s.value !== '').length;
+    const pct = all.length ? Math.round(decided / all.length * 100) : 0;
+    document.getElementById('progress-fill').style.width = pct + '%';
+    document.getElementById('progress-text').textContent = `${decided} / ${all.length} scenarios decided`;
+  }
+  updateProgress();
+
+  // ── Generate summary ──
+  function generateSummary() {
+    const sections = document.querySelectorAll('.card');
+    const lines = [];
+    const reviewer = document.getElementById('reviewer-input').value || '(not set)';
+    const date = document.getElementById('review-date').textContent;
+
+    lines.push(`SxG Knowledge Hub — Stakeholder Review Summary`);
+    lines.push(`Date: ${date}`);
+    lines.push(`Reviewer(s): ${reviewer}`);
+    lines.push('');
+
+    const counts = { approved: 0, deferred: 0, 'needs-discussion': 0, cut: 0, '': 0 };
+    document.querySelectorAll('.scenario-table .status-select').forEach(s => { counts[s.value] = (counts[s.value] || 0) + 1; });
+
+    lines.push('── DECISIONS ──────────────────────────────');
+    lines.push(`  ✓ Approved:          ${counts['approved'] || 0}`);
+    lines.push(`  ◷ Deferred:          ${counts['deferred'] || 0}`);
+    lines.push(`  ? Needs discussion:  ${counts['needs-discussion'] || 0}`);
+    lines.push(`  ✕ Cut:               ${counts['cut'] || 0}`);
+    lines.push(`  — Not reviewed:      ${counts[''] || 0}`);
+    lines.push('');
+
+    sections.forEach(card => {
+      const titleEl = card.querySelector('.card__title');
+      const body = card.querySelector('.card__body');
+      if (!titleEl || !body) return;
+
+      const rows = body.querySelectorAll('.scenario-table tbody tr');
+      const notes = body.querySelector('.notes-box');
+      if (!rows.length && !notes) return;
+
+      const title = titleEl.textContent.trim();
+      const sectionLines = [];
+
+      rows.forEach(row => {
+        const cells = row.querySelectorAll('td');
+        if (cells.length < 4) return;
+        const id = cells[0].textContent.trim();
+        const scenario = cells[1].textContent.trim();
+        const sel = cells[3].querySelector('select');
+        const status = sel ? (sel.value || 'not reviewed') : '';
+        const label = { approved:'✓ APPROVED', deferred:'◷ DEFERRED', 'needs-discussion':'? NEEDS DISCUSSION', cut:'✕ CUT', '':'— not reviewed' }[status] || status;
+        sectionLines.push(`  [${id}] ${scenario}\n       → ${label}`);
+      });
+
+      const notesVal = notes ? notes.value.trim() : '';
+      if (sectionLines.length || notesVal) {
+        lines.push(`── ${title.toUpperCase()} ──`);
+        sectionLines.forEach(l => lines.push(l));
+        if (notesVal) lines.push(`  NOTES: ${notesVal}`);
+        lines.push('');
+      }
+    });
+
+    // Open questions
+    lines.push('── OPEN QUESTIONS ──────────────────────────');
+    document.querySelectorAll('.oq-list li').forEach(li => {
+      const cb = li.querySelector('input[type=checkbox]');
+      const label = li.querySelector('label');
+      const answer = li.querySelector('.oq-answer');
+      const resolved = cb && cb.checked ? '✓ Resolved' : '○ Unresolved';
+      const q = label ? label.textContent.trim() : '';
+      lines.push(`  [${resolved}] ${q}`);
+      if (answer && answer.value.trim()) lines.push(`  → ${answer.value.trim()}`);
+    });
+
+    const overall = document.getElementById('overall-notes').value.trim();
+    if (overall) { lines.push(''); lines.push('── OVERALL NOTES ──'); lines.push(overall); }
+
+    const out = document.getElementById('summary-out');
+    out.style.fontStyle = 'normal';
+    out.style.color = 'var(--text)';
+    out.textContent = lines.join('\n');
+
+    // Open summary card
+    const summaryCard = out.closest('.card');
+    if (summaryCard) {
+      const body = summaryCard.querySelector('.card__body');
+      const chev = summaryCard.querySelector('.card__chevron');
+      body.classList.add('open');
+      chev.classList.add('open');
+      summaryCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  }
+</script>
+</body>
+</html>

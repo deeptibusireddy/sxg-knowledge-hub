@@ -28,6 +28,7 @@ import type {
   LobScorecardRow,
   OwnerSbuRow,
   PriorityScenarioSummary,
+  ProdVsEvalSummary,
   QualitySignals,
   ReadabilityBin,
   ReadabilityDistribution,
@@ -441,12 +442,18 @@ export function selectAiReadiness(filter: ContentHealthFilter): AiReadinessSumma
   const docs = filterDocs(filter);
   let indexed = 0, schema = 0, qa = 0, embFresh = 0, evalPass = 0;
   const blocked: AiReadinessSummary['blockedDocs'] = [];
+  const lobMap = new Map<LobArea, { pass: number; total: number }>();
   for (const d of docs) {
     if (d.ai.indexedInAiStore) indexed++;
     if (d.ai.schemaValid) schema++;
     if (d.ai.hasQaBlock) qa++;
     if (d.ai.embeddingAgeDays <= EMBEDDING_FRESH_DAYS) embFresh++;
     if (d.ai.lastAiEval === 'pass') evalPass++;
+
+    const lobBucket = lobMap.get(d.lob) ?? { pass: 0, total: 0 };
+    lobBucket.total += 1;
+    if (d.ai.lastAiEval === 'pass') lobBucket.pass += 1;
+    lobMap.set(d.lob, lobBucket);
 
     const issues: string[] = [];
     if (!d.ai.indexedInAiStore) issues.push('not indexed');
@@ -458,6 +465,9 @@ export function selectAiReadiness(filter: ContentHealthFilter): AiReadinessSumma
       blocked.push({ id: d.id, title: d.title, lob: d.lob, issues });
     }
   }
+  const evalPassByLob = [...lobMap.entries()]
+    .map(([lob, v]) => ({ lob, evalPassPct: pct(v.pass, v.total), docs: v.total }))
+    .sort((a, b) => a.lob.localeCompare(b.lob));
   return {
     totalDocs: docs.length,
     indexedPct: pct(indexed, docs.length),
@@ -465,6 +475,7 @@ export function selectAiReadiness(filter: ContentHealthFilter): AiReadinessSumma
     hasQaBlockPct: pct(qa, docs.length),
     embeddingFreshPct: pct(embFresh, docs.length),
     evalPassPct: pct(evalPass, docs.length),
+    evalPassByLob,
     blockedDocs: blocked
       .sort((a, b) => b.issues.length - a.issues.length)
       .slice(0, 8),
@@ -509,6 +520,60 @@ export function selectAiQuality(filter: ContentHealthFilter): AiQualitySummary {
     groundedPct: pct(grounded, total),
     fallbackPct: pct(fallback, total),
     accuracyTrend: trend,
+    byLob,
+  };
+}
+
+/**
+ * Compares production answer accuracy vs offline eval pass rate, both overall
+ * and per LOB. Helps spot LOBs where the golden-set evals diverge from
+ * production reality.
+ *
+ * - prodAccuracyPct: avg `accuracy` over windowed AiAnswerEvents
+ * - evalPassPct:     % of in-scope docs in that LOB with `lastAiEval === 'pass'`
+ * - deltaPct:        prodAccuracyPct − evalPassPct (rounded to 1 decimal)
+ *
+ * Caveat: prod is windowed; eval is a snapshot. Useful as a directional
+ * diagnostic, not a like-for-like comparison.
+ */
+export function selectProdVsEval(filter: ContentHealthFilter): ProdVsEvalSummary {
+  const ai = selectAiQuality(filter);
+  const readiness = selectAiReadiness(filter);
+  const evalByLob = new Map(readiness.evalPassByLob.map((r) => [r.lob, r]));
+  const prodByLob = new Map(ai.byLob.map((r) => [r.lob, r]));
+
+  const lobs = new Set<LobArea>([
+    ...readiness.evalPassByLob.map((r) => r.lob),
+    ...ai.byLob.map((r) => r.lob),
+  ]);
+
+  const round1 = (n: number) => Math.round(n * 10) / 10;
+
+  const byLob = [...lobs]
+    .map((lob) => {
+      const prod = prodByLob.get(lob);
+      const ev = evalByLob.get(lob);
+      const prodAccuracyPct = prod?.accuracyPct ?? 0;
+      const evalPassPct = ev?.evalPassPct ?? 0;
+      return {
+        lob,
+        prodAccuracyPct,
+        evalPassPct,
+        deltaPct: round1(prodAccuracyPct - evalPassPct),
+        answers: prod?.answers ?? 0,
+        docs: ev?.docs ?? 0,
+      };
+    })
+    .sort((a, b) => Math.abs(b.deltaPct) - Math.abs(a.deltaPct));
+
+  return {
+    overall: {
+      prodAccuracyPct: ai.accuracyPct,
+      evalPassPct: readiness.evalPassPct,
+      deltaPct: round1(ai.accuracyPct - readiness.evalPassPct),
+      answers: ai.totalAnswers,
+      docs: readiness.totalDocs,
+    },
     byLob,
   };
 }

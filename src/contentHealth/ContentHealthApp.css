@@ -634,3 +634,59 @@
   outline: 2px solid #0078d4;
   outline-offset: 2px;
 }
+
+
+/* Prod vs Eval panel */
+.ch-pve-overall {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin: 8px 0 16px;
+}
+.ch-pve-overall__col {
+  border: 1px solid #edebe9;
+  border-radius: 6px;
+  padding: 12px 14px;
+  background: #faf9f8;
+  text-align: center;
+}
+.ch-pve-overall__col--good { background: #f3faf3; border-color: #c8e6c9; }
+.ch-pve-overall__col--warn { background: #fff8e6; border-color: #f8d775; }
+.ch-pve-overall__col--bad  { background: #fdecea; border-color: #f1948a; }
+.ch-pve-overall__value {
+  font-size: 24px;
+  font-weight: 600;
+  color: #201f1e;
+  font-variant-numeric: tabular-nums;
+  line-height: 1.2;
+}
+.ch-pve-overall__label {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #605e5c;
+  margin-top: 4px;
+  cursor: help;
+}
+.ch-pve-overall__sub {
+  font-size: 11px;
+  color: #8a8886;
+  margin-top: 2px;
+}
+.ch-pve-delta {
+  display: inline-block;
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 10px;
+  min-width: 44px;
+  text-align: center;
+}
+.ch-pve-delta--good { background: #e6f4ea; color: #1e7e34; }
+.ch-pve-delta--warn { background: #fff4d4; color: #856404; }
+.ch-pve-delta--bad  { background: #fdecea; color: #b71c1c; }
+.ch-pve-hint {
+  font-size: 11px;
+  color: #605e5c;
+  font-style: italic;
+}

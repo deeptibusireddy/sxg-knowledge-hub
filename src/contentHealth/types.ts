@@ -151,12 +151,40 @@ export interface AiReadinessSummary {
   hasQaBlockPct: number;
   embeddingFreshPct: number;
   evalPassPct: number;
+  /** Per-LOB eval pass rate (% of in-scope docs in that LOB with lastAiEval === 'pass'). */
+  evalPassByLob: Array<{ lob: LobArea; evalPassPct: number; docs: number }>;
   /** Docs that fail one or more readiness checks. */
   blockedDocs: Array<{
     id: string;
     title: string;
     lob: LobArea;
     issues: string[];
+  }>;
+}
+
+/**
+ * Compares production answer accuracy (from real, windowed answer events) against
+ * the offline eval pass rate (point-in-time corpus snapshot). Helps Knowledge
+ * leaders spot LOBs where the golden-set evals don't reflect production reality.
+ *
+ * Note: prodAccuracyPct is windowed; evalPassPct is a corpus snapshot. The Δ is
+ * a diagnostic signal, NOT a like-for-like comparison.
+ */
+export interface ProdVsEvalSummary {
+  overall: {
+    prodAccuracyPct: number;
+    evalPassPct: number;
+    deltaPct: number;
+    answers: number;
+    docs: number;
+  };
+  byLob: Array<{
+    lob: LobArea;
+    prodAccuracyPct: number;
+    evalPassPct: number;
+    deltaPct: number;
+    answers: number;
+    docs: number;
   }>;
 }
 

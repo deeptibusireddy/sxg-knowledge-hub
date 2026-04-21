@@ -15,6 +15,7 @@ import {
   selectLobScorecards,
   selectOwnerSbu,
   selectPriorityScenarios,
+  selectProdVsEval,
   selectQualitySignals,
   selectReadability,
   selectSearchAnalytics,
@@ -44,6 +45,7 @@ import { ReadabilityDistributionPanel } from './components/ReadabilityDistributi
 import { SearchGapMapPanel } from './components/SearchGapMapPanel';
 import { AiReadinessPanel } from './components/AiReadinessPanel';
 import { AiQualityPanel } from './components/AiQualityPanel';
+import { ProdVsEvalPanel } from './components/ProdVsEvalPanel';
 import { PriorityScenariosPanel } from './components/PriorityScenariosPanel';
 import { IntakeQueuePanel } from './components/IntakeQueuePanel';
 import { OwnerSbuRolloutPanel } from './components/OwnerSbuRolloutPanel';
@@ -84,6 +86,7 @@ export default function ContentHealthApp() {
   const searchGap = useMemo(() => selectSearchGapMap(filter), [filter]);
   const aiReadiness = useMemo(() => selectAiReadiness(filter), [filter]);
   const aiQuality = useMemo(() => selectAiQuality(filter), [filter]);
+  const prodVsEval = useMemo(() => selectProdVsEval(filter), [filter]);
   const priorityScenarios = useMemo(() => selectPriorityScenarios(filter), [filter]);
   const intakeQueue = useMemo(() => selectIntakeQueue(filter), [filter]);
   const ownerSbu = useMemo(() => selectOwnerSbu(filter), [filter]);
@@ -218,6 +221,9 @@ export default function ContentHealthApp() {
         <div className="ch-grid">
           <AiReadinessPanel summary={aiReadiness} />
           <AiQualityPanel summary={aiQuality} />
+          <div className="ch-grid__wide">
+            <ProdVsEvalPanel summary={prodVsEval} />
+          </div>
         </div>
 
         <h2 className="ch-section">C · Lifecycle (intake → retire)</h2>
