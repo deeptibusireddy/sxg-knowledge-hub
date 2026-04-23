@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from 'vitest';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { DrilldownDrawer } from '../../components/common/DrilldownDrawer';
 import type { DrilldownContent } from '../../components/common/DrilldownDrawer';
@@ -71,12 +71,8 @@ describe('DrilldownDrawer', () => {
     expect(onClose).toHaveBeenCalledOnce();
   });
 
-  it('calls onClose when backdrop is clicked', async () => {
-    const onClose = vi.fn();
-    const { container } = render(<DrilldownDrawer content={content} onClose={onClose} />);
-    const backdrop = container.querySelector('.drilldown-backdrop');
-    expect(backdrop).toBeInTheDocument();
-    fireEvent.click(backdrop!);
-    expect(onClose).toHaveBeenCalledOnce();
-  });
+  // Backdrop dismissal is now managed by Fluent UI's OverlayDrawer via
+  // onOpenChange (covered by Fluent's own test suite). We still exercise the
+  // close path via the Escape-key and close-button tests above, so the
+  // previous direct `.drilldown-backdrop` click test is no longer applicable.
 });

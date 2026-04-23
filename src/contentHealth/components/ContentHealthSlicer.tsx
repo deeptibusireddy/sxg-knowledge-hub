@@ -1,3 +1,4 @@
+import { Dropdown, Field, Option } from '@fluentui/react-components';
 import type { ContentHealthFilter } from '../types';
 import type { LobArea } from '../../shared/contentHealth/types';
 
@@ -13,31 +14,45 @@ const WINDOWS: Array<{ value: 30 | 90 | 365; label: string }> = [
   { value: 365, label: 'Last 12 months' },
 ];
 
+const lobLabel = (l: LobArea | 'all') => (l === 'all' ? 'All LOBs' : l);
+
 export function ContentHealthSlicer({ value, onChange }: Props) {
   return (
     <div className="ch-slicer">
-      <label className="ch-slicer__field">
-        <span className="ch-slicer__label">LOB</span>
-        <select
-          value={value.lob}
-          onChange={(e) => onChange({ ...value, lob: e.target.value as LobArea | 'all' })}
+      <Field label="LOB" className="ch-slicer__field">
+        <Dropdown
+          value={lobLabel(value.lob)}
+          selectedOptions={[value.lob]}
+          onOptionSelect={(_, data) => {
+            const next = data.optionValue as LobArea | 'all' | undefined;
+            if (next) onChange({ ...value, lob: next });
+          }}
         >
           {LOBS.map((l) => (
-            <option key={l} value={l}>{l === 'all' ? 'All LOBs' : l}</option>
+            <Option key={l} value={l} text={lobLabel(l)}>
+              {lobLabel(l)}
+            </Option>
           ))}
-        </select>
-      </label>
-      <label className="ch-slicer__field">
-        <span className="ch-slicer__label">Window</span>
-        <select
-          value={value.windowDays}
-          onChange={(e) => onChange({ ...value, windowDays: Number(e.target.value) as 30 | 90 | 365 })}
+        </Dropdown>
+      </Field>
+      <Field label="Window" className="ch-slicer__field">
+        <Dropdown
+          value={WINDOWS.find((w) => w.value === value.windowDays)?.label ?? ''}
+          selectedOptions={[String(value.windowDays)]}
+          onOptionSelect={(_, data) => {
+            const next = data.optionValue;
+            if (next) {
+              onChange({ ...value, windowDays: Number(next) as 30 | 90 | 365 });
+            }
+          }}
         >
           {WINDOWS.map((w) => (
-            <option key={w.value} value={w.value}>{w.label}</option>
+            <Option key={w.value} value={String(w.value)} text={w.label}>
+              {w.label}
+            </Option>
           ))}
-        </select>
-      </label>
+        </Dropdown>
+      </Field>
     </div>
   );
 }

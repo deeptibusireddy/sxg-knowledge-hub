@@ -1,3 +1,4 @@
+import { Card } from '@fluentui/react-components';
 import type { KpiCardData } from '../../types';
 import './KpiCard.css';
 
@@ -16,12 +17,21 @@ export function KpiCard({ data, onClick }: Props) {
   const arrow = trend === 'up' ? '↑' : trend === 'down' ? '↓' : '→';
 
   return (
-    <div
-      className={`kpi-card surface${onClick ? ' kpi-card--clickable' : ''}`}
+    <Card
+      className={`kpi-card${onClick ? ' kpi-card--clickable' : ''}`}
       onClick={onClick}
       role={onClick ? 'button' : undefined}
       tabIndex={onClick ? 0 : undefined}
-      onKeyDown={onClick ? (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onClick(); } } : undefined}
+      onKeyDown={
+        onClick
+          ? (e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                onClick();
+              }
+            }
+          : undefined
+      }
       aria-label={onClick ? `${label}: ${value}${unit ?? ''} — click for details` : undefined}
     >
       <span className="kpi-card__label">{label}</span>
@@ -33,6 +43,6 @@ export function KpiCard({ data, onClick }: Props) {
         {arrow} {trendLabel}
       </span>
       {onClick && <span className="kpi-card__drill-hint">↗ View details</span>}
-    </div>
+    </Card>
   );
 }

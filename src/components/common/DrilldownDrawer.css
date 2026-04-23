@@ -1,56 +1,11 @@
-.drilldown-backdrop {
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0);
-  z-index: 200;
-  pointer-events: none;
-  transition: background 0.25s;
-}
-
-.drilldown-backdrop--visible {
-  background: rgba(0, 0, 0, 0.3);
-  pointer-events: all;
-}
-
-.drilldown-drawer {
-  position: fixed;
-  top: 0;
-  right: 0;
-  width: 480px;
-  max-width: 95vw;
-  height: 100vh;
-  background: #fff;
-  box-shadow: -4px 0 24px rgba(0, 0, 0, 0.14);
-  z-index: 201;
-  display: flex;
-  flex-direction: column;
-  transform: translateX(100%);
-  transition: transform 0.25s ease;
-  overflow: hidden;
-}
-
-.drilldown-drawer--open {
-  transform: translateX(0);
-}
-
-/* Header */
-.drilldown-drawer__header {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 12px;
-  padding: 18px 20px 14px;
-  border-bottom: 1px solid #ebebeb;
-  flex-shrink: 0;
-}
-
-.drilldown-drawer__titles { flex: 1; min-width: 0; }
+/* OverlayDrawer from @fluentui/react-components handles backdrop, slide animation,
+   focus trap, and Escape key natively. Remaining styles scope the table +
+   title-block typography inside the Fluent Drawer shell. */
 
 .drilldown-drawer__title {
   font-size: 15px;
   font-weight: 700;
   color: var(--pbi-text, #201f1e);
-  margin: 0 0 3px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -59,39 +14,19 @@
 .drilldown-drawer__subtitle {
   font-size: 12px;
   color: var(--pbi-muted, #888);
-  margin: 0;
+  margin-top: 2px;
+}
+
+.drilldown-drawer__back {
+  margin-bottom: 6px;
+  color: var(--pbi-accent, #0078d4) !important;
 }
 
 .drilldown-drawer__actions {
   display: flex;
   align-items: center;
-  gap: 6px;
-  flex-shrink: 0;
+  gap: 4px;
 }
-
-.drilldown-drawer__export {
-  padding: 4px 10px;
-  border-radius: 6px;
-  border: 1px solid #c7d7ee;
-  background: #f7fbff;
-  color: var(--pbi-blue, #118dff);
-  font-size: 12px;
-  font-weight: 600;
-  cursor: pointer;
-}
-.drilldown-drawer__export:hover { background: #e0eeff; }
-
-.drilldown-drawer__close {
-  background: none;
-  border: none;
-  font-size: 16px;
-  color: var(--pbi-muted, #888);
-  cursor: pointer;
-  padding: 4px 6px;
-  border-radius: 4px;
-  line-height: 1;
-}
-.drilldown-drawer__close:hover { background: #f3f2f1; }
 
 /* Row count */
 .drilldown-drawer__count {
@@ -100,24 +35,17 @@
   color: var(--pbi-muted, #888);
   text-transform: uppercase;
   letter-spacing: 0.04em;
-  padding: 8px 20px 0;
-  flex-shrink: 0;
-}
-
-/* Body / table */
-.drilldown-drawer__body {
-  flex: 1;
-  overflow-y: auto;
-  padding: 10px 0 24px;
+  padding: 4px 0 10px;
 }
 
 .drilldown-drawer__empty {
-  padding: 32px 20px;
+  padding: 32px 0;
   text-align: center;
   color: var(--pbi-muted, #888);
   font-size: 13px;
 }
 
+/* Table */
 .drilldown-drawer__table {
   width: 100%;
   border-collapse: collapse;
@@ -137,6 +65,7 @@
   position: sticky;
   top: 0;
   white-space: nowrap;
+  z-index: 1;
 }
 
 .drilldown-drawer__table td {
@@ -146,23 +75,12 @@
   vertical-align: top;
 }
 
-.drilldown-drawer__table tbody tr:hover td { background: #f8f9fa; }
-.drilldown-drawer__table tbody tr:last-child td { border-bottom: none; }
-
-/* Back navigation */
-.drilldown-drawer__back {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  background: none;
-  border: none;
-  padding: 0 0 6px;
-  font-size: 12px;
-  font-weight: 600;
-  color: var(--pbi-accent, #0078d4);
-  cursor: pointer;
+.drilldown-drawer__table tbody tr:hover td {
+  background: #f8f9fa;
 }
-.drilldown-drawer__back:hover { text-decoration: underline; }
+.drilldown-drawer__table tbody tr:last-child td {
+  border-bottom: none;
+}
 
 /* "Click to drill in" hint */
 .drilldown-drawer__clickable-hint {
