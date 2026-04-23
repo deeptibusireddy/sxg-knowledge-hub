@@ -71,6 +71,9 @@ function Dashboard() {
 
   return (
     <div className="app">
+      <a href="#main-content" className="app__skip-link">
+        Skip to main content
+      </a>
 
       {/* ── Zone 1: Identity & Environment ───────────────────────────────── */}
       <header className="app__header">
@@ -149,7 +152,7 @@ function Dashboard() {
 
       {/* ── Body: main + sidebar ─────────────────────────────────────────── */}
       <div className="app__body">
-        <main className="app__main">
+        <main className="app__main" id="main-content" tabIndex={-1}>
           <SlicerBar state={slicer} onChange={setSlicer} />
           <div className="kpi-row">
             {kpiCards.map(card => (

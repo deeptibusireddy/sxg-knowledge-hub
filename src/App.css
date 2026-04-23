@@ -6,6 +6,33 @@
   background: var(--pbi-bg);
 }
 
+/* Skip link — visually hidden until focused via keyboard */
+.app__skip-link,
+.ch-app__skip-link {
+  position: absolute;
+  top: -40px;
+  left: 8px;
+  z-index: 10000;
+  padding: 8px 12px;
+  background: #0d60aa;
+  color: #ffffff;
+  border-radius: 4px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: top 120ms ease-in-out;
+}
+.app__skip-link:focus,
+.ch-app__skip-link:focus {
+  top: 8px;
+  outline: 2px solid #ffffff;
+  outline-offset: 2px;
+}
+.app__main:focus,
+.ch-app__main:focus {
+  outline: none;
+}
+
+
 /* ─── Header ─────────────────────────────────────────────────────────────────── */
 .app__header {
   background: var(--pbi-teal);

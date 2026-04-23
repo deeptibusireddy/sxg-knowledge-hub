@@ -147,6 +147,9 @@ export default function ContentHealthApp() {
 
   return (
     <div className="ch-app">
+      <a href="#main-content" className="ch-app__skip-link">
+        Skip to main content
+      </a>
       <header className="ch-app__header">
         <div className="ch-app__header-inner">
           <div className="ch-app__title-block">
@@ -189,7 +192,7 @@ export default function ContentHealthApp() {
         </div>
       </header>
 
-      <main className="ch-app__main">
+      <main className="ch-app__main" id="main-content" tabIndex={-1}>
         <ContentHealthSlicer value={filter} onChange={setFilter} />
         <ContentHealthKpiStrip kpis={kpis} />
 
