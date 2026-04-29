@@ -1,4 +1,5 @@
 import type { IntakeQueueSummary } from '../types';
+import { ChPanel } from './ChPanel';
 
 interface Props {
   summary: IntakeQueueSummary;
@@ -22,14 +23,11 @@ export function IntakeQueuePanel({ summary }: Props) {
   const states: Array<keyof typeof byState> = ['pending', 'in_review', 'blocked', 'published'];
   const open = byState.pending + byState.in_review + byState.blocked;
   return (
-    <section className="ch-panel">
-      <header className="ch-panel__header">
-        <h3 className="ch-panel__title">Intake &amp; review queue</h3>
-        <p className="ch-panel__subtitle">
-          {total} request{total === 1 ? '' : 's'} in flight · {open} open ·{' '}
-          <strong className={breachPct > 25 ? 'ch-neg' : 'ch-pos'}>{breachPct}%</strong> of open are past SLA.
-        </p>
-      </header>
+    <ChPanel
+      title="Intake &amp; review queue"
+      subtitle={<>{total} request{total === 1 ? '' : 's'} in flight · {open} open ·{' '}
+          <strong className={breachPct > 25 ? 'ch-neg' : 'ch-pos'}>{breachPct}%</strong> of open are past SLA.</>}
+    >
       <div className="ch-kanban">
         {states.map((s) => (
           <div key={s} className={`ch-kanban__col ch-kanban__col--${STATE_TONE[s]}`}>
@@ -69,6 +67,6 @@ export function IntakeQueuePanel({ summary }: Props) {
       ) : (
         <p className="ch-panel__hint">No SLA breaches in the open queue.</p>
       )}
-    </section>
+    </ChPanel>
   );
 }

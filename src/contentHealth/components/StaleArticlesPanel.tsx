@@ -1,4 +1,5 @@
 import type { StaleArticleRow } from '../types';
+import { ChPanel } from './ChPanel';
 
 interface Props {
   rows: StaleArticleRow[];
@@ -6,15 +7,12 @@ interface Props {
 
 export function StaleArticlesPanel({ rows }: Props) {
   return (
-    <section className="ch-panel">
-      <header className="ch-panel__header">
-        <h3 className="ch-panel__title">Stale / at-risk articles</h3>
-        <p className="ch-panel__subtitle">
-          {rows.length === 0
+    <ChPanel
+      title="Stale / at-risk articles"
+      subtitle={<>{rows.length === 0
             ? 'No articles past the 180-day stale threshold in scope.'
-            : `Top ${rows.length} oldest docs (> 180d since update). Reach out to the owner to refresh.`}
-        </p>
-      </header>
+            : `Top ${rows.length} oldest docs (> 180d since update). Reach out to the owner to refresh.`}</>}
+    >
       {rows.length > 0 && (
         <table className="ch-table">
           <thead>
@@ -41,6 +39,6 @@ export function StaleArticlesPanel({ rows }: Props) {
           </tbody>
         </table>
       )}
-    </section>
+    </ChPanel>
   );
 }

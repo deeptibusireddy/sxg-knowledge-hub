@@ -1,4 +1,5 @@
 import type { SourceBreakdown } from '../types';
+import { ChPanel } from './ChPanel';
 
 interface Props {
   breakdown: SourceBreakdown;
@@ -18,14 +19,11 @@ export function SourceBreakdownPanel({ breakdown }: Props) {
   const totalDocs = rows.reduce((s, r) => s + r.total, 0);
 
   return (
-    <section className="ch-panel">
-      <header className="ch-panel__header">
-        <h3 className="ch-panel__title">Source attribution</h3>
-        <p className="ch-panel__subtitle">
-          Where {totalDocs.toLocaleString()} in-scope doc{totalDocs === 1 ? '' : 's'} came from, by LOB.
-          {hasUnknown && <> Some docs have no recorded source — counted as <em>Other</em>.</>}
-        </p>
-      </header>
+    <ChPanel
+      title="Source attribution"
+      subtitle={<>Where {totalDocs.toLocaleString()} in-scope doc{totalDocs === 1 ? '' : 's'} came from, by LOB.
+          {hasUnknown && <> Some docs have no recorded source — counted as <em>Other</em>.</>}</>}
+    >
 
       <div className="ch-source-legend" role="list">
         {sources.map((s) => (
@@ -65,6 +63,6 @@ export function SourceBreakdownPanel({ breakdown }: Props) {
           </div>
         ))}
       </div>
-    </section>
+    </ChPanel>
   );
 }

@@ -2,6 +2,7 @@ import {
   LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid,
 } from 'recharts';
 import type { SelfHelpSummary } from '../types';
+import { ChPanel } from './ChPanel';
 
 interface Props {
   summary: SelfHelpSummary;
@@ -10,14 +11,11 @@ interface Props {
 export function SelfHelpResolutionPanel({ summary }: Props) {
   const { totalSessions, resolvedPct, fallbackPct, trend, byLob } = summary;
   return (
-    <section className="ch-panel">
-      <header className="ch-panel__header">
-        <h3 className="ch-panel__title">Self-help resolution success</h3>
-        <p className="ch-panel__subtitle">
-          {totalSessions.toLocaleString()} self-help session{totalSessions === 1 ? '' : 's'} in window.
-          Higher = engineers / partners solving without escalating.
-        </p>
-      </header>
+    <ChPanel
+      title="Self-help resolution success"
+      subtitle={<>{totalSessions.toLocaleString()} self-help session{totalSessions === 1 ? '' : 's'} in window.
+          Higher = engineers / partners solving without escalating.</>}
+    >
       <div className="ch-readiness-grid">
         <div className={`ch-readiness-tile ch-readiness-tile--${resolvedPct >= 70 ? 'good' : resolvedPct >= 55 ? 'warn' : 'bad'}`}>
           <div className="ch-readiness-tile__value">{resolvedPct}%</div>
@@ -59,6 +57,6 @@ export function SelfHelpResolutionPanel({ summary }: Props) {
           ))}
         </tbody>
       </table>
-    </section>
+    </ChPanel>
   );
 }

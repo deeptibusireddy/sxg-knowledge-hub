@@ -2,6 +2,7 @@ import {
   BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid, Cell,
 } from 'recharts';
 import type { FreshnessBucket } from '../types';
+import { ChPanel } from './ChPanel';
 
 interface Props {
   buckets: FreshnessBucket[];
@@ -15,15 +16,12 @@ const BUCKET_COLORS = ['#107c10', '#3b9a3b', '#e8b336', '#d97706', '#d83b01'];
 export function FreshnessPanel({ buckets, staleCount, staleSharePct, onBucketClick }: Props) {
   const total = buckets.reduce((s, b) => s + b.count, 0);
   return (
-    <section className="ch-panel">
-      <header className="ch-panel__header">
-        <h3 className="ch-panel__title">Freshness</h3>
-        <p className="ch-panel__subtitle">
-          Days since last update.{' '}
+    <ChPanel
+      title="Freshness"
+      subtitle={<>Days since last update.{' '}
           <strong>{staleCount}</strong> stale doc{staleCount === 1 ? '' : 's'} (&gt; 180d) — {staleSharePct}% of {total}.
-          {onBucketClick && <> Click a bar to list docs.</>}
-        </p>
-      </header>
+          {onBucketClick && <> Click a bar to list docs.</>}</>}
+    >
       <ResponsiveContainer width="100%" height={220}>
         <BarChart data={buckets} barSize={36}>
           <CartesianGrid strokeDasharray="3 3" stroke="#e1dfdd" vertical={false} />
@@ -42,6 +40,6 @@ export function FreshnessPanel({ buckets, staleCount, staleSharePct, onBucketCli
           </Bar>
         </BarChart>
       </ResponsiveContainer>
-    </section>
+    </ChPanel>
   );
 }

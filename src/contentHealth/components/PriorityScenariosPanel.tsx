@@ -1,4 +1,5 @@
 import type { PriorityScenarioSummary } from '../types';
+import { ChPanel } from './ChPanel';
 
 interface Props {
   summary: PriorityScenarioSummary;
@@ -14,14 +15,11 @@ const STATUS_TONE: Record<string, string> = {
 export function PriorityScenariosPanel({ summary }: Props) {
   const { rows, totals } = summary;
   return (
-    <section className="ch-panel">
-      <header className="ch-panel__header">
-        <h3 className="ch-panel__title">Priority scenarios</h3>
-        <p className="ch-panel__subtitle">
-          <strong>{totals.covered}</strong> of {totals.total} validated ({totals.coveragePct}%).{' '}
-          P0: {totals.p0Coverage.covered} / {totals.p0Coverage.total} covered.
-        </p>
-      </header>
+    <ChPanel
+      title="Priority scenarios"
+      subtitle={<><strong>{totals.covered}</strong> of {totals.total} validated ({totals.coveragePct}%).{' '}
+          P0: {totals.p0Coverage.covered} / {totals.p0Coverage.total} covered.</>}
+    >
       <div className="ch-readiness-grid">
         <div className="ch-readiness-tile ch-readiness-tile--good">
           <div className="ch-readiness-tile__value">{totals.covered}</div>
@@ -66,6 +64,6 @@ export function PriorityScenariosPanel({ summary }: Props) {
           ))}
         </tbody>
       </table>
-    </section>
+    </ChPanel>
   );
 }

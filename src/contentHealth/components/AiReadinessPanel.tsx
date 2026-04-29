@@ -1,4 +1,5 @@
 import type { AiReadinessSummary } from '../types';
+import { ChPanel } from './ChPanel';
 
 interface Props {
   summary: AiReadinessSummary;
@@ -19,14 +20,11 @@ export function AiReadinessPanel({ summary }: Props) {
     { key: 'eval', label: 'Last AI eval = pass',  value: summary.evalPassPct },
   ];
   return (
-    <section className="ch-panel">
-      <header className="ch-panel__header">
-        <h3 className="ch-panel__title">AI readiness</h3>
-        <p className="ch-panel__subtitle">
-          Per-doc readiness for AI agents across {summary.totalDocs.toLocaleString()} docs in scope.
-          Higher = safer to ground answers on this corpus.
-        </p>
-      </header>
+    <ChPanel
+      title="AI readiness"
+      subtitle={<>Per-doc readiness for AI agents across {summary.totalDocs.toLocaleString()} docs in scope.
+          Higher = safer to ground answers on this corpus.</>}
+    >
       <div className="ch-readiness-grid">
         {checks.map((c) => {
           const t = tone(c.value);
@@ -65,6 +63,6 @@ export function AiReadinessPanel({ summary }: Props) {
           </table>
         </>
       )}
-    </section>
+    </ChPanel>
   );
 }

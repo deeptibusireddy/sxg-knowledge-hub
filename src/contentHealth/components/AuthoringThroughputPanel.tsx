@@ -2,6 +2,7 @@ import {
   LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid,
 } from 'recharts';
 import type { ContributorRow, ThroughputPoint } from '../types';
+import { ChPanel } from './ChPanel';
 
 interface Props {
   series: ThroughputPoint[];
@@ -11,13 +12,10 @@ interface Props {
 export function AuthoringThroughputPanel({ series, contributors }: Props) {
   const totalPrs = series.reduce((s, p) => s + p.prs, 0);
   return (
-    <section className="ch-panel">
-      <header className="ch-panel__header">
-        <h3 className="ch-panel__title">Authoring throughput</h3>
-        <p className="ch-panel__subtitle">
-          <strong>{totalPrs}</strong> update{totalPrs === 1 ? '' : 's'} merged in window.
-        </p>
-      </header>
+    <ChPanel
+      title="Authoring throughput"
+      subtitle={<><strong>{totalPrs}</strong> update{totalPrs === 1 ? '' : 's'} merged in window.</>}
+    >
       <ResponsiveContainer width="100%" height={180}>
         <LineChart data={series}>
           <CartesianGrid strokeDasharray="3 3" stroke="#e1dfdd" vertical={false} />
@@ -47,6 +45,6 @@ export function AuthoringThroughputPanel({ series, contributors }: Props) {
           ))}
         </tbody>
       </table>
-    </section>
+    </ChPanel>
   );
 }

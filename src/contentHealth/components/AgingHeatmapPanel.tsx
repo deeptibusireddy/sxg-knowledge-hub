@@ -1,5 +1,6 @@
 import type { AgingHeatmap } from '../types';
 import type { LobArea } from '../../shared/contentHealth/types';
+import { ChPanel } from './ChPanel';
 
 interface Props {
   heatmap: AgingHeatmap;
@@ -11,15 +12,12 @@ export function AgingHeatmapPanel({ heatmap, onCellClick }: Props) {
   const total = counts.flat().reduce((s, c) => s + c, 0);
 
   return (
-    <section className="ch-panel">
-      <header className="ch-panel__header">
-        <h3 className="ch-panel__title">Document aging heatmap</h3>
-        <p className="ch-panel__subtitle">
-          {total.toLocaleString()} docs across {lobs.length} LOB{lobs.length === 1 ? '' : 's'} ×{' '}
+    <ChPanel
+      title="Document aging heatmap"
+      subtitle={<>{total.toLocaleString()} docs across {lobs.length} LOB{lobs.length === 1 ? '' : 's'} ×{' '}
           {buckets.length} age buckets. Darker = more docs; rightmost columns are stale.
-          {onCellClick && <> Click a cell to list docs.</>}
-        </p>
-      </header>
+          {onCellClick && <> Click a cell to list docs.</>}</>}
+    >
       <div
         className="ch-heatmap"
         style={{ gridTemplateColumns: `120px repeat(${buckets.length}, 1fr)` }}
@@ -71,6 +69,6 @@ export function AgingHeatmapPanel({ heatmap, onCellClick }: Props) {
           </div>
         ))}
       </div>
-    </section>
+    </ChPanel>
   );
 }

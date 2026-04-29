@@ -2,6 +2,7 @@ import {
   LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid,
 } from 'recharts';
 import type { AiQualitySummary } from '../types';
+import { ChPanel } from './ChPanel';
 
 interface Props {
   summary: AiQualitySummary;
@@ -16,14 +17,11 @@ function kpiTone(value: number, goodAt: number, warnAt: number) {
 export function AiQualityPanel({ summary }: Props) {
   const { totalAnswers, accuracyPct, meanConfidencePct, groundedPct, fallbackPct, accuracyTrend, byLob } = summary;
   return (
-    <section className="ch-panel">
-      <header className="ch-panel__header">
-        <h3 className="ch-panel__title">AI quality</h3>
-        <p className="ch-panel__subtitle">
-          {totalAnswers.toLocaleString()} AI answer{totalAnswers === 1 ? '' : 's'} judged in window.
-          Accuracy is eval-judged; confidence is model self-reported.
-        </p>
-      </header>
+    <ChPanel
+      title="AI quality"
+      subtitle={<>{totalAnswers.toLocaleString()} AI answer{totalAnswers === 1 ? '' : 's'} judged in window.
+          Accuracy is eval-judged; confidence is model self-reported.</>}
+    >
       <div className="ch-readiness-grid">
         <div className={`ch-readiness-tile ch-readiness-tile--${kpiTone(accuracyPct, 80, 60)}`}>
           <div className="ch-readiness-tile__value">{accuracyPct}%</div>
@@ -75,6 +73,6 @@ export function AiQualityPanel({ summary }: Props) {
           ))}
         </tbody>
       </table>
-    </section>
+    </ChPanel>
   );
 }

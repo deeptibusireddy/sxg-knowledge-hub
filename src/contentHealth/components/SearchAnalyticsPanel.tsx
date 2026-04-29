@@ -2,6 +2,7 @@ import {
   LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid,
 } from 'recharts';
 import type { SearchAnalyticsSummary } from '../types';
+import { ChPanel } from './ChPanel';
 
 interface Props {
   summary: SearchAnalyticsSummary;
@@ -10,14 +11,11 @@ interface Props {
 export function SearchAnalyticsPanel({ summary }: Props) {
   const { totalSearches, successRatePct, zeroClickRatePct, trend, byLob } = summary;
   return (
-    <section className="ch-panel">
-      <header className="ch-panel__header">
-        <h3 className="ch-panel__title">Search analytics</h3>
-        <p className="ch-panel__subtitle">
-          {totalSearches.toLocaleString()} search{totalSearches === 1 ? '' : 'es'} in window.
-          Successful = at least one result above relevance threshold.
-        </p>
-      </header>
+    <ChPanel
+      title="Search analytics"
+      subtitle={<>{totalSearches.toLocaleString()} search{totalSearches === 1 ? '' : 'es'} in window.
+          Successful = at least one result above relevance threshold.</>}
+    >
       <div className="ch-readiness-grid">
         <div className={`ch-readiness-tile ch-readiness-tile--${successRatePct >= 80 ? 'good' : successRatePct >= 65 ? 'warn' : 'bad'}`}>
           <div className="ch-readiness-tile__value">{successRatePct}%</div>
@@ -61,6 +59,6 @@ export function SearchAnalyticsPanel({ summary }: Props) {
           ))}
         </tbody>
       </table>
-    </section>
+    </ChPanel>
   );
 }

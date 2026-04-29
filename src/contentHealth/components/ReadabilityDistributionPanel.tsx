@@ -1,4 +1,5 @@
 import type { ReadabilityDistribution } from '../types';
+import { ChPanel } from './ChPanel';
 
 interface Props {
   distribution: ReadabilityDistribution;
@@ -10,14 +11,11 @@ export function ReadabilityDistributionPanel({ distribution }: Props) {
   const hard = bins.filter((b) => b.isHard).reduce((s, b) => s + b.count, 0);
 
   return (
-    <section className="ch-panel">
-      <header className="ch-panel__header">
-        <h3 className="ch-panel__title">Readability distribution</h3>
-        <p className="ch-panel__subtitle">
-          Flesch reading-ease across {totalDocs.toLocaleString()} docs.{' '}
-          <strong>{hard}</strong> in the hard ranges (&lt; 50).
-        </p>
-      </header>
+    <ChPanel
+      title="Readability distribution"
+      subtitle={<>Flesch reading-ease across {totalDocs.toLocaleString()} docs.{' '}
+          <strong>{hard}</strong> in the hard ranges (&lt; 50).</>}
+    >
       <div className="ch-histogram">
         {bins.map((b) => {
           const w = (b.count / max) * 100;
@@ -58,6 +56,6 @@ export function ReadabilityDistributionPanel({ distribution }: Props) {
           </table>
         </>
       )}
-    </section>
+    </ChPanel>
   );
 }

@@ -1,4 +1,5 @@
 import type { TopPerformerRow } from '../types';
+import { ChPanel } from './ChPanel';
 
 interface Props {
   rows: TopPerformerRow[];
@@ -6,15 +7,12 @@ interface Props {
 
 export function TopPerformersPanel({ rows }: Props) {
   return (
-    <section className="ch-panel">
-      <header className="ch-panel__header">
-        <h3 className="ch-panel__title">Top performing docs</h3>
-        <p className="ch-panel__subtitle">
-          {rows.length === 0
+    <ChPanel
+      title="Top performing docs"
+      subtitle={<>{rows.length === 0
             ? 'Not enough engagement in window to rank.'
-            : 'Best feedback ratio among docs with ≥ 100 views in window.'}
-        </p>
-      </header>
+            : 'Best feedback ratio among docs with ≥ 100 views in window.'}</>}
+    >
       {rows.length > 0 && (
         <table className="ch-table">
           <thead>
@@ -41,6 +39,6 @@ export function TopPerformersPanel({ rows }: Props) {
           </tbody>
         </table>
       )}
-    </section>
+    </ChPanel>
   );
 }

@@ -1,4 +1,5 @@
 import type { OwnerSbuRow } from '../types';
+import { ChPanel } from './ChPanel';
 
 interface Props {
   rows: OwnerSbuRow[];
@@ -6,14 +7,11 @@ interface Props {
 
 export function OwnerSbuRolloutPanel({ rows }: Props) {
   return (
-    <section className="ch-panel">
-      <header className="ch-panel__header">
-        <h3 className="ch-panel__title">Owner / SBU rollup</h3>
-        <p className="ch-panel__subtitle">
-          Where to focus cross-team conversations. Sorted by combined risk
-          (stale share + quality share + intake breaches).
-        </p>
-      </header>
+    <ChPanel
+      title="Owner / SBU rollup"
+      subtitle={<>Where to focus cross-team conversations. Sorted by combined risk
+          (stale share + quality share + intake breaches).</>}
+    >
       <table className="ch-table">
         <thead>
           <tr>
@@ -42,6 +40,6 @@ export function OwnerSbuRolloutPanel({ rows }: Props) {
           ))}
         </tbody>
       </table>
-    </section>
+    </ChPanel>
   );
 }

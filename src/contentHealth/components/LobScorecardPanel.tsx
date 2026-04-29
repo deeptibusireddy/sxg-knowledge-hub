@@ -1,4 +1,5 @@
 import type { LobScorecardRow } from '../types';
+import { ChPanel } from './ChPanel';
 
 interface Props {
   rows: LobScorecardRow[];
@@ -24,13 +25,10 @@ function bar(score: number, color: string) {
 
 export function LobScorecardPanel({ rows }: Props) {
   return (
-    <section className="ch-panel">
-      <header className="ch-panel__header">
-        <h3 className="ch-panel__title">LOB health scorecard</h3>
-        <p className="ch-panel__subtitle">
-          Composite score per LOB: 30% coverage · 40% freshness · 30% quality.
-        </p>
-      </header>
+    <ChPanel
+      title="LOB health scorecard"
+      subtitle={<>Composite score per LOB: 30% coverage · 40% freshness · 30% quality.</>}
+    >
       <table className="ch-table">
         <thead>
           <tr>
@@ -59,6 +57,6 @@ export function LobScorecardPanel({ rows }: Props) {
           ))}
         </tbody>
       </table>
-    </section>
+    </ChPanel>
   );
 }

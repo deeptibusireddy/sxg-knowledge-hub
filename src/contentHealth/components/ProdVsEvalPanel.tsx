@@ -1,4 +1,5 @@
 import type { ProdVsEvalSummary } from '../types';
+import { ChPanel } from './ChPanel';
 
 interface Props {
   summary: ProdVsEvalSummary;
@@ -28,15 +29,12 @@ export function ProdVsEvalPanel({ summary }: Props) {
   const { overall, byLob } = summary;
 
   return (
-    <section className="ch-panel">
-      <header className="ch-panel__header">
-        <h3 className="ch-panel__title">Prod vs Eval</h3>
-        <p className="ch-panel__subtitle">
-          Production answer accuracy (windowed, real answers) compared to offline
+    <ChPanel
+      title="Prod vs Eval"
+      subtitle={<>Production answer accuracy (windowed, real answers) compared to offline
           eval pass rate (corpus snapshot). A large Δ means your golden-set evals
-          don't reflect production reality — refresh them.
-        </p>
-      </header>
+          don't reflect production reality — refresh them.</>}
+    >
 
       <div className="ch-pve-overall">
         <div className="ch-pve-overall__col">
@@ -100,6 +98,6 @@ export function ProdVsEvalPanel({ summary }: Props) {
           })}
         </tbody>
       </table>
-    </section>
+    </ChPanel>
   );
 }

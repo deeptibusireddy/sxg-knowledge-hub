@@ -220,19 +220,19 @@
 
 /* ── Panel shell ───────────────────────────────────────────── */
 .ch-panel {
-  background: #fff;
-  border: 1px solid #e1dfdd;
-  border-radius: 6px;
-  padding: 16px;
+  /* Fluent Card supplies background, border, radius, elevation. We only add
+     the internal layout (flex column with gap) and minimum-width safeguard
+     for Recharts ResponsiveContainer. */
   display: flex;
   flex-direction: column;
   gap: 12px;
   min-width: 0;
+  padding: 16px;
 }
 
 .ch-panel__header { display: flex; flex-direction: column; gap: 2px; }
-.ch-panel__title { margin: 0; font-size: 14px; font-weight: 700; color: #201f1e; }
-.ch-panel__subtitle { margin: 0; font-size: 12px; color: #605e5c; }
+.ch-panel__title { margin: 0; color: var(--colorNeutralForeground1, #201f1e); }
+.ch-panel__subtitle { margin: 0; color: var(--colorNeutralForeground2, #605e5c); }
 .ch-panel__sub {
   font-size: 11px;
   color: #605e5c;

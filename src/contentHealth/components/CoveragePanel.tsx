@@ -1,4 +1,5 @@
 import type { CoverageRow } from '../types';
+import { ChPanel } from './ChPanel';
 
 interface Props {
   rows: CoverageRow[];
@@ -14,14 +15,11 @@ export function CoveragePanel({ rows }: Props) {
   const gaps = rows.filter((r) => r.isGap);
 
   return (
-    <section className="ch-panel">
-      <header className="ch-panel__header">
-        <h3 className="ch-panel__title">Inventory by Product × LOB</h3>
-        <p className="ch-panel__subtitle">
-          Doc counts per product × LOB.{' '}
-          <strong>{gaps.length}</strong> thin area{gaps.length === 1 ? '' : 's'} (&lt; 4 docs).
-        </p>
-      </header>
+    <ChPanel
+      title="Inventory by Product × LOB"
+      subtitle={<>Doc counts per product × LOB.{' '}
+          <strong>{gaps.length}</strong> thin area{gaps.length === 1 ? '' : 's'} (&lt; 4 docs).</>}
+    >
 
       <div className="ch-coverage-grid" style={{ gridTemplateColumns: `120px repeat(${lobs.length}, 1fr)` }}>
         <div className="ch-coverage-grid__corner" />
@@ -63,6 +61,6 @@ export function CoveragePanel({ rows }: Props) {
           ))}
         </ul>
       )}
-    </section>
+    </ChPanel>
   );
 }

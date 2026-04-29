@@ -1,3 +1,4 @@
+import { Card } from '@fluentui/react-components';
 import type { KpiSummary } from '../types';
 
 interface Props {
@@ -60,11 +61,15 @@ export function ContentHealthKpiStrip({ kpis }: Props) {
   return (
     <div className="ch-kpi-strip">
       {tiles.map((t) => (
-        <div key={t.label} className={`ch-kpi-strip__tile ch-kpi-strip__tile--${t.tone}`}>
+        <Card
+          key={t.label}
+          appearance="filled"
+          className={`ch-kpi-strip__tile ch-kpi-strip__tile--${t.tone}`}
+        >
           <div className="ch-kpi-strip__label">{t.label}</div>
           <div className="ch-kpi-strip__value">{t.value}</div>
           <div className="ch-kpi-strip__hint">{t.hint}</div>
-        </div>
+        </Card>
       ))}
     </div>
   );

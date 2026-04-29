@@ -1,4 +1,5 @@
 import type { SearchGapRow } from '../types';
+import { ChPanel } from './ChPanel';
 
 interface Props {
   rows: SearchGapRow[];
@@ -7,16 +8,13 @@ interface Props {
 export function SearchGapMapPanel({ rows }: Props) {
   const top = rows.find((r) => r.gapScore > 0);
   return (
-    <section className="ch-panel">
-      <header className="ch-panel__header">
-        <h3 className="ch-panel__title">Search-miss → coverage gap</h3>
-        <p className="ch-panel__subtitle">
-          Where unmet search demand meets thin coverage.{' '}
+    <ChPanel
+      title="Search-miss → coverage gap"
+      subtitle={<>Where unmet search demand meets thin coverage.{' '}
           {top
             ? <>Biggest gap: <strong>{top.lob}</strong> (score {top.gapScore}).</>
-            : 'No clear gaps in this window.'}
-        </p>
-      </header>
+            : 'No clear gaps in this window.'}</>}
+    >
       <table className="ch-table">
         <thead>
           <tr>
@@ -54,6 +52,6 @@ export function SearchGapMapPanel({ rows }: Props) {
         Heuristic mapping: queries are bucketed to a LOB by keyword. Replace with
         the search index's classifier when wiring real data.
       </p>
-    </section>
+    </ChPanel>
   );
 }

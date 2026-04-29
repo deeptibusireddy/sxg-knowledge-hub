@@ -1,4 +1,5 @@
 import type { FeedbackSummary, SearchMissRow } from '../types';
+import { ChPanel } from './ChPanel';
 
 interface Props {
   feedback: FeedbackSummary;
@@ -8,13 +9,10 @@ interface Props {
 export function FeedbackUsagePanel({ feedback, searchMisses }: Props) {
   const { totalViews, totalThumbsUp, totalThumbsDown, thumbsRatioPct, topDocs } = feedback;
   return (
-    <section className="ch-panel">
-      <header className="ch-panel__header">
-        <h3 className="ch-panel__title">Feedback &amp; usage</h3>
-        <p className="ch-panel__subtitle">
-          {totalViews.toLocaleString()} views · 👍 {totalThumbsUp.toLocaleString()} · 👎 {totalThumbsDown.toLocaleString()} ({thumbsRatioPct}% positive)
-        </p>
-      </header>
+    <ChPanel
+      title="Feedback &amp; usage"
+      subtitle={<>{totalViews.toLocaleString()} views · 👍 {totalThumbsUp.toLocaleString()} · 👎 {totalThumbsDown.toLocaleString()} ({thumbsRatioPct}% positive)</>}
+    >
 
       <div className="ch-panel__sub">Top viewed docs</div>
       <table className="ch-table">
@@ -55,6 +53,6 @@ export function FeedbackUsagePanel({ feedback, searchMisses }: Props) {
           ))}
         </tbody>
       </table>
-    </section>
+    </ChPanel>
   );
 }

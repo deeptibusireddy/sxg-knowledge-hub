@@ -1,5 +1,6 @@
 import type { QualitySignals } from '../types';
 import type { QualityKey } from '../selectors';
+import { ChPanel } from './ChPanel';
 
 interface Props {
   signals: QualitySignals;
@@ -19,14 +20,11 @@ export function QualitySignalsPanel({ signals, onIssueClick }: Props) {
   ] as const;
 
   return (
-    <section className="ch-panel">
-      <header className="ch-panel__header">
-        <h3 className="ch-panel__title">Quality signals</h3>
-        <p className="ch-panel__subtitle">
-          Across {totalDocs.toLocaleString()} docs in scope.
-          {onIssueClick && <> Click a row for the doc list.</>}
-        </p>
-      </header>
+    <ChPanel
+      title="Quality signals"
+      subtitle={<>Across {totalDocs.toLocaleString()} docs in scope.
+          {onIssueClick && <> Click a row for the doc list.</>}</>}
+    >
       <ul className="ch-quality-list">
         {items.map((it) => {
           const inner = (
@@ -54,6 +52,6 @@ export function QualitySignalsPanel({ signals, onIssueClick }: Props) {
           );
         })}
       </ul>
-    </section>
+    </ChPanel>
   );
 }
