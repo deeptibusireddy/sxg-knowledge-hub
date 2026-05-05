@@ -52,6 +52,7 @@ import { OwnerSbuRolloutPanel } from './components/OwnerSbuRolloutPanel';
 import { SelfHelpResolutionPanel } from './components/SelfHelpResolutionPanel';
 import { SearchAnalyticsPanel } from './components/SearchAnalyticsPanel';
 import { SourceBreakdownPanel } from './components/SourceBreakdownPanel';
+import { UrlIngestionCheckerPanel } from './components/UrlIngestionCheckerPanel';
 import { DrilldownDrawer, type DrilldownContent, type DrilldownRow } from '../components/common/DrilldownDrawer';
 import './ContentHealthApp.css';
 
@@ -195,6 +196,12 @@ export default function ContentHealthApp() {
       <main className="ch-app__main" id="main-content" tabIndex={-1}>
         <ContentHealthSlicer value={filter} onChange={setFilter} />
         <ContentHealthKpiStrip kpis={kpis} />
+
+        <div className="ch-grid">
+          <div className="ch-grid__wide">
+            <UrlIngestionCheckerPanel />
+          </div>
+        </div>
 
         <h2 className="ch-section">A · Knowledge hygiene</h2>
         <div className="ch-grid">
